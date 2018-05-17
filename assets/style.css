@@ -1,0 +1,34 @@
+* {
+	margin-left: auto;
+	margin-right: auto;
+}
+.amount {
+	width: 180px;
+	height: 45px;
+	font-size: 40px;
+	margin-bottom: 80px;
+}
+.inputs {
+	width: 875px;
+	padding-left: 73px;
+}
+#firstIn, #secondIn {
+	display: inline-flex;
+	float: left;
+}
+.addendum {
+	width: 12px;
+	border-radius: 4px;
+}
+#sum {
+	border-radius: 4px;
+	width: 44px;
+	height: 29px;
+	font-size: 38px;
+}
+.canvas {
+	width: 875px;
+}
+#img {
+	display: none;
+}
