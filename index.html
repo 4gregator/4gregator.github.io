@@ -19,55 +19,9 @@
 		<div id="secondIn"><input class="addendum" type="hidden"></div>
 	</div>
 	<div class="canvas">
-		<!-- <canvas id="scale" width="875" height="83"></canvas> -->
 		<canvas id="scale" width="875" height="133">Ваш браузер не отображает элемент</canvas>
 	</div>
 	<img id="img" src="assets/sprite.png" alt="">
 	<script src="assets/script.js"></script>
 </body>
-<!-- <script type="text/javascript">
-	var img = document.getElementById("img");
-	var canvas = document.getElementById("scale");
-	var context = canvas.getContext("2d");
-	img.style.display = "none";
-	context.drawImage(img, 0, 50);
-/*	context.textAlign = "center";
-	context.textBaseline = "middle";
-	for (var i = 0; i <= 20; i++) {
-		var x = 36 + i * 39;
-		var y = 123;
-		if (i % 5 == 0) {
-			context.font = "bold 25px verdana";
-			context.fillText(i, x, y)
-		} else {
-			context.font = "normal 19px verdana";
-			context.fillText(i, x, y)
-		}
-	}
-	context.moveTo(34, 20);
-	context.lineTo(852, 20);
-	context.lineTo(842, 11);
-	context.moveTo(842, 29);
-	context.lineTo(852, 20);
-	for (var x = 74.5; x < 850; x += 39) {
-		context.moveTo(x, 11);
-		context.lineTo(x, 29);
-	}
-	context.stroke();
-	context.beginPath();
-	context.lineWidth = 2;
-	for (var x = 35.5; x < 850; x += 390) {
-		context.moveTo(x, 9);
-		context.lineTo(x, 31);
-	}
-	for (var x = 230.5; x < 850; x += 390) {
-		context.moveTo(x, 11);
-		context.lineTo(x, 29);
-	}
-	context.stroke();*/
-	context.strokeStyle = "purple";
-	context.moveTo(35.5, 70);
-	context.bezierCurveTo(35.5, -20, 308.5, -20, 308.5, 70);
-	context.stroke();
-</script>  -->
 </html>
