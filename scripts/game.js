@@ -51,9 +51,11 @@ function shipChoice() {
 		for (let i = 0; i < a; i++) {
 			let shipAvlbl = document.createElement("button");
 			shipAvlbl.innerHTML = ships[i];
-			/*shipAvlbl.onclick function() {
-				ship = 
-			}*/
+			shipAvlbl.onclick = function() {
+				popup.style.display = "none";
+				ship = ships[i];
+				document.getElementById("shipPlayer").innerHTML = ship;
+			}
 			popup.appendChild(shipAvlbl);
 		}
 	}
