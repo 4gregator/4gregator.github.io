@@ -15,12 +15,18 @@
 	height: 1000px;
 }
 .playField {
+	position: relative;
 	margin: auto;
 	border: solid 1px;
 	border-radius: 8px;
 	background-color: #cff6ff;
 	width: 1000px;
 	height: 500px;
+}
+#shipPlayer {
+	position: absolute;
+	top: 300px;
+	left: 460px;
 }
 #hand {
 	display: inline-flex;
