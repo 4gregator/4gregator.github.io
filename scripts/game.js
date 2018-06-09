@@ -2,7 +2,7 @@ var distance = 1;
 var gender = 0;
 var round = 1;
 var ship;
-var shipDirection = "up";
+var shipDirection = "top";
 var ships = ["Бригантина", "Фрегат", "Галеон"];
 var leftGuns = [];
 var rightGuns = [];
@@ -68,6 +68,7 @@ function shipChoice() {
 				ship = ships.splice(i, 1)[0];
 				yourShip.innerHTML = "<img src='images/" + ship + ".jpg' width='143' height='200'>";
 				loadGuns();
+				setGuns();
 				wind();
 			}
 			popup.appendChild(shipAvlbl);
@@ -104,39 +105,88 @@ function loadGuns() {
 			notBoard = 0
 		} else notBoard = 1;
 		for (let j = 0; j < 5; j++) {
-			arsenal[i][j] = loadGun();
+			switch(i) {
+				case 0:
+					name = "top";
+					break;
+				case 1:
+					name = "right";
+					break;
+				case 2:
+					name = "bottom";
+					break;
+				case 3:
+					name = "left";
+					break;
+			}
+			arsenal[i][j] = loadGun(name);
 			if (brigantine) notBoard ? totalGuns[i][j] = 6 : totalGuns[i][j] = 5;
 			else if (frigate) notBoard ? totalGuns[i][j] = 5 : totalGuns[i][j] = 4;
 			else notBoard ? totalGuns[i][j] = 4 : totalGuns[i][j] = 3;
-			arsenal[i][j].innerHTML = totalGuns[i][j];
 			if (brigantine && notBoard) break;
 			else if (j == 1 && frigate && notBoard) break;
 			else if (j == 2 && (brigantine || (ship == "Галеон" && notBoard))) break;
 			else if (j == 3 && frigate) break;
 		}
 	}
-	setGuns();
 }
-function loadGun() {
+function loadGun(name) {
 	let div = document.createElement("div");
-	/*div.className = name;*/
+	div.className = name;
 	div.style.position = "absolute";
 	yourShip.appendChild(div);
 	return div;
 }
 
+// расставляем орудийные расчёты в зависимости от типа корабля и его направления
 function setGuns() {
-	let board = document.getElementsByClassName(position);
-	if (ship == "Бригантина") {
-		if (shipDirection == "up") {
-			if (position == "left") {
-				for (let i = 0, p = 84; i < 3; i++, p += 25) {
-					board[i].style.top = p + "px";
-					board[i].style.left = "12px";
-				}
+	let left = document.getElementsByClassName("left");
+	let right = document.getElementsByClassName("right");
+	let top = document.getElementsByClassName("top");
+	let bottom = document.getElementsByClassName("bottom");
+	let arsenal = [top, right, bottom, left];
+	arsenal.forEach(function(side, i) {
+		[].forEach.call(side, function(gun, j) {
+			gun.innerHTML = totalGuns[i][j];
+			getCoordinate(gun, i, j);
+		});
+	});
+}
+function getCoordinate(obj, i, j) {
+	let x = 0;
+	let y = 0;
+	switch(ship) {
+		case "Бригантина":
+			switch(shipDirection) {
+				case "top":
+					switch(i) {
+						case 0:
+							break;
+						case 1:
+							x = 123;
+							y = 82 + j * 25;
+							placeGun(obj, x, y);
+							break;
+						case 3:
+							x = 12;
+							y = 84 + j * 25;
+							placeGun(obj, x, y);
+							break;
+					}
+					break;
 			}
-		}
+			break;
+		case "Фрегат":
+			switch(shipDirection) {}
+			break;
+		case "Галеон":
+			switch(shipDirection) {}
+			break;
 	}
+}
+function placeGun(obj, x, y) {
+	obj.style.left = x + "px";
+	obj.style.top = y + "px";
 }
 
 function wind() {}
