@@ -161,10 +161,18 @@ function getCoordinate(obj, i, j) {
 				case "top":
 					switch(i) {
 						case 0:
+							x = 80;
+							y = 25;
+							placeGun(obj, x, y);
 							break;
 						case 1:
 							x = 123;
 							y = 82 + j * 25;
+							placeGun(obj, x, y);
+							break;
+						case 2:
+							x = 48;
+							y = 175;
 							placeGun(obj, x, y);
 							break;
 						case 3:
@@ -177,10 +185,65 @@ function getCoordinate(obj, i, j) {
 			}
 			break;
 		case "Фрегат":
-			switch(shipDirection) {}
+			switch(shipDirection) {
+				case "top":
+					switch(i) {
+						case 0:
+							x = 80 + j * 25;
+							y = 13;
+							placeGun(obj, x, y);
+							break;
+						case 1:
+							x = 123;
+							y = 69 + j * 25;
+							placeGun(obj, x, y);
+							break;
+						case 2:
+							x = 35 + j * 63;
+							y = 177;
+							placeGun(obj, x, y);
+							break;
+						case 3:
+							x = 12;
+							y = 70 + j * 25;
+							placeGun(obj, x, y);
+							break;
+					}
+					break;
+			}
 			break;
 		case "Галеон":
-			switch(shipDirection) {}
+			switch(shipDirection) {
+				case "top":
+					switch(i) {
+						case 0:
+							if (j != 2) {
+								x = 92 + j * 22;
+								y = 7;
+							} else {
+								x = 103;
+								y = 30;
+							}
+							placeGun(obj, x, y);
+							break;
+						case 1:
+							x = 123;
+							y = 55 + j * 25;
+							placeGun(obj, x, y);
+							break;
+						case 2:
+							x = 46 + j * 23;
+							y = 176;
+							placeGun(obj, x, y);
+							break;
+						case 3:
+							x = 13;
+							y = 56 + j * 25;
+							placeGun(obj, x, y);
+							break;
+					}
+					break;
+			}
 			break;
 	}
 }
