@@ -23,11 +23,15 @@
 	width: 1000px;
 	height: 500px;
 }
+
+/* положение кораблей */
 #shipPlayer {
 	position: absolute;
 	top: 300px;
 	left: 460px;
 }
+
+/* страты в руке */
 #hand {
 	display: inline-flex;
 	flex-wrap: wrap;
