@@ -1,6 +1,7 @@
 var distance = 1;
 var gender = 0;
 var round = 1;
+var wind;
 var ship;
 var shipDirection = "top";
 var ships = ["Бригантина", "Фрегат", "Галеон"];
@@ -138,47 +139,6 @@ function loadGun(name) {
 	return div;
 }
 
-function chooseDirection() {
-	let Left = document.createElement("button");
-	Left.innerHTML = "повернуть влево";
-	Left.onclick = function() {
-		changeCourse(1);
-	}
-	let Right = document.createElement("button");
-	Right.innerHTML = "повернуть вправо";
-	Right.onclick = function() {
-		changeCourse(0);
-	}
-	popup.innerHTML = "Выберите начальное направление корабля";
-	popup.appendChild(Left);
-	popup.appendChild(Right);
-	popup.style.display = "block";
-}
-
-//меняем курс корабля
-function changeCourse(left) {
-	let deg = 0;
-	switch(shipDirection) {
-		case "right":
-			deg = 90;
-			shipDirection = left ? "top" : "bottom";
-			break;
-		case "bottom":
-			deg = 180;
-			shipDirection = left ? "right" : "left";
-			break;
-		case "left":
-			deg = -90;
-			shipDirection = left ? "bottom" : "top";
-			break;
-		default:
-			shipDirection = left ? "left" : "right";
-	}
-	deg = left ? -90 + deg : 90 + deg;
-	yourShip.style.transform = "rotate(" + deg + "deg)";
-	setGuns();
-}
-
 // расставляем орудийные расчёты в зависимости от типа корабля и его направления
 function setGuns() {
 	let left = document.getElementsByClassName("left");
@@ -287,7 +247,66 @@ function getCoordinate(i, j) {
 	return arr;
 }
 
-function wind() {}
+function wind() {
+	let compas = document.getElementById("wind");
+	compas.innerHTML = "<img src='images/wind.jpg' width='100' height='100'>";
+	switch(rollDice()) {
+		case 1:
+		case 2:
+			wind = "north";
+			break;
+		case 3:
+		case 4:
+			wind = "south";
+			break;
+		case 5:
+			wind = "west";
+			break;
+		case 6:
+			wind = "east";
+	}
+}
+
+function chooseDirection() {
+	let Left = document.createElement("button");
+	Left.innerHTML = "повернуть влево";
+	Left.onclick = function() {
+		changeCourse(1);
+	}
+	let Right = document.createElement("button");
+	Right.innerHTML = "повернуть вправо";
+	Right.onclick = function() {
+		changeCourse(0);
+	}
+	popup.innerHTML = "Выберите начальное направление корабля";
+	popup.appendChild(Left);
+	popup.appendChild(Right);
+	popup.style.display = "block";
+}
+
+//меняем курс корабля
+function changeCourse(left) {
+	let deg = 0;
+	switch(shipDirection) {
+		case "right":
+			deg = 90;
+			shipDirection = left ? "top" : "bottom";
+			break;
+		case "bottom":
+			deg = 180;
+			shipDirection = left ? "right" : "left";
+			break;
+		case "left":
+			deg = -90;
+			shipDirection = left ? "bottom" : "top";
+			break;
+		default:
+			shipDirection = left ? "left" : "right";
+	}
+	deg = left ? -90 + deg : 90 + deg;
+	yourShip.style.transform = "rotate(" + deg + "deg)";
+	setGuns();
+}
 
 // проверка статуса игры и активных стратагем
 function checkStatus() {}
