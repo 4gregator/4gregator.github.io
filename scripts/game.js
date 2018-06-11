@@ -249,8 +249,15 @@ function getCoordinate(i, j) {
 
 function wind() {
 	let compas = document.getElementById("wind");
+	let dice = document.createElement("img");
+	dice.width = 40;
+	dice.height = 40;
+	dice.style.position = "absolute";
+	dice.style.top = "30px";
+	dice.style.left = "30px";
 	compas.innerHTML = "<img src='images/wind.jpg' width='100' height='100'>";
-	switch(rollDice()) {
+	compas.appendChild(dice);
+	switch(rollDice(dice)) {
 		case 1:
 		case 2:
 			wind = "north";
@@ -319,8 +326,9 @@ function checkStrata(arr) {
 // запуск игры после проверки
 function Continue() {}
 
-function rollDice() {
+function rollDice(dice) {
 	let rand = Math.random() * 6 + 1;
 	rand = Math.floor(rand);
+	dice.src = "images/" + rand + ".png";
 	return rand;
 }
