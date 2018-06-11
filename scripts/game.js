@@ -59,7 +59,7 @@ function takeStrata(arr) {
 function shipChoice() {
 	let a = ships.length;
 	if (a != 1) {
-		popup.innerHTML = "<p>Выберете корабль на <p>" + round + " раунд";
+		popup.innerHTML = "<p>Выберите корабль на <p>" + round + " раунд";
 		for (let i = 0; i < a; i++) {
 			let shipAvlbl = document.createElement("button");
 			shipAvlbl.innerHTML = ships[i];
@@ -70,6 +70,7 @@ function shipChoice() {
 				loadGuns();
 				setGuns();
 				wind();
+				chooseDirection();
 			}
 			popup.appendChild(shipAvlbl);
 		}
@@ -95,16 +96,15 @@ function loadGuns() {
 	var top = [];
 	var bottom = [];
 	var arsenal = [top, right, bottom, left];
-	let brigantine = 0;
-	let frigate = 0;
-	if (ship == "Бригантина") brigantine = 1;
-	if (ship == "Фрегат") frigate = 1;
+	let brigantine = (ship == "Бригантина");
+	let frigate = (ship == "Фрегат");
 	for (let i = 0; i < 4; i++) {
 		let notBoard;
 		if (i % 2) {
 			notBoard = 0
 		} else notBoard = 1;
 		for (let j = 0; j < 5; j++) {
+			let name;
 			switch(i) {
 				case 0:
 					name = "top";
@@ -120,9 +120,9 @@ function loadGuns() {
 					break;
 			}
 			arsenal[i][j] = loadGun(name);
-			if (brigantine) notBoard ? totalGuns[i][j] = 6 : totalGuns[i][j] = 5;
-			else if (frigate) notBoard ? totalGuns[i][j] = 5 : totalGuns[i][j] = 4;
-			else notBoard ? totalGuns[i][j] = 4 : totalGuns[i][j] = 3;
+			if (brigantine) totalGuns[i][j] = notBoard ? 6 : 5;
+			else if (frigate) totalGuns[i][j] = notBoard ? 5 : 4;
+			else totalGuns[i][j] = notBoard ? 4 : 3;
 			if (brigantine && notBoard) break;
 			else if (j == 1 && frigate && notBoard) break;
 			else if (j == 2 && (brigantine || (ship == "Галеон" && notBoard))) break;
@@ -138,6 +138,47 @@ function loadGun(name) {
 	return div;
 }
 
+function chooseDirection() {
+	let Left = document.createElement("button");
+	Left.innerHTML = "повернуть влево";
+	Left.onclick = function() {
+		changeCourse(1);
+	}
+	let Right = document.createElement("button");
+	Right.innerHTML = "повернуть вправо";
+	Right.onclick = function() {
+		changeCourse(0);
+	}
+	popup.innerHTML = "Выберите начальное направление корабля";
+	popup.appendChild(Left);
+	popup.appendChild(Right);
+	popup.style.display = "block";
+}
+
+//меняем курс корабля
+function changeCourse(left) {
+	let deg = 0;
+	switch(shipDirection) {
+		case "right":
+			deg = 90;
+			shipDirection = left ? "top" : "bottom";
+			break;
+		case "bottom":
+			deg = 180;
+			shipDirection = left ? "right" : "left";
+			break;
+		case "left":
+			deg = -90;
+			shipDirection = left ? "bottom" : "top";
+			break;
+		default:
+			shipDirection = left ? "left" : "right";
+	}
+	deg = left ? -90 + deg : 90 + deg;
+	yourShip.style.transform = "rotate(" + deg + "deg)";
+	setGuns();
+}
+
 // расставляем орудийные расчёты в зависимости от типа корабля и его направления
 function setGuns() {
 	let left = document.getElementsByClassName("left");
@@ -148,108 +189,102 @@ function setGuns() {
 	arsenal.forEach(function(side, i) {
 		[].forEach.call(side, function(gun, j) {
 			gun.innerHTML = totalGuns[i][j];
-			getCoordinate(gun, i, j);
+			placeGun(gun, getCoordinate(i, j));
 		});
 	});
 }
-function getCoordinate(obj, i, j) {
+function placeGun(obj, arr) {
+	obj.style.left = arr[0] + "px";
+	obj.style.top = arr[1] + "px";
+	switch(shipDirection) {
+		case "top":
+			obj.style.transform = "rotate(0deg)";
+			break;
+		case "right":
+			obj.style.transform = "rotate(-90deg)";
+			break;
+		case "bottom":
+			obj.style.transform = "rotate(180deg)";
+			break;
+		case "left":
+			obj.style.transform = "rotate(90deg)";
+			break;
+	}
+}
+function getCoordinate(i, j) {
 	let x = 0;
 	let y = 0;
+	let arr = [];
 	switch(ship) {
 		case "Бригантина":
-			switch(shipDirection) {
-				case "top":
-					switch(i) {
-						case 0:
-							x = 80;
-							y = 25;
-							placeGun(obj, x, y);
-							break;
-						case 1:
-							x = 123;
-							y = 82 + j * 25;
-							placeGun(obj, x, y);
-							break;
-						case 2:
-							x = 48;
-							y = 175;
-							placeGun(obj, x, y);
-							break;
-						case 3:
-							x = 12;
-							y = 84 + j * 25;
-							placeGun(obj, x, y);
-							break;
-					}
+			switch(i) {
+				case 0:
+					x = 80;
+					y = 25;
+					break;
+				case 1:
+					x = 123;
+					y = 82 + j * 25;
+					break;
+				case 2:
+					x = 48;
+					y = 175;
+					break;
+				case 3:
+					x = 12;
+					y = 84 + j * 25;
 					break;
 			}
 			break;
 		case "Фрегат":
-			switch(shipDirection) {
-				case "top":
-					switch(i) {
-						case 0:
-							x = 80 + j * 25;
-							y = 13;
-							placeGun(obj, x, y);
-							break;
-						case 1:
-							x = 123;
-							y = 69 + j * 25;
-							placeGun(obj, x, y);
-							break;
-						case 2:
-							x = 35 + j * 63;
-							y = 177;
-							placeGun(obj, x, y);
-							break;
-						case 3:
-							x = 12;
-							y = 70 + j * 25;
-							placeGun(obj, x, y);
-							break;
-					}
+			switch(i) {
+				case 0:
+					x = 80 + j * 25;
+					y = 13;
+					break;
+				case 1:
+					x = 123;
+					y = 69 + j * 25;
+					break;
+				case 2:
+					x = 35 + j * 63;
+					y = 177;
+					break;
+				case 3:
+					x = 12;
+					y = 70 + j * 25;
 					break;
 			}
 			break;
 		case "Галеон":
-			switch(shipDirection) {
-				case "top":
-					switch(i) {
-						case 0:
-							if (j != 2) {
-								x = 92 + j * 22;
-								y = 7;
-							} else {
-								x = 103;
-								y = 30;
-							}
-							placeGun(obj, x, y);
-							break;
-						case 1:
-							x = 123;
-							y = 55 + j * 25;
-							placeGun(obj, x, y);
-							break;
-						case 2:
-							x = 46 + j * 23;
-							y = 176;
-							placeGun(obj, x, y);
-							break;
-						case 3:
-							x = 13;
-							y = 56 + j * 25;
-							placeGun(obj, x, y);
-							break;
+			switch(i) {
+				case 0:
+					if (j != 2) {
+						x = 92 + j * 22;
+						y = 7;
+					} else {
+						x = 103;
+						y = 30;
 					}
+					break;
+				case 1:
+					x = 124;
+					y = 55 + j * 25;
+					break;
+				case 2:
+					x = 46 + j * 23;
+					y = 176;
+					break;
+				case 3:
+					x = 13;
+					y = 56 + j * 25;
 					break;
 			}
 			break;
 	}
-}
-function placeGun(obj, x, y) {
-	obj.style.left = x + "px";
-	obj.style.top = y + "px";
+	arr.push(x);
+	arr.push(y);
+	return arr;
 }
 
 function wind() {}
