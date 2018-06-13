@@ -3,6 +3,8 @@ var gender = 0;
 var round = 1;
 var turn = 0;
 var movePts = 0;
+var evasion = 0;
+var evasionOpp = 0;
 var wind;
 var ship;
 var shipOpp = "Галеон";
@@ -372,7 +374,8 @@ function salvo() {
 		shoots.sort(function(a, b) {
 			return b - a;
 		});
-		getResult(shoots);
+		let result = getResult(shoots);
+		popup.appendChild(result);
 	}
 	popup.innerHTML = "";
 	popup.appendChild(fire);
@@ -400,6 +403,16 @@ function salvo() {
 	}
 }
 function getResult(arr) {
+	let result = document.createElement("p");
+	if (arr[2] == 6) {
+		let evade = (evasionOpp > 0) ? "Оппонент использует уклонение<br>Уклонений осталось: " + evasionOpp : "Вы выиграли раунд!";
+		result.innerHTML = "Удачное попадание вызвало детонацию порохового склада!<br>" + evade;
+		return result;
+	} else if (arr[1] == 6 && distance == 0) {
+		let evade = (evasionOpp > 0) ? "Оппонент использует уклонение<br>Уклонений осталось: " + evasionOpp : "Вы выиграли раунд!";
+		result.innerHTML = "Удачное попадание вызвало детонацию порохового склада!<br>" + evade;
+		return result;
+	}
 	let kills = 0;
 	let wounds = 0;
 	let i = 0;
@@ -427,9 +440,8 @@ function getResult(arr) {
 			i++;
 		}
 	});
-	let result = document.createElement("p");
 	result.innerHTML = "Пушек уничтожено: " + kills + "<br>Членов экипажа ранено: " + wounds;
-	popup.appendChild(result);
+	return result;
 }
 function getTarget(index) {
 	if (totalGunsOpp[index].valueOf() == 0) {
