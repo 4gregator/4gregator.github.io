@@ -1,15 +1,24 @@
 var distance = 1;
 var gender = 0;
 var round = 1;
+var turn = 0;
+var movePts = 0;
 var wind;
 var ship;
+var shipOpp = "Галеон";
 var shipDirection = "top";
+var shipOppDirection = "top";
 var ships = ["Бригантина", "Фрегат", "Галеон"];
 var leftGuns = [];
 var rightGuns = [];
 var topGuns = [];
 var bottomGuns = [];
 var totalGuns = [topGuns, rightGuns, bottomGuns, leftGuns];
+var leftGunsOpp = [];
+var rightGunsOpp = [];
+var topGunsOpp = [];
+var bottomGunsOpp = [];
+var totalGunsOpp = [topGunsOpp, rightGunsOpp, bottomGunsOpp, leftGunsOpp];
 var hand = [];
 var deck = [];
 var stratagems = [];
@@ -18,6 +27,8 @@ for (let i = 0; i < 30; i++) {
 };
 var popup = document.getElementById("dialog");
 var yourShip = document.getElementById("shipPlayer");
+var enemyShip = document.getElementById("shipOpponent");
+var fire = document.getElementById("fire");
 
 function male() {
 	gender = 1;
@@ -68,9 +79,11 @@ function shipChoice() {
 				popup.style.display = "none";
 				ship = ships.splice(i, 1)[0];
 				yourShip.innerHTML = "<img src='images/" + ship + ".jpg' width='143' height='200'>";
-				loadGuns();
-				setGuns();
+				loadGuns(yourShip);
+				setGuns(yourShip);
 				wind();
+				loadGuns(enemyShip);
+				setGuns(enemyShip);
 				chooseDirection();
 			}
 			popup.appendChild(shipAvlbl);
@@ -91,14 +104,12 @@ function shipChoice() {
 }
 
 // подгружаем пушки в зависимости от типа корабля
-function loadGuns() {
-	var left = [];
-	var right = [];
-	var top = [];
-	var bottom = [];
-	var arsenal = [top, right, bottom, left];
-	let brigantine = (ship == "Бригантина");
-	let frigate = (ship == "Фрегат");
+function loadGuns(elem) {
+	let player = (elem == yourShip) ? 1 : 0;
+	let arsenal = [	[],	[],	[],	[] ];
+	let brigantine = player ? (ship == "Бригантина") : (shipOpp == "Бригантина");
+	let frigate = player ? (ship == "Фрегат") : (shipOpp == "Фрегат");
+	let galleon = player ? (ship == "Галеон") : (shipOpp == "Галеон");
 	for (let i = 0; i < 4; i++) {
 		let notBoard;
 		if (i % 2) {
@@ -106,57 +117,65 @@ function loadGuns() {
 		} else notBoard = 1;
 		for (let j = 0; j < 5; j++) {
 			let name;
+			let crew = 0;
 			switch(i) {
 				case 0:
-					name = "top";
+					name = player ? "top" : "topOpp";
 					break;
 				case 1:
-					name = "right";
+					name = player ? "right" : "rightOpp";
 					break;
 				case 2:
-					name = "bottom";
+					name = player ? "bottom" : "bottomOpp";
 					break;
 				case 3:
-					name = "left";
-					break;
+					name = player ? "left" : "leftOpp";
 			}
-			arsenal[i][j] = loadGun(name);
-			if (brigantine) totalGuns[i][j] = notBoard ? 6 : 5;
-			else if (frigate) totalGuns[i][j] = notBoard ? 5 : 4;
-			else totalGuns[i][j] = notBoard ? 4 : 3;
+			arsenal[i][j] = loadGun(name, elem);
+			if (brigantine) crew = notBoard ? 6 : 5;
+			else if (frigate) crew = notBoard ? 5 : 4;
+			else crew = notBoard ? 4 : 3;
+			player ? totalGuns[i][j] = crew : totalGunsOpp[i][j] = crew;
 			if (brigantine && notBoard) break;
 			else if (j == 1 && frigate && notBoard) break;
-			else if (j == 2 && (brigantine || (ship == "Галеон" && notBoard))) break;
+			else if (j == 2 && (brigantine || (galleon && notBoard))) break;
 			else if (j == 3 && frigate) break;
 		}
 	}
 }
-function loadGun(name) {
+function loadGun(name, elem) {
 	let div = document.createElement("div");
 	div.className = name;
 	div.style.position = "absolute";
-	yourShip.appendChild(div);
+	elem.appendChild(div);
 	return div;
 }
 
 // расставляем орудийные расчёты в зависимости от типа корабля и его направления
-function setGuns() {
-	let left = document.getElementsByClassName("left");
-	let right = document.getElementsByClassName("right");
-	let top = document.getElementsByClassName("top");
-	let bottom = document.getElementsByClassName("bottom");
+function setGuns(elem) {
+	let player = (elem == yourShip) ? 1 : 0;
+	let left = player ? document.getElementsByClassName("left") : document.getElementsByClassName("leftOpp");
+	let right = player ? document.getElementsByClassName("right") : document.getElementsByClassName("rightOpp");
+	let top = player ? document.getElementsByClassName("top") : document.getElementsByClassName("topOpp");
+	let bottom = player ? document.getElementsByClassName("bottom") : document.getElementsByClassName("bottomOpp");
 	let arsenal = [top, right, bottom, left];
 	arsenal.forEach(function(side, i) {
 		[].forEach.call(side, function(gun, j) {
-			gun.innerHTML = totalGuns[i][j];
-			placeGun(gun, getCoordinate(i, j));
+			gun.innerHTML = player ? totalGuns[i][j] : totalGunsOpp[i][j];
+			placeGun(player, gun, getCoordinate(player, i, j));
 		});
 	});
 }
-function placeGun(obj, arr) {
-	obj.style.left = arr[0] + "px";
-	obj.style.top = arr[1] + "px";
-	switch(shipDirection) {
+function placeGun(player, obj, arr) {
+	let direction = player ? shipDirection : shipOppDirection;
+	if (player) {
+		obj.style.left = arr[0] + "px";
+		obj.style.top = arr[1] + "px";
+	} else {
+		obj.style.right = arr[0] + "px";
+		obj.style.bottom = arr[1] + "px";
+	}
+	switch(direction) {
 		case "top":
 			obj.style.transform = "rotate(0deg)";
 			break;
@@ -171,11 +190,12 @@ function placeGun(obj, arr) {
 			break;
 	}
 }
-function getCoordinate(i, j) {
+function getCoordinate(player, i, j) {
+	let boat = player ? ship : shipOpp;
 	let x = 0;
 	let y = 0;
 	let arr = [];
-	switch(ship) {
+	switch(boat) {
 		case "Бригантина":
 			switch(i) {
 				case 0:
@@ -274,45 +294,104 @@ function wind() {
 	}
 }
 
+//первоначальное положение корабля
 function chooseDirection() {
 	let Left = document.createElement("button");
 	Left.innerHTML = "повернуть влево";
 	Left.onclick = function() {
-		changeCourse(1);
+		changeCourse(1, yourShip);
 	}
 	let Right = document.createElement("button");
 	Right.innerHTML = "повернуть вправо";
 	Right.onclick = function() {
-		changeCourse(0);
+		changeCourse(0, yourShip);
 	}
-	popup.innerHTML = "Выберите начальное направление корабля";
+	popup.innerHTML = "<p>Выберите начальное направление корабля<p>";
 	popup.appendChild(Left);
 	popup.appendChild(Right);
+
+	//test
+	let test = document.createElement("button");
+	test.innerHTML = "test";
+	test.onclick = function() {
+		move();
+	}
+	popup.appendChild(test);
+	fire.disabled = "";
+
 	popup.style.display = "block";
 }
 
 //меняем курс корабля
-function changeCourse(left) {
+function changeCourse(left, elem) {
+	let player = (elem == yourShip) ? 1 : 0;
+	let direction = player ? shipDirection : shipOppDirection;
 	let deg = 0;
-	switch(shipDirection) {
+	switch(direction) {
 		case "right":
 			deg = 90;
-			shipDirection = left ? "top" : "bottom";
+			direction = left ? "top" : "bottom";
 			break;
 		case "bottom":
 			deg = 180;
-			shipDirection = left ? "right" : "left";
+			direction = left ? "right" : "left";
 			break;
 		case "left":
 			deg = -90;
-			shipDirection = left ? "bottom" : "top";
+			direction = left ? "bottom" : "top";
 			break;
 		default:
-			shipDirection = left ? "left" : "right";
+			direction = left ? "left" : "right";
 	}
+	player ? shipDirection = direction : shipOppDirection = direction;
 	deg = left ? -90 + deg : 90 + deg;
-	yourShip.style.transform = "rotate(" + deg + "deg)";
-	setGuns();
+	elem.style.transform = "rotate(" + deg + "deg)";
+	setGuns(elem);
+}
+
+function move() {
+	let btn = document.getElementById("grapple");
+	distance = distance ? 0 : 1;
+	yourShip.style.top = distance ? "300px" : "250px";
+	enemyShip.style.top = distance ? "0px" : "50px";
+	btn.disabled = distance ? "disabled" : "";
+}
+
+function salvo() {
+	let guns = 0;
+	let squadron = [];
+	let fire = document.createElement("button");
+	fire.innerHTML = "пли!";
+	fire.onclick = function() {
+		squadron.forEach(function(el, i) {
+			let dices = document.getElementsByClassName("dices");
+			rollDice(dices[i]);
+		});
+	}
+	popup.innerHTML = "";
+	popup.appendChild(fire);
+	switch(shipDirection) {
+		case "right":
+			squadron = leftGuns;
+			break;
+		case "bottom":
+			squadron = bottomGuns;
+			break;
+		case "left":
+			squadron = rightGuns;
+			break;
+		default:
+			squadron = topGuns;
+	}
+	guns = squadron.length;
+	for (let i = 0; i < guns; i++) {
+		let dice = document.createElement("img");
+		dice.className = "dices";
+		dice.src = "images/dice.gif";
+		dice.width = 44;
+		dice.height = 44;
+		popup.appendChild(dice);
+	}
 }
 
 // проверка статуса игры и активных стратагем
@@ -325,6 +404,8 @@ function checkStrata(arr) {
 
 // запуск игры после проверки
 function Continue() {}
+
+function closeCombat() {alert("yo");}
 
 function rollDice(dice) {
 	let rand = Math.random() * 6 + 1;

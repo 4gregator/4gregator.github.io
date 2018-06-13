@@ -3,12 +3,13 @@
 }
 
 #dialog {
-	position: fixed;
+	position: absolute;
 	top: 44px;
-	left: 44%;
+	left: 44px;
 	border: solid 1px;
 	border-radius: 4px;
 	background-color: #bfdab7;
+	z-index: 2;
 }
 .TheGame {
 	width: 100%;
@@ -31,14 +32,31 @@
 	top: 200px;
 	left: 50px;
 }
+#boarding, #fireButton {
+	width: 100px;
+	height: 100px;
+	position: absolute;
+	top: 350px;
+}
+#boarding {
+	left: 40px;
+}
+#fireButton {
+	left: 160px;
+}
+#grapple:disabled, #fire:disabled {
+	opacity: 0.5;
+}
 
 /* положение кораблей */
-#shipPlayer {
+#shipPlayer, #shipOpponent {
 	width: 143px;
 	height: 200px;
 	position: absolute;
-	top: 300px;
 	left: 460px;
+}
+#shipPlayer {
+	top: 300px;
 }
 
 /* страты в руке */
