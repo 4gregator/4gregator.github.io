@@ -360,13 +360,19 @@ function move() {
 function salvo() {
 	let guns = 0;
 	let squadron = [];
+	let shoots = [];
 	let fire = document.createElement("button");
 	fire.innerHTML = "пли!";
 	fire.onclick = function() {
 		squadron.forEach(function(el, i) {
 			let dices = document.getElementsByClassName("dices");
-			rollDice(dices[i]);
+			shoots[i] = rollDice(dices[i]);
 		});
+		fire.style.display = "none";
+		shoots.sort(function(a, b) {
+			return b - a;
+		});
+		getResult(shoots);
 	}
 	popup.innerHTML = "";
 	popup.appendChild(fire);
@@ -392,6 +398,44 @@ function salvo() {
 		dice.height = 44;
 		popup.appendChild(dice);
 	}
+}
+function getResult(arr) {
+	let kills = 0;
+	let wounds = 0;
+	let i = 0;
+	let index = 0;
+	switch(shipOppDirection) {
+		case "right":
+			index = 1;
+			break;
+		case "bottom":
+			index = 2;
+			break;
+		case "left":
+			index = 3;
+			break;
+		default: break;
+	}
+	let target = getTarget(index);
+	arr.forEach(function(dice) {
+		/*if (dice < target[i]) brake;*/
+		if (dice > target[i]) {
+			kills++;
+			i++;
+		} else if (dice == target[i]) {
+			wounds++;
+			i++;
+		}
+	});
+	let result = document.createElement("p");
+	result.innerHTML = "Пушек уничтожено: " + kills + "<br>Членов экипажа ранено: " + wounds;
+	popup.appendChild(result);
+}
+function getTarget(index) {
+	if (totalGunsOpp[index].valueOf() == 0) {
+		index == 3 ? index = 0 : index++;
+		getTarget();
+	} else return totalGunsOpp[index];
 }
 
 // проверка статуса игры и активных стратагем
