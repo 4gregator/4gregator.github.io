@@ -1,6 +1,8 @@
+"use strict";
+
 var distance = 1;
 var gender = 0;
-var round = 1;
+var round = 0;
 var turn = 0;
 var movePts = 0;
 var evasion = 0;
@@ -22,30 +24,66 @@ var topGunsOpp = [];
 var bottomGunsOpp = [];
 var totalGunsOpp = [topGunsOpp, rightGunsOpp, bottomGunsOpp, leftGunsOpp];
 var hand = [];
-var deck = [];
 var stratagems = [];
-for (let i = 0; i < 30; i++) {
-	stratagems.push(i + 1);
-};
+for (let i = 0; i < 30; i++) {stratagems.push(i + 1);}
 var popup = document.getElementById("dialog");
 var yourShip = document.getElementById("shipPlayer");
 var enemyShip = document.getElementById("shipOpponent");
-var fire = document.getElementById("fire");
+var prepareFire = document.getElementById("fire");
+var control = document.getElementById("controlPanel");
+
+
+function PlayTheGame() {
+	round++;
+	roundStart();
+	shipChoice().then(function() {
+		chooseDirection().then(function() {
+			loadGuns(enemyShip);
+			setGuns(enemyShip);
+			// начало хода, начисление ОД + здесь должна быть проверка чей ход => если ход противника, то ждёт промиса о начале хода игрока
+			switch(ship) {
+				case "Бригантина": movePts++;
+				case "Фрегат": movePts++;
+				default: movePts++;
+			}
+			makeAction();
+		});
+	});
+}
+
+function makeAction() {
+	document.getElementById("infoPanel").innerHTML = "ОД: " + movePts;
+	if (movePts == 0) return 0;
+	prepareFire.disabled = "";
+	let action = new Promise(function(resolve) {
+		makeMove().then(function() {
+			return resolve();
+		});
+		prepareFire.onclick = function() {
+			salvo().then(function() {
+				return resolve();
+			});
+		}
+	});
+	action.then(function() {
+		return makeAction();
+	});
+}
 
 function male() {
 	gender = 1;
 	popup.style.display = "none";
-	start();
+	PlayTheGame();
 }
 function female() {
 	gender = 2;
 	popup.style.display = "none";
-	start();
+	PlayTheGame();
 }
 
-function start() {
+function roundStart() {
 	shuffleDeck(stratagems);
-	deck = stratagems;
+	let deck = stratagems;
 	while (hand.length < 6) {
 		takeStrata(deck);
 	}
@@ -66,48 +104,35 @@ function takeStrata(arr) {
 	} else {
 		hand.push(arr.shift());
 		document.getElementsByClassName("strata")[a].innerHTML = "<img src='images/" + hand[a] + ".jpg' width='89' height='124'>";
-		shipChoice();
 	}
 }
 
 function shipChoice() {
 	let a = ships.length;
-	if (a != 1) {
-		popup.innerHTML = "<p>Выберите корабль на <p>" + round + " раунд";
+	let text = (a != 1) ? "<p>Выберите корабль на <p>" + round + " раунд" : "<p>У вас остался последний корабль:<p>";
+	popup.innerHTML = text;
+	return new Promise(function(resolve) {
 		for (let i = 0; i < a; i++) {
 			let shipAvlbl = document.createElement("button");
 			shipAvlbl.innerHTML = ships[i];
 			shipAvlbl.onclick = function() {
 				popup.style.display = "none";
-				ship = ships.splice(i, 1)[0];
+				ship = (a != 1) ? ships.splice(i, 1)[0] : ships[i];
 				yourShip.innerHTML = "<img src='images/" + ship + ".jpg' width='143' height='200'>";
 				loadGuns(yourShip);
 				setGuns(yourShip);
 				wind();
-				loadGuns(enemyShip);
-				setGuns(enemyShip);
-				chooseDirection();
+				return resolve();
 			}
 			popup.appendChild(shipAvlbl);
 		}
-	} else {
-		popup.innerHTML = "<p>У вас остался последний корабль:<p>";
-		let shipAvlbl = document.createElement("button");
-		shipAvlbl.innerHTML = ships[0];
-		shipAvlbl.onclick = function() {
-				popup.style.display = "none";
-				ship = ships[0];
-				yourShip.innerHTML = "<img src='images/" + ship + ".jpg' width='143' height='200'>";
-				wind();
-			}
-		popup.appendChild(shipAvlbl);
-	}
-	popup.style.display = "block";
+		popup.style.display = "block";
+	});
 }
 
 // подгружаем пушки в зависимости от типа корабля
 function loadGuns(elem) {
-	let player = (elem == yourShip) ? 1 : 0;
+	let player = (elem == yourShip) ? true : false;
 	let arsenal = [	[],	[],	[],	[] ];
 	let brigantine = player ? (ship == "Бригантина") : (shipOpp == "Бригантина");
 	let frigate = player ? (ship == "Фрегат") : (shipOpp == "Фрегат");
@@ -144,6 +169,13 @@ function loadGuns(elem) {
 			else if (j == 3 && frigate) break;
 		}
 	}
+	//добавляем уклонение
+	let eva = 0;
+	let className = player ? "eva" : "evaOpp";
+	let evaDiv = loadGun(className, elem);
+	if (galleon) eva = 1;
+	else eva = frigate ? 2 : 3;
+	player ? evasion = eva : evasionOpp = eva;
 }
 function loadGun(name, elem) {
 	let div = document.createElement("div");
@@ -155,7 +187,8 @@ function loadGun(name, elem) {
 
 // расставляем орудийные расчёты в зависимости от типа корабля и его направления
 function setGuns(elem) {
-	let player = (elem == yourShip) ? 1 : 0;
+	let player = (elem == yourShip) ? true : false;
+	let eva = player ? document.getElementsByClassName("eva")[0] : document.getElementsByClassName("evaOpp")[0];
 	let left = player ? document.getElementsByClassName("left") : document.getElementsByClassName("leftOpp");
 	let right = player ? document.getElementsByClassName("right") : document.getElementsByClassName("rightOpp");
 	let top = player ? document.getElementsByClassName("top") : document.getElementsByClassName("topOpp");
@@ -167,6 +200,11 @@ function setGuns(elem) {
 			placeGun(player, gun, getCoordinate(player, i, j));
 		});
 	});
+	//уклонение
+	let galleon = player ? (ship == "Галеон") : (shipOpp == "Галеон");
+	let EvaXY = galleon ? [68, 94] : [23, 41];
+	eva.innerHTML = player ? evasion : evasionOpp;
+	placeGun(player, eva, EvaXY);
 }
 function placeGun(player, obj, arr) {
 	let direction = player ? shipDirection : shipOppDirection;
@@ -308,20 +346,19 @@ function chooseDirection() {
 	Right.onclick = function() {
 		changeCourse(0, yourShip);
 	}
+	let ready = document.createElement("button");
+	ready.innerHTML = "разместить корабль";
 	popup.innerHTML = "<p>Выберите начальное направление корабля<p>";
 	popup.appendChild(Left);
 	popup.appendChild(Right);
-
-	//test
-	let test = document.createElement("button");
-	test.innerHTML = "test";
-	test.onclick = function() {
-		move();
-	}
-	popup.appendChild(test);
-	fire.disabled = "";
-
+	popup.appendChild(ready);
 	popup.style.display = "block";
+	return new Promise(function(resolve) {
+		ready.onclick = function() {
+			popup.style.display = "none";
+			return resolve();
+		}
+	});
 }
 
 //меняем курс корабля
@@ -359,26 +396,132 @@ function move() {
 	btn.disabled = distance ? "disabled" : "";
 }
 
+function makeMove() {
+	let forward = document.getElementById("move");
+	let left = document.getElementById("turnLeft");
+	let right = document.getElementById("turnRight");
+	let back = document.getElementById("turnAround");
+	let moveCostF = 1;
+	let moveCostL = 1;
+	let moveCostR = 1;
+	let moveCostB = 2;
+	//влияние ветра на стоимость движения
+	switch(shipDirection) {
+		case "top":
+			switch(wind) {
+				case "north":
+					moveCostF = 0;
+					break;
+				case "east":
+					moveCostR = 0;
+					break;
+				case "south":
+					moveCostF = 2;
+					moveCostB = 1;
+					break;
+				case "west":
+					moveCostL = 0;
+			}
+			if (distance && movePts >= moveCostF) forward.disabled = "";
+			break;
+		case "right":
+			switch(wind) {
+				case "north":
+					moveCostL = 0;
+					break;
+				case "south":
+					moveCostR = 0;
+					break;
+				case "west":
+					moveCostB = 1;
+			}
+			break;
+		case "bottom":
+			switch(wind) {
+				case "north":
+					moveCostF = 2;
+					moveCostB = 1;
+					break;
+				case "east":
+					moveCostL = 0;
+					break;
+				case "south":
+					moveCostF = 0;
+					break;
+				case "west":
+					moveCostR = 0;
+			}
+			if (!distance && movePts >= moveCostF) forward.disabled = "";
+			break;
+		case "left":
+			switch(wind) {
+				case "north":
+					moveCostR = 0;
+					break;
+				case "east":
+					moveCostB = 1;
+					break;
+				case "south":
+					moveCostL = 0;
+			}
+	}
+	if (movePts >= moveCostL) left.disabled = "";
+	if (movePts >= moveCostR) right.disabled = "";
+	if (movePts >= moveCostB) back.disabled = "";
+	forward.innerHTML = "Полный вперёд! (" + moveCostF + " од)";
+	left.innerHTML = "Лево руля! (" + moveCostL + " од)";
+	right.innerHTML = "Право руля! (" + moveCostR + " од)";
+	back.innerHTML = "Разворот! (" + moveCostB + " од)";
+	control.style.display = "block";
+	function deactivation() {
+		control.style.display = "none";
+		forward.disabled = "disabled";
+		left.disabled = "disabled";
+		right.disabled = "disabled";
+		back.disabled = "disabled";
+		prepareFire.disabled = "disabled";
+	}
+	return new Promise(function(resolve) {
+		forward.onclick = function() {
+			movePts -= moveCostF;
+			deactivation();
+			move();
+			return resolve();
+		}
+		left.onclick = function() {
+			movePts -= moveCostL;
+			deactivation();
+			changeCourse(1, yourShip);
+			return resolve();
+		}
+		right.onclick = function() {
+			movePts -= moveCostR;
+			deactivation();
+			changeCourse(0, yourShip);
+			return resolve();
+		}
+		back.onclick = function() {
+			movePts -= moveCostB;
+			deactivation();
+			changeCourse(1, yourShip);
+			changeCourse(1, yourShip);
+			return resolve();
+		}
+	});
+}
+
+//стрельба
 function salvo() {
 	let guns = 0;
 	let squadron = [];
 	let shoots = [];
 	let fire = document.createElement("button");
 	fire.innerHTML = "пли!";
-	fire.onclick = function() {
-		squadron.forEach(function(el, i) {
-			let dices = document.getElementsByClassName("dices");
-			shoots[i] = rollDice(dices[i]);
-		});
-		fire.style.display = "none";
-		shoots.sort(function(a, b) {
-			return b - a;
-		});
-		let result = getResult(shoots);
-		popup.appendChild(result);
-	}
+	prepareFire.disabled = "disabled";
+	control.style.display = "none";
 	popup.innerHTML = "";
 	popup.appendChild(fire);
+	popup.style.display = "block";
 	switch(shipDirection) {
 		case "right":
 			squadron = leftGuns;
@@ -401,15 +544,35 @@ function salvo() {
 		dice.height = 44;
 		popup.appendChild(dice);
 	}
+	return new Promise(function(resolve) {
+		fire.onclick = function() {
+			movePts--;
+			squadron.forEach(function(el, i) {
+				let dices = document.getElementsByClassName("dices");
+				shoots[i] = rollDice(dices[i]);
+			});
+			fire.disabled = "disabled";
+			shoots.sort(function(a, b) {
+				return b - a;
+			});
+			let result = getResult(shoots);
+			let next = document.createElement("button");
+			next.innerHTML = "принять";
+			next.onclick = function() {
+				popup.style.display = "none";
+				return resolve();
+			}
+			popup.appendChild(result);
+			popup.appendChild(next);
+		}
+	});
 }
 function getResult(arr) {
 	let result = document.createElement("p");
-	if (arr[2] == 6) {
-		let evade = (evasionOpp > 0) ? "Оппонент использует уклонение<br>Уклонений осталось: " + evasionOpp : "Вы выиграли раунд!";
-		result.innerHTML = "Удачное попадание вызвало детонацию порохового склада!<br>" + evade;
-		return result;
-	} else if (arr[1] == 6 && distance == 0) {
-		let evade = (evasionOpp > 0) ? "Оппонент использует уклонение<br>Уклонений осталось: " + evasionOpp : "Вы выиграли раунд!";
+	if (arr[2] == 6 || (arr[1] == 6 && distance == 0)) {
+		let evaUpd = evasionOpp - 1;
+		let evade = (evasionOpp > 0) ? "Оппонент использует уклонение<br>Уклонений осталось: " + evaUpd : "Вы выиграли раунд!";
+		evasionOpp = evaUpd;
 		result.innerHTML = "Удачное попадание вызвало детонацию порохового склада!<br>" + evade;
 		return result;
 	}

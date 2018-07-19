@@ -6,6 +6,7 @@
 	border-radius: 4px;
 	background-color: #bfdab7;
 	z-index: 2;
+	/* display: none; */
 }
 .TheGame {
 	width: 100%;
@@ -21,6 +22,11 @@
 	height: 500px;
 }
 
+#infoPanel {
+	position: absolute;
+	top: 40px;
+	right: 40px;
+}
 #wind {
 	width: 100px;
 	height: 100px;
@@ -28,7 +34,7 @@
 	top: 200px;
 	left: 50px;
 }
-#boarding, #fireButton {
+#boarding, #fireButton, #controlPanel {
 	width: 100px;
 	height: 100px;
 	position: absolute;
@@ -42,6 +48,10 @@
 }
 #grapple:disabled, #fire:disabled {
 	opacity: 0.5;
+}
+#controlPanel {
+	left: 280px;
+	display: none;
 }
 
 /* положение кораблей */
