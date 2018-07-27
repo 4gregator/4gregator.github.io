@@ -3,6 +3,7 @@
 var distance = 1;
 var gender = 0;
 var round = 0;
+var roundEnd = false;
 var turn = 0;
 var movePts = 0;
 var evasion = 0;
@@ -39,21 +40,46 @@ function PlayTheGame() {
 	shipChoice().then(function() {
 		chooseDirection().then(function() {
 			loadGuns(enemyShip);
-			setGuns(enemyShip);
-			// начало хода, начисление ОД + здесь должна быть проверка чей ход => если ход противника, то ждёт промиса о начале хода игрока
-			switch(ship) {
-				case "Бригантина": movePts++;
-				case "Фрегат": movePts++;
-				default: movePts++;
-			}
-			makeAction();
+			roundPlay();
+		});
+	});
+}
+function roundPlay() {
+	setGuns(enemyShip);
+	if (roundEnd) return 0;
+	// начало хода, начисление ОД + здесь должна быть проверка чей ход => если ход противника, то ждёт промиса о начале хода игрока
+	switch(ship) {
+		case "Бригантина": movePts++;
+		case "Фрегат": movePts++;
+		default: movePts++;
+	}
+	//смена хода
+	turnOver().then(function() {
+		changeTurn().then(function() {
+			return roundPlay();
 		});
 	});
 }
 
-function makeAction() {
+function turnOver() {
+	let endTurn = document.createElement("button");
+	endTurn.innerHTML = "Передать ход";
+	makeAction(endTurn);
+	return new Promise(function(resolve) {
+		endTurn.onclick = function() {
+			popup.style.display = "none";
+			return resolve();
+		}
+	});
+}
+function makeAction(elem) {
 	document.getElementById("infoPanel").innerHTML = "ОД: " + movePts;
-	if (movePts == 0) return 0;
+	if (movePts == 0) {
+		popup.innerHTML = "";
+		popup.appendChild(elem);
+		popup.style.display = "block";
+		return 0;
+	}
 	prepareFire.disabled = "";
 	let action = new Promise(function(resolve) {
 		makeMove().then(function() {
@@ -66,7 +92,13 @@ function makeAction() {
 		}
 	});
 	action.then(function() {
-		return makeAction();
+		return makeAction(elem);
+	});
+}
+
+function changeTurn() {
+	return new Promise(function(resolve) {
+		return resolve();
 	});
 }
 
@@ -196,7 +228,9 @@ function setGuns(elem) {
 	let arsenal = [top, right, bottom, left];
 	arsenal.forEach(function(side, i) {
 		[].forEach.call(side, function(gun, j) {
-			gun.innerHTML = player ? totalGuns[i][j] : totalGunsOpp[i][j];
+			let emptyCheck = player ? totalGuns[i][j] : totalGunsOpp[i][j];
+			if (emptyCheck == undefined) gun.innerHTML = "X";
+			else gun.innerHTML = emptyCheck;
 			placeGun(player, gun, getCoordinate(player, i, j));
 		});
 	});
@@ -560,6 +594,7 @@ function salvo() {
 			next.innerHTML = "принять";
 			next.onclick = function() {
 				popup.style.display = "none";
+				sendResult();
 				return resolve();
 			}
 			popup.appendChild(result);
@@ -581,36 +616,48 @@ function getResult(arr) {
 	let i = 0;
 	let index = 0;
 	switch(shipOppDirection) {
-		case "right":
-			index = 1;
-			break;
-		case "bottom":
-			index = 2;
-			break;
-		case "left":
-			index = 3;
-			break;
-		default: break;
+		case "left": index++;
+		case "bottom": index++;
+		case "right": index++;
 	}
-	let target = getTarget(index);
+	while (totalGunsOpp[index].valueOf() == 0) {
+		index == 3 ? index = 0 : index++;
+	}
+	let target = [];
+	for (let i = 0; i < totalGunsOpp[index].length; i++) {
+		target[i] = totalGunsOpp[index][i];
+	}
 	arr.forEach(function(dice) {
-		/*if (dice < target[i]) brake;*/
 		if (dice > target[i]) {
+			target[i] = 0;
 			kills++;
 			i++;
 		} else if (dice == target[i]) {
+			if (target[i] == 1) kills++;
+			target[i]--;
 			wounds++;
 			i++;
 		}
 	});
+	sendResult().then(function() {
+		target = target.filter(function(crew) {
+			return crew > 0;
+		});
+		target = target.sort(function(a, b) {
+			return b - a;
+		});
+		totalGunsOpp[index] = target;
+		setGuns(enemyShip);
+	});
 	result.innerHTML = "Пушек уничтожено: " + kills + "<br>Членов экипажа ранено: " + wounds;
 	return result;
 }
-function getTarget(index) {
-	if (totalGunsOpp[index].valueOf() == 0) {
-		index == 3 ? index = 0 : index++;
-		getTarget();
-	} else return totalGunsOpp[index];
+
+//отправка результата стрельбы
+function sendResult() {
+	return new Promise(function(resolve) {
+		return resolve();
+	});
 }
 
 // проверка статуса игры и активных стратагем
