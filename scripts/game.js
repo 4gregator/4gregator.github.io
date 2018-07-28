@@ -24,6 +24,7 @@ var rightGunsOpp = [];
 var topGunsOpp = [];
 var bottomGunsOpp = [];
 var totalGunsOpp = [topGunsOpp, rightGunsOpp, bottomGunsOpp, leftGunsOpp];
+var reloading = [];
 var hand = [];
 var stratagems = [];
 for (let i = 0; i < 30; i++) {stratagems.push(i + 1);}
@@ -53,6 +54,7 @@ function roundPlay() {
 		case "Фрегат": movePts++;
 		default: movePts++;
 	}
+	reloading = [];
 	//смена хода
 	turnOver().then(function() {
 		changeTurn().then(function() {
@@ -80,7 +82,23 @@ function makeAction(elem) {
 		popup.style.display = "block";
 		return 0;
 	}
-	prepareFire.disabled = "";
+	if (reloading.length == 0) {
+		prepareFire.disabled = "";
+	} else {
+		switch(shipDirection) {
+			case "top": 
+				if (reloading.indexOf("top") == -1) prepareFire.disabled = "";
+				break;
+			case "right": 
+				if (reloading.indexOf("left") == -1) prepareFire.disabled = "";
+				break;
+			case "bottom":
+				if (reloading.indexOf("bottom") == -1) prepareFire.disabled = "";
+				break;
+			case "left":
+				if (reloading.indexOf("right") == -1) prepareFire.disabled = "";
+		}
+	}
 	let action = new Promise(function(resolve) {
 		makeMove().then(function() {
 			return resolve();
@@ -559,15 +577,19 @@ function salvo() {
 	switch(shipDirection) {
 		case "right":
 			squadron = leftGuns;
+			reloading.push("left");
 			break;
 		case "bottom":
 			squadron = bottomGuns;
+			reloading.push("bottom");
 			break;
 		case "left":
 			squadron = rightGuns;
+			reloading.push("right");
 			break;
 		default:
 			squadron = topGuns;
+			reloading.push("top");
 	}
 	guns = squadron.length;
 	for (let i = 0; i < guns; i++) {
@@ -660,16 +682,10 @@ function sendResult() {
 	});
 }
 
-// проверка статуса игры и активных стратагем
-function checkStatus() {}
-
 function checkStrata(arr) {
 	let a = arr.length;
 	for (let i = 0; i < a; i++) {}
 }
-
-// запуск игры после проверки
-function Continue() {}
 
 function closeCombat() {alert("yo");}
 
