@@ -4,6 +4,8 @@ var distance = 1;
 var gender = 0;
 var round = 0;
 var roundEnd = false;
+var plrVP = 0;
+var oppVP = 0;
 var turn = 0;
 var movePts = 0;
 var evasion = 0;
@@ -36,18 +38,30 @@ var control = document.getElementById("controlPanel");
 
 
 function PlayTheGame() {
+	if (plrVP == 2 || oppVP == 2) return 0;
 	round++;
-	roundStart();
-	shipChoice().then(function() {
-		chooseDirection().then(function() {
-			loadGuns(enemyShip);
-			roundPlay();
+	let roundOver = new Promise(function(resolve) {
+		let endRound = document.createElement("button");
+		endRound.innerHTML = "Завершить раунд";
+		endRound.onclick = function() {
+			popup.style.display = "none";
+			return resolve();
+		}
+		roundStart();
+		shipChoice().then(function() {
+			chooseDirection().then(function() {
+				loadGuns(enemyShip);
+				roundPlay(endRound);
+			});
 		});
 	});
+	roundOver.then(function() {
+		clearField();
+		PlayTheGame();
+	});
 }
-function roundPlay() {
+function roundPlay(elem) {
 	setGuns(enemyShip);
-	if (roundEnd) return 0;
 	// начало хода, начисление ОД + здесь должна быть проверка чей ход => если ход противника, то ждёт промиса о начале хода игрока
 	switch(ship) {
 		case "Бригантина": movePts++;
@@ -56,17 +70,27 @@ function roundPlay() {
 	}
 	reloading = [];
 	//смена хода
-	turnOver().then(function() {
+	turnOver(elem).then(function() {
 		changeTurn().then(function() {
-			return roundPlay();
+			return roundPlay(elem);
 		});
 	});
 }
+function clearField() {
+	enemyShip.innerHTML = "";
+	enemyShip.style.transform = "";
+	shipOppDirection = "top";
+	yourShip.innerHTML = "";
+	yourShip.style.transform = "";
+	shipDirection = "top";
+	if (!distance) move();
+	hand = [];
+}
 
-function turnOver() {
+function turnOver(elem) {
 	let endTurn = document.createElement("button");
 	endTurn.innerHTML = "Передать ход";
-	makeAction(endTurn);
+	makeAction(endTurn, elem);
 	return new Promise(function(resolve) {
 		endTurn.onclick = function() {
 			popup.style.display = "none";
@@ -74,11 +98,11 @@ function turnOver() {
 		}
 	});
 }
-function makeAction(elem) {
+function makeAction(elem1, elem2) {
 	document.getElementById("infoPanel").innerHTML = "ОД: " + movePts;
 	if (movePts == 0) {
 		popup.innerHTML = "";
-		popup.appendChild(elem);
+		popup.appendChild(elem1);
 		popup.style.display = "block";
 		return 0;
 	}
@@ -110,7 +134,13 @@ function makeAction(elem) {
 		}
 	});
 	action.then(function() {
-		return makeAction(elem);
+		if (roundEnd) {
+			popup.innerHTML = "";
+			popup.appendChild(elem2);
+			popup.style.display = "block";
+			return 0;
+		}
+		else return makeAction(elem1, elem2);
 	});
 }
 
@@ -132,6 +162,7 @@ function female() {
 }
 
 function roundStart() {
+	roundEnd = false;
 	shuffleDeck(stratagems);
 	let deck = stratagems;
 	while (hand.length < 6) {
@@ -171,7 +202,7 @@ function shipChoice() {
 				yourShip.innerHTML = "<img src='images/" + ship + ".jpg' width='143' height='200'>";
 				loadGuns(yourShip);
 				setGuns(yourShip);
-				wind();
+				changeWind();
 				return resolve();
 			}
 			popup.appendChild(shipAvlbl);
@@ -359,7 +390,7 @@ function getCoordinate(player, i, j) {
 	return arr;
 }
 
-function wind() {
+function changeWind() {
 	let compas = document.getElementById("wind");
 	let dice = document.createElement("img");
 	dice.width = 40;
@@ -617,6 +648,14 @@ function salvo() {
 			next.onclick = function() {
 				popup.style.display = "none";
 				sendResult();
+				let totalCrew = 0;
+				for (let i = 0; i < totalGunsOpp.length; i++) {
+					totalCrew += totalGunsOpp[i].length;
+				}
+				if (totalCrew <= 1) {
+					roundEnd = true;
+					plrVP++;
+				}
 				return resolve();
 			}
 			popup.appendChild(result);
@@ -627,6 +666,10 @@ function salvo() {
 function getResult(arr) {
 	let result = document.createElement("p");
 	if (arr[2] == 6 || (arr[1] == 6 && distance == 0)) {
+		if (evasionOpp == 0) {
+			plrVP++;
+			roundEnd = true;
+		}
 		let evaUpd = evasionOpp - 1;
 		let evade = (evasionOpp > 0) ? "Оппонент использует уклонение<br>Уклонений осталось: " + evaUpd : "Вы выиграли раунд!";
 		evasionOpp = evaUpd;
@@ -687,7 +730,29 @@ function checkStrata(arr) {
 	for (let i = 0; i < a; i++) {}
 }
 
-function closeCombat() {alert("yo");}
+function closeCombat() {
+	combatInvite().then(function(answer) {
+		if (answer) combatResult();
+		else evasionOpp--;
+	});
+}
+function combatInvite() {
+	return new Promise(function(resolve) {
+		return resolve(true);
+	});
+}
+function combatResult() {
+	roundEnd = true;
+	if (totalGuns.valueOf() - 6 >= totalGunsOpp.valueOf()) {
+		plrVP++;
+	} else if (totalGunsOpp.valueOf() - 6 >= totalGuns.valueOf()) {
+		oppVP++;
+	} else {
+		let plrPower = totalGuns.valueOf() + rollDice();
+		let oppPower = totalGunsOpp.valueOf() + rollDice();
+		plrPower >= oppPower ? plrVP++ : oppVP++;
+	}
+}
 
 function rollDice(dice) {
 	let rand = Math.random() * 6 + 1;
