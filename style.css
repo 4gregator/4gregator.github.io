@@ -6,7 +6,6 @@
 	border-radius: 4px;
 	background-color: #bfdab7;
 	z-index: 2;
-	/* display: none; */
 }
 .TheGame {
 	width: 100%;
@@ -60,6 +59,7 @@
 	height: 200px;
 	position: absolute;
 	left: 460px;
+	display: none;
 }
 #shipPlayer {
 	top: 300px;
@@ -84,4 +84,8 @@
 	-webkit-transform: scale(4);
 	-moz-transform: scale(4);
 	-o-transform: scale(4);
+}
+
+#portret {
+	display: none;
 }
