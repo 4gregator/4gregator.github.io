@@ -59,14 +59,14 @@
 }
 
 /* положение кораблей */
-#shipPlayer, #shipOpponent {
+#shipPlr, #shipOpp {
 	width: 143px;
 	height: 200px;
 	position: absolute;
 	left: 460px;
 	display: none;
 }
-#shipPlayer {
+#shipPlr {
 	top: 300px;
 }
 
@@ -91,6 +91,6 @@
 	-o-transform: scale(4);
 }
 
-#portret {
+#portretOpp {
 	display: none;
 }
