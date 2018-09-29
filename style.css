@@ -1,3 +1,7 @@
+#start {
+	position: absolute;
+}
+
 #dialog {
 	position: absolute;
 	top: 44px;
@@ -6,6 +10,7 @@
 	border-radius: 4px;
 	background-color: #bfdab7;
 	z-index: 2;
+	display: none;
 }
 .TheGame {
 	width: 100%;

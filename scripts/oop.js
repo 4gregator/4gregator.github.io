@@ -13,7 +13,19 @@ var player = {
 			bottom: []
 		}
 	},
-	hand: {}
+	hand: {},
+	init: function(collection) {
+		for (let i = 0; i < collection.length; i++) {
+			let id = collection[i].id;
+			document.getElementById(id).addEventListener('click', function() {
+				player.gender = id;
+				popup.style.display = "none";
+				computer.init();
+				console.log(player.gender);
+				console.log(computer.gender);
+			});
+		}
+	}
 },
 computer = {
 	gender: false,
@@ -34,11 +46,9 @@ computer = {
 	init: function() {
 		if (!this.gender) this.gender = random(0, 1) ? "male" : "female";
 		this.ship.name = this.fleet.splice(random(0, this.fleet.length - 1))[0];
-	}
-},
-game = {
+		this.render();
+	},
 	render: function() {
-		computer.init();
 		let img = document.getElementById("portret"),
 			cmpShip = document.getElementById("shipOpponent");
 
@@ -46,9 +56,18 @@ game = {
 		img.style.display = "block";
 		cmpShip.src = "images/" + computer.ship.name + "2.jpg";
 		cmpShip.style.display = "block";
-		console.log(computer.ship.name);
+	}
+},
+game = {
+	render: function() {
+		document.getElementById("play").addEventListener('click', function() {
+			document.getElementById("start").style.display = "none";
+			popup.style.display = "block";
+			player.init(document.getElementsByClassName("gender"));
+		});
 	},
-}
+},
+popup = document.getElementById("dialog");
 
 window.addEventListener('load', function() {
 	game.render();
