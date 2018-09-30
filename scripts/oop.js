@@ -6,6 +6,7 @@ var player = {
 	victPts: 0,
 	fleet: ["Бригантина", "Фрегат", "Галеон"],
 	ship: {
+		object: plrShip,
 		name: false,
 		direction: "top",
 		movePts: 0,
@@ -27,6 +28,36 @@ var player = {
 					player.gender = id;
 					return resolve();
 				});
+			}
+		});
+	},
+	renderShip: function() {
+		this.ship.object.getElementsByClassName("ship")[0].src = "images/" + this.ship.name + "1.jpg";
+		this.ship.object.getElementsByClassName("ship")[0].style.display = "block";
+	},
+	renderStrata: function() {
+		let strata = document.getElementsByClassName("strata");
+		for (let i = 0; i < strata.length; i++) {
+			strata[i].src = "images/" + this.hand[i].id + ".jpg";
+			strata[i].style.display = "block";
+		}
+	},
+	shipChoice: function() {
+		let text = (this.fleet.length != 1) ? "<p>Выберите корабль:<p>": "<p>У вас остался последний корабль:<p>";
+		dialog.innerHTML = text;
+		return new Promise(function(resolve) {
+			for (let i = 0; i < player.fleet.length; i++) {
+				let shipAvlbl = document.createElement("button");
+				shipAvlbl.innerHTML = player.fleet[i];
+				shipAvlbl.addEventListener('click', function() {
+					dialog.style.display = "none";
+					player.ship.name = (player.fleet.length != 1) ? player.fleet.splice(i, 1)[0] : player.fleet[i];
+					player.renderShip();
+					game.loadGuns.call(player, plrShip);
+					computer.init();
+					return resolve();
+				});
+				dialog.appendChild(shipAvlbl);
 			}
 		});
 	}
@@ -54,10 +85,10 @@ computer = {
 		this.render();
 	},
 	render: function() {
-		portretOpp.src = "images/" + computer.gender + ".jpg";
+		portretOpp.src = "images/" + this.gender + ".jpg";
 		portretOpp.style.display = "block";
-		shipOpponent.src = "images/" + computer.ship.name + "2.jpg";
-		shipOpponent.style.display = "block";
+		oppShip.getElementsByClassName("ship")[0].src = "images/" + this.ship.name + "2.jpg";
+		oppShip.getElementsByClassName("ship")[0].style.display = "block";
 	}
 },
 game = {
@@ -101,8 +132,8 @@ game = {
 			this.innerHTML = "Далее";
 			this.addEventListener('click', function() {
 				game.takeStrata();
-				console.log(player.hand);
-				console.log(computer.hand);
+				player.renderStrata();
+				player.shipChoice();
 			});
 		}
 	},
@@ -130,6 +161,31 @@ game = {
 				computer.hand.push(deck.shift());
 			}
 		}
+	},
+	loadGuns: function(elem) {
+		for (let side in this.ship.guns) {
+			let notBoard = (side != "top" && side != "bottom") ? true : false;
+			for (let i = 0; i < 5; i++) { // максимум 5 орудий по борту
+				let crew = notBoard ? 4 : 3;
+				switch(this.ship.name) {
+					case "Бригантина": crew++;
+					case "Фрегат": crew++;
+					case "Галеон": this.ship.guns[side].push(crew);
+				}
+				game.createGun.call(elem, side);
+				if (this.ship.name == "Бригантина" && notBoard) break;
+				else if (i == 1 && this.ship.name == "Фрегат" && notBoard) break;
+				else if ( i == 2 && ( this.ship.name == "Бригантина" || (this.ship.name == "Галеон" && notBoard) ) ) break;
+				else if (i == 3 && this.ship.name == "Фрегат") break;
+			}
+		}
+		console.log(this.ship);
+	},
+	createGun: function(name) {
+		let div = document.createElement("div");
+		div.className = name;
+		div.style.position = "absolute";
+		this.appendChild(div);
 	}
 };
 
@@ -146,121 +202,91 @@ function compareRandom(a, b) {
 
 var stratagems = [{
 	id: 1,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 2,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 3,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 4,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 5,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 6,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 7,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 8,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 9,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 10,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 11,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 12,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 13,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 14,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 15,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 16,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 17,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 18,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 19,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 20,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 21,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 22,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 23,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 24,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 25,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 26,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 27,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 28,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 29,
-	src: "images/" + this.id + ".jpg",
 },
 {
 	id: 30,
-	src: "images/" + this.id + ".jpg",
 }];

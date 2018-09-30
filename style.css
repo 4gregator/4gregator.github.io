@@ -59,14 +59,14 @@
 }
 
 /* положение кораблей */
-#shipPlr, #shipOpp {
+.ship {
 	width: 143px;
 	height: 200px;
 	position: absolute;
 	left: 460px;
 	display: none;
 }
-#shipPlr {
+#plrShip .ship {
 	top: 300px;
 }
 
@@ -78,7 +78,10 @@
 	margin-top: 240px;
 }
 .strata {
+	width: 89px;
+	height: 124px;
 	margin-right: 11px;
+	display: none;
 }
 .strata img {
 	-moz-transition: all 1s ease-out;
