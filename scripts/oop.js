@@ -92,50 +92,81 @@ computer = {
 	}
 },
 game = {
+	round: 0,
 	roundEnd: true,
+	PlayTheGame: function() {
+		if (player.victPts == 2 || computer.victPts == 2) return 0;
+		this.round++;
+		if (this.round == 1) this.init().then(game.roundStart.bind(game));
+		//
+		/*let roundOver = new Promise(function(resolve) {
+			let endRound = document.createElement("button");
+			endRound.innerHTML = "Завершить раунд";
+			endRound.onclick = function() {
+				popup.style.display = "none";
+				return resolve();
+			}
+			roundStart();
+			shipChoice().then(function() {
+				chooseDirection().then(function() {
+					loadGuns(enemyShip);
+					roundPlay(endRound);
+				});
+			});
+		});
+		roundOver.then(function() {
+			clearField();
+			PlayTheGame();
+		});*/
+	},
 	init: function() {
 		let gender = new Promise(function(resolve) {
 			play.addEventListener('click', function() {
 				player.init( document.getElementsByClassName("gender") ).then(function() {return resolve();});
 			});
 		});
-		gender.then(function() {
-			dialog.innerHTML = "<p>Бросим кости и узнаем, кто ходит первый!<p>";
-			for (let i = 0; i < 2; i++) {
-				let dice = document.createElement("img");
-				dice.className = "dices";
-				dice.src = "images/dice.gif";
-				dice.width = 44;
-				dice.height = 44;
-				dice.style.display = "block";
-				dialog.appendChild(dice);
-			}
-
+		return new Promise(function(resolve) {
+			gender.then(function() {
+				game.firstMove().then(function() {return resolve();});
+			});
+		});
+	},
+	firstMove: function() {
+		dialog.innerHTML = "<p>Бросим кости и узнаем, кто ходит первый!<p>";
+		for (let i = 0; i < 2; i++) {
+			let dice = document.createElement("img");
+			dice.className = "dices";
+			dice.src = "images/dice.gif";
+			dice.width = 44;
+			dice.height = 44;
+			dice.style.display = "block";
+			dialog.appendChild(dice);
+		}
+		return new Promise(function(resolve) {
 			let roll = document.createElement('button');
 			roll.innerHTML = "Бросить!";
-			roll.addEventListener('click', game.checkFirstMove);
+			roll.addEventListener('click', function() {
+				if ( game.checkFirstMove.call(roll) ) return resolve();
+			});
 			dialog.appendChild(roll);
 		});
 	},
 	checkFirstMove: function() {
-		let numbers = game.rollDice( document.getElementsByClassName("dices") );
-		if (numbers[0] != numbers[1]) {
-			if (numbers[0] > numbers[1]) {
-				dialog.firstChild.innerHTML = "Гром и молния! Мой ход!";
-				computer.move = true;
-			}
-			else {
-				dialog.firstChild.innerHTML = "Тысяча тухлых моллюсков!!! Твой ход!";
-				player.move = true;
-			}
-			this.removeEventListener('click', game.checkFirstMove);
-			this.innerHTML = "Далее";
-			this.addEventListener('click', function() {
-				game.takeStrata();
-				player.renderStrata();
-				player.shipChoice();
-			});
-		}
+		if (!player.move && !computer.move) {
+			let numbers = game.rollDice( document.getElementsByClassName("dices") );
+			if (numbers[0] != numbers[1]) {
+				if (numbers[0] > numbers[1]) {
+					dialog.firstChild.innerHTML = "Гром и молния! Мой ход!";
+					computer.move = true;
+				}
+				else {
+					dialog.firstChild.innerHTML = "Тысяча тухлых моллюсков!!! Твой ход!";
+					player.move = true;
+				}
+				this.innerHTML = "Далее";
+				return false;
+			} else return false;
+		} else return true;
 	},
 	rollDice: function(dices) {
 		let value = [];
@@ -145,6 +176,13 @@ game = {
 			dices[i].src = "images/" + rand + ".png";
 		}
 		return value;
+	},
+	roundStart: function() {
+		this.roundEnd = false;
+		this.takeStrata();
+		player.shipChoice().then(function() {
+			console.log("new round");
+		});
 	},
 	takeStrata: function() {
 		let deck = [],
@@ -190,7 +228,7 @@ game = {
 };
 
 window.addEventListener('load', function() {
-	game.init();
+	game.PlayTheGame();
 });
 
 function random(min, max){
