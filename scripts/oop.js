@@ -180,8 +180,9 @@ game = {
 	roundStart: function() {
 		this.roundEnd = false;
 		this.takeStrata();
+		this.renderStrata();
 		player.shipChoice().then(function() {
-			console.log("new round");
+			game.setGuns.call(player);
 		});
 	},
 	takeStrata: function() {
@@ -202,7 +203,7 @@ game = {
 	},
 	loadGuns: function(elem) {
 		for (let side in this.ship.guns) {
-			let notBoard = (side != "top" && side != "bottom") ? true : false;
+			let notBoard = (side != "top" && side != "bottom") ? false : true;
 			for (let i = 0; i < 5; i++) { // максимум 5 орудий по борту
 				let crew = notBoard ? 4 : 3;
 				switch(this.ship.name) {
@@ -224,6 +225,115 @@ game = {
 		div.className = name;
 		div.style.position = "absolute";
 		this.appendChild(div);
+	},
+	setGuns: function() {
+		for (let side in this.ship.guns) {
+			let guns = this.ship.object.getElementsByClassName(side);
+			//
+			[].forEach.call( this, game.renderGun.bind( this, guns[i], game.getGunCoordinates.bind(this, side, i) ) );
+			//
+			for (let i = 0; i < guns.length; i++) {
+				console.log(this.ship.guns.side);
+				guns[i].innerHTML = side[i];
+				game.renderGun.call( this, guns[i], game.getGunCoordinates.call(this, side, i) );
+			}
+		}
+	},
+	renderGun: function(obj, arr) {
+		if (this == player) {
+			obj.style.left = arr[0] + "px";
+			obj.style.top = arr[1] + "px";
+		} else {
+			obj.style.right = arr[0] + "px";
+			obj.style.bottom = arr[1] + "px";
+		}
+		switch(this.ship.direction) {
+			case "top":
+				obj.style.transform = "rotate(0deg)";
+				break;
+			case "right":
+				obj.style.transform = "rotate(-90deg)";
+				break;
+			case "bottom":
+				obj.style.transform = "rotate(180deg)";
+				break;
+			case "left":
+				obj.style.transform = "rotate(90deg)";
+				break;
+		}
+	},
+	getGunCoordinates: function(side, id) {
+		let x = 0, y = 0, arr = [];
+		switch(this.ship.name) {
+			case "Бригантина":
+				switch(side) {
+					case "top":
+						x = 80;
+						y = 25;
+						break;
+					case "right":
+						x = 123;
+						y = 82 + id * 25;
+						break;
+					case "bottom":
+						x = 48;
+						y = 175;
+						break;
+					case "left":
+						x = 12;
+						y = 84 + id * 25;
+						break;
+				}
+				break;
+			case "Фрегат":
+				switch(side) {
+					case "top":
+						x = 80 + id * 25;
+						y = 13;
+						break;
+					case "right":
+						x = 123;
+						y = 69 + id * 25;
+						break;
+					case "bottom":
+						x = 35 + id * 63;
+						y = 177;
+						break;
+					case "left":
+						x = 12;
+						y = 70 + id * 25;
+						break;
+				}
+				break;
+			case "Галеон":
+				switch(side) {
+					case "top":
+						if (id != 2) {
+							x = 92 + id * 22;
+							y = 7;
+						} else {
+							x = 103;
+							y = 30;
+						}
+						break;
+					case "right":
+						x = 124;
+						y = 55 + id * 25;
+						break;
+					case "bottom":
+						x = 46 + id * 23;
+						y = 176;
+						break;
+					case "left":
+						x = 13;
+						y = 56 + id * 25;
+						break;
+				}
+				break;
+		}
+		arr.push(x);
+		arr.push(y);
+		return arr;
 	}
 };
 

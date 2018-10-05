@@ -63,10 +63,15 @@
 	width: 143px;
 	height: 200px;
 	position: absolute;
-	left: 460px;
 	display: none;
 }
-#plrShip .ship {
+
+#plrShip, #oppShip {
+	position: absolute;
+	left: 460px;
+}
+
+#plrShip {
 	top: 300px;
 }
 
