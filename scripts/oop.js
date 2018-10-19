@@ -180,7 +180,7 @@ game = {
 	roundStart: function() {
 		this.roundEnd = false;
 		this.takeStrata();
-		this.renderStrata();
+		player.renderStrata();
 		player.shipChoice().then(function() {
 			game.setGuns.call(player);
 		});
@@ -229,12 +229,8 @@ game = {
 	setGuns: function() {
 		for (let side in this.ship.guns) {
 			let guns = this.ship.object.getElementsByClassName(side);
-			//
-			[].forEach.call( this, game.renderGun.bind( this, guns[i], game.getGunCoordinates.bind(this, side, i) ) );
-			//
 			for (let i = 0; i < guns.length; i++) {
-				console.log(this.ship.guns.side);
-				guns[i].innerHTML = side[i];
+				guns[i].innerHTML = this.ship.guns[side][i];
 				game.renderGun.call( this, guns[i], game.getGunCoordinates.call(this, side, i) );
 			}
 		}
