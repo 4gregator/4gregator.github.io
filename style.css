@@ -62,7 +62,7 @@
 .ship {
 	width: 143px;
 	height: 200px;
-	position: absolute;
+	position: relative;
 	display: none;
 }
 

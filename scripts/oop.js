@@ -50,15 +50,38 @@ var player = {
 				let shipAvlbl = document.createElement("button");
 				shipAvlbl.innerHTML = player.fleet[i];
 				shipAvlbl.addEventListener('click', function() {
-					dialog.style.display = "none";
 					player.ship.name = (player.fleet.length != 1) ? player.fleet.splice(i, 1)[0] : player.fleet[i];
 					player.renderShip();
 					game.loadGuns.call(player, plrShip);
-					computer.init();
 					return resolve();
 				});
 				dialog.appendChild(shipAvlbl);
 			}
+		});
+	},
+	chooseDirection: function() {
+		let Left = document.createElement("button");
+		Left.innerHTML = "повернуть влево";
+		Left.addEventListener('click', function() {
+			game.changeCourse.call(player, true);
+		});
+		let Right = document.createElement("button");
+		Right.innerHTML = "повернуть вправо";
+		Right.addEventListener('click', function() {
+			game.changeCourse.call(player, false);
+		});
+		let ready = document.createElement("button");
+		ready.innerHTML = "разместить корабль";
+		dialog.innerHTML = "<p>Выберите начальное направление корабля<p>";
+		dialog.appendChild(Left);
+		dialog.appendChild(Right);
+		dialog.appendChild(ready);
+		return new Promise(function(resolve) {
+			ready.addEventListener('click', function() {
+				dialog.style.display = "none";
+				computer.init();
+				return resolve();
+			});
 		});
 	}
 },
@@ -183,6 +206,7 @@ game = {
 		player.renderStrata();
 		player.shipChoice().then(function() {
 			game.setGuns.call(player);
+			player.chooseDirection();
 		});
 	},
 	takeStrata: function() {
@@ -255,7 +279,6 @@ game = {
 				break;
 			case "left":
 				obj.style.transform = "rotate(90deg)";
-				break;
 		}
 	},
 	getGunCoordinates: function(side, id) {
@@ -330,6 +353,29 @@ game = {
 		arr.push(x);
 		arr.push(y);
 		return arr;
+	},
+	changeCourse: function(side) {
+		// true при повороте налево
+		let deg = 0;
+		switch(this.ship.direction) {
+			case "right":
+				deg = 90;
+				this.ship.direction = side ? "top" : "bottom";
+				break;
+			case "bottom":
+				deg = 180;
+				this.ship.direction = side ? "right" : "left";
+				break;
+			case "left":
+				deg = -90;
+				this.ship.direction = side ? "bottom" : "top";
+				break;
+			default:
+				this.ship.direction = side ? "left" : "right";
+		}
+		deg += side ? -90 : 90;
+		this.ship.object.style.transform = 'rotate(' + deg + 'deg)';
+		game.setGuns.call(this);
 	}
 };
 
