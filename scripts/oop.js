@@ -52,7 +52,7 @@ var player = {
 				shipAvlbl.addEventListener('click', function() {
 					player.ship.name = (player.fleet.length != 1) ? player.fleet.splice(i, 1)[0] : player.fleet[i];
 					player.renderShip();
-					game.loadGuns.call(player, plrShip);
+					game.loadGuns.call(player);
 					return resolve();
 				});
 				dialog.appendChild(shipAvlbl);
@@ -80,6 +80,8 @@ var player = {
 			ready.addEventListener('click', function() {
 				dialog.style.display = "none";
 				computer.init();
+				game.loadGuns.call(computer);
+				game.setGuns.call(computer);
 				return resolve();
 			});
 		});
@@ -91,6 +93,7 @@ computer = {
 	victPts: 0,
 	fleet: ["Бригантина", "Фрегат", "Галеон"],
 	ship: {
+		object: oppShip,
 		name: false,
 		direction: "top",
 		movePts: 0,
@@ -120,7 +123,7 @@ game = {
 	PlayTheGame: function() {
 		if (player.victPts == 2 || computer.victPts == 2) return 0;
 		this.round++;
-		if (this.round == 1) this.init().then(game.roundStart.bind(game));
+		if (this.round == 1) this.init().then( game.roundStart.bind(game) );
 		//
 		/*let roundOver = new Promise(function(resolve) {
 			let endRound = document.createElement("button");
@@ -204,9 +207,11 @@ game = {
 		this.roundEnd = false;
 		this.takeStrata();
 		player.renderStrata();
-		player.shipChoice().then(function() {
-			game.setGuns.call(player);
-			player.chooseDirection();
+		return new Promise(function(resolve) {
+			player.shipChoice().then(function() {
+				game.setGuns.call(player);
+				player.chooseDirection().then(function() {return resolve();});
+			});
 		});
 	},
 	takeStrata: function() {
@@ -225,7 +230,7 @@ game = {
 			}
 		}
 	},
-	loadGuns: function(elem) {
+	loadGuns: function() {
 		for (let side in this.ship.guns) {
 			let notBoard = (side != "top" && side != "bottom") ? false : true;
 			for (let i = 0; i < 5; i++) { // максимум 5 орудий по борту
@@ -235,7 +240,7 @@ game = {
 					case "Фрегат": crew++;
 					case "Галеон": this.ship.guns[side].push(crew);
 				}
-				game.createGun.call(elem, side);
+				game.createGun.call(this.ship.object, side);
 				if (this.ship.name == "Бригантина" && notBoard) break;
 				else if (i == 1 && this.ship.name == "Фрегат" && notBoard) break;
 				else if ( i == 2 && ( this.ship.name == "Бригантина" || (this.ship.name == "Галеон" && notBoard) ) ) break;
