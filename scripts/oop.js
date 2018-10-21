@@ -120,10 +120,12 @@ computer = {
 game = {
 	round: 0,
 	roundEnd: true,
+	wind: "",
 	PlayTheGame: function() {
 		if (player.victPts == 2 || computer.victPts == 2) return 0;
 		this.round++;
-		if (this.round == 1) this.init().then( game.roundStart.bind(game) );
+		if (this.round == 1) this.init().then( game.roundStart.bind(game) ).then(function() {console.log("let's play!");});
+		else this.roundStart.bind(game);
 		//
 		/*let roundOver = new Promise(function(resolve) {
 			let endRound = document.createElement("button");
@@ -163,8 +165,6 @@ game = {
 			let dice = document.createElement("img");
 			dice.className = "dices";
 			dice.src = "images/dice.gif";
-			dice.width = 44;
-			dice.height = 44;
 			dice.style.display = "block";
 			dialog.appendChild(dice);
 		}
@@ -210,7 +210,10 @@ game = {
 		return new Promise(function(resolve) {
 			player.shipChoice().then(function() {
 				game.setGuns.call(player);
-				player.chooseDirection().then(function() {return resolve();});
+				player.chooseDirection().then(function() {
+					game.wind = game.changeWind();
+					return resolve();
+				});
 			});
 		});
 	},
@@ -381,6 +384,32 @@ game = {
 		deg += side ? -90 : 90;
 		this.ship.object.style.transform = 'rotate(' + deg + 'deg)';
 		game.setGuns.call(this);
+	},
+	changeWind: function() {
+		let wind, dice = document.getElementById("windDice");
+		if (dice == null) {
+			dice = document.createElement("img")
+			dice.className = "dices";
+			dice.id = "windDice";
+		}
+		compas.appendChild(dice);
+		if (compas.style.display != "block") compas.style.display = "block";
+		switch(this.rollDice([dice])[0]) {
+			case 1:
+			case 2:
+				wind = "north";
+				break;
+			case 3:
+			case 4:
+				wind = "south";
+				break;
+			case 5:
+				wind = "west";
+				break;
+			case 6:
+				wind = "east";
+		}
+		return wind;
 	}
 };
 
