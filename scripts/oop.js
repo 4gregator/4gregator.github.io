@@ -15,7 +15,8 @@ var player = {
 			right: [],
 			top: [],
 			bottom: []
-		}
+		},
+		reloading: []
 	},
 	hand: [],
 	init: function(collection) {
@@ -102,7 +103,8 @@ computer = {
 			right: [],
 			top: [],
 			bottom: []
-		}
+		},
+		reloading: []
 	},
 	hand: [],
 	init: function() {
@@ -121,11 +123,13 @@ game = {
 	round: 0,
 	roundEnd: true,
 	wind: "",
+	distance: true,
 	PlayTheGame: function() {
+		let self = this;
 		if (player.victPts == 2 || computer.victPts == 2) return 0;
 		this.round++;
-		if (this.round == 1) this.init().then( game.roundStart.bind(game) ).then(function() {console.log("let's play!");});
-		else this.roundStart.bind(game);
+		if (this.round == 1) this.init().then( self.roundStart.bind(self) ).then( self.roundPlay.bind(self) );
+		else this.roundStart.bind(self);
 		//
 		/*let roundOver = new Promise(function(resolve) {
 			let endRound = document.createElement("button");
@@ -148,15 +152,14 @@ game = {
 		});*/
 	},
 	init: function() {
+		let self = this;
 		let gender = new Promise(function(resolve) {
 			play.addEventListener('click', function() {
 				player.init( document.getElementsByClassName("gender") ).then(function() {return resolve();});
 			});
 		});
 		return new Promise(function(resolve) {
-			gender.then(function() {
-				game.firstMove().then(function() {return resolve();});
-			});
+			gender.then( self.firstMove.bind(self) ).then(function() {return resolve();});
 		});
 	},
 	firstMove: function() {
@@ -204,22 +207,58 @@ game = {
 		return value;
 	},
 	roundStart: function() {
-		this.roundEnd = false;
-		this.takeStrata();
+		let self = this;
+		self.roundEnd = false;
+		self.takeStrata();
 		player.renderStrata();
 		return new Promise(function(resolve) {
 			player.shipChoice().then(function() {
-				game.setGuns.call(player);
+				self.setGuns.call(player);
 				player.chooseDirection().then(function() {
-					game.wind = game.changeWind();
 					return resolve();
 				});
 			});
 		});
 	},
+	roundPlay: function() {
+		//определить, чей ход
+		let self = this, that = player.move ? player : computer;
+		this.wind = this.changeWind();
+		//начислить очкий действий
+		if (!that.ship.movePts) {
+			switch(that.ship.name) {
+				case "Бригантина": that.ship.movePts++;
+				case "Фрегат": that.ship.movePts++;
+				default: that.ship.movePts++;
+			}
+		}
+		//активировать возможность сделать действие
+		if (that == computer) {
+			alert("Ход искуственного интеллекта, который в данный момент без мозгов");
+			that.ship.movePts = 0;
+			player.move = player.move ? false : true;
+			computer.move = computer.move ? false : true;
+			return self.roundPlay();
+		} else this.makeAction.call(that).then(function() {
+			console.log("checkpoint");
+			if (self.roundEnd) return console.log("endRound");
+			else {
+				if (!that.ship.movePts) {
+					//передать ход и запустить раунд плэй
+				} else return self.roundPlay();
+			}
+		});
+		//по окончании очков действий передать ход
+		//сделать рекурсию, если раунд не окончен
+		/*if (this.roundEnd) return console.log("endRound");
+		else {
+			player.move = player.move ? false : true;
+			computer.move = computer.move ? false : true;
+			return this.roundPlay();
+		}*/
+	},
 	takeStrata: function() {
-		let deck = [],
-			playerTurn = player.move ? true : false;
+		let deck = [], playerTurn = player.move ? true : false;
 		for (let i = stratagems.length - 1; i >= 0; i--) deck.push(stratagems[i]);
 		deck.sort(compareRandom);
 		// @todo: победивший в прошлом раунде берет 7 карт стратагем
@@ -232,6 +271,110 @@ game = {
 				computer.hand.push(deck.shift());
 			}
 		}
+	},
+	makeAction: function() {
+		let self = game, that = this, cost = self.renderControl(this.ship.movePts);
+		/*btn = document.createElement("button");
+		btn.innerHTML = "Передать ход";
+		btn.addEventListener( 'click', self.changeMove.bind(self) );
+		let moveOver = function() {
+			if (!this.ship.movePts) {
+				self.roundEnd = true;
+				return btn;
+			} else return self.makeAction.call(this);
+		};*/
+		return new Promise(function(resolve) {
+			self.makeMove.apply(that, cost).then(function() {return resolve();});
+		});
+	},
+	makeMove: function(fCost, rCost, bCost, lCost) {
+		let self = game, that = this;
+		return new Promise(function(resolve) {
+			move.onclick = function() {
+				that.ship.movePts -= fCost;
+				self.deactivation();
+				self.move();
+				return resolve();
+			}
+			turnRight.onclick = function() {
+				that.ship.movePts -= rCost;
+				self.deactivation();
+				self.changeCourse.call(that, false);
+				return resolve();
+			}
+			turnAround.onclick = function() {
+				that.ship.movePts -= bCost;
+				self.deactivation();
+				self.changeCourse.call(that, true);
+				self.changeCourse.call(that, true);
+				return resolve();
+			}
+			turnLeft.onclick = function() {
+				that.ship.movePts -= lCost;
+				self.deactivation();
+				self.changeCourse.call(that, true);
+				return resolve();
+			}
+		});
+	},
+	move: function() {
+		this.distance = this.distance ? false : true;
+		// @todo проверить, можно ли рендерить движение кораблей в рендерконтрол
+		player.ship.object.style.top = this.distance ? "300px" : "250px";
+		computer.ship.object.style.top = this.distance ? "0px" : "50px";
+		grapple.disabled = this.distance ? "disabled" : "";
+	},
+	/*changeMove: function() {
+		console.log(this.roundEnd);
+	},*/
+	changeCourse: function(side) {
+		// true при повороте налево
+		let deg = 0;
+		switch(this.ship.direction) {
+			case "right":
+				deg = 90;
+				this.ship.direction = side ? "top" : "bottom";
+				break;
+			case "bottom":
+				deg = 180;
+				this.ship.direction = side ? "right" : "left";
+				break;
+			case "left":
+				deg = -90;
+				this.ship.direction = side ? "bottom" : "top";
+				break;
+			default:
+				this.ship.direction = side ? "left" : "right";
+		}
+		deg += side ? -90 : 90;
+		this.ship.object.style.transform = 'rotate(' + deg + 'deg)';
+		game.setGuns.call(this);
+	},
+	changeWind: function() {
+		let wind, dice = document.getElementById("windDice");
+		if (dice == null) {
+			dice = document.createElement("img")
+			dice.className = "dices";
+			dice.id = "windDice";
+			compas.appendChild(dice);
+		}
+		if (compas.style.display != "block") compas.style.display = "block";
+		switch(this.rollDice([dice])[0]) {
+			case 1:
+			case 2:
+				wind = "north";
+				break;
+			case 3:
+			case 4:
+				wind = "south";
+				break;
+			case 5:
+				wind = "west";
+				break;
+			case 6:
+				wind = "east";
+		}
+		return wind;
 	},
 	loadGuns: function() {
 		for (let side in this.ship.guns) {
@@ -250,7 +393,6 @@ game = {
 				else if (i == 3 && this.ship.name == "Фрегат") break;
 			}
 		}
-		console.log(this.ship);
 	},
 	createGun: function(name) {
 		let div = document.createElement("div");
@@ -265,28 +407,6 @@ game = {
 				guns[i].innerHTML = this.ship.guns[side][i];
 				game.renderGun.call( this, guns[i], game.getGunCoordinates.call(this, side, i) );
 			}
-		}
-	},
-	renderGun: function(obj, arr) {
-		if (this == player) {
-			obj.style.left = arr[0] + "px";
-			obj.style.top = arr[1] + "px";
-		} else {
-			obj.style.right = arr[0] + "px";
-			obj.style.bottom = arr[1] + "px";
-		}
-		switch(this.ship.direction) {
-			case "top":
-				obj.style.transform = "rotate(0deg)";
-				break;
-			case "right":
-				obj.style.transform = "rotate(-90deg)";
-				break;
-			case "bottom":
-				obj.style.transform = "rotate(180deg)";
-				break;
-			case "left":
-				obj.style.transform = "rotate(90deg)";
 		}
 	},
 	getGunCoordinates: function(side, id) {
@@ -362,60 +482,116 @@ game = {
 		arr.push(y);
 		return arr;
 	},
-	changeCourse: function(side) {
-		// true при повороте налево
-		let deg = 0;
+	renderGun: function(obj, arr) {
+		if (this == player) {
+			obj.style.left = arr[0] + "px";
+			obj.style.top = arr[1] + "px";
+		} else {
+			obj.style.right = arr[0] + "px";
+			obj.style.bottom = arr[1] + "px";
+		}
 		switch(this.ship.direction) {
+			case "top":
+				obj.style.transform = "rotate(0deg)";
+				break;
 			case "right":
-				deg = 90;
-				this.ship.direction = side ? "top" : "bottom";
+				obj.style.transform = "rotate(-90deg)";
 				break;
 			case "bottom":
-				deg = 180;
-				this.ship.direction = side ? "right" : "left";
+				obj.style.transform = "rotate(180deg)";
 				break;
 			case "left":
-				deg = -90;
-				this.ship.direction = side ? "bottom" : "top";
-				break;
-			default:
-				this.ship.direction = side ? "left" : "right";
+				obj.style.transform = "rotate(90deg)";
 		}
-		deg += side ? -90 : 90;
-		this.ship.object.style.transform = 'rotate(' + deg + 'deg)';
-		game.setGuns.call(this);
 	},
-	changeWind: function() {
-		let wind, dice = document.getElementById("windDice");
-		if (dice == null) {
-			dice = document.createElement("img")
-			dice.className = "dices";
-			dice.id = "windDice";
+	renderControl: function(MP) {
+		let moveCostF = 1, moveCostL = 1, moveCostR = 1, moveCostB = 2,
+			that = player.ship;
+		//влияние ветра на стоимость движения
+		switch(that.direction) {
+			case "top":
+				switch(this.wind) {
+					case "north":
+						moveCostF = 0;
+						break;
+					case "east":
+						moveCostR = 0;
+						break;
+					case "south":
+						moveCostF = 2;
+						moveCostB = 1;
+						break;
+					case "west":
+						moveCostL = 0;
+				}
+				if (this.distance && MP >= moveCostF) move.disabled = "";
+				break;
+			case "right":
+				switch(this.wind) {
+					case "north":
+						moveCostL = 0;
+						break;
+					case "south":
+						moveCostR = 0;
+						break;
+					case "west":
+						moveCostB = 1;
+				}
+				break;
+			case "bottom":
+				switch(this.wind) {
+					case "north":
+						moveCostF = 2;
+						moveCostB = 1;
+						break;
+					case "east":
+						moveCostL = 0;
+						break;
+					case "south":
+						moveCostF = 0;
+						break;
+					case "west":
+						moveCostR = 0;
+				}
+				if (!this.distance && MP >= moveCostF) move.disabled = "";
+				break;
+			case "left":
+				switch(this.wind) {
+					case "north":
+						moveCostR = 0;
+						break;
+					case "east":
+						moveCostB = 1;
+						break;
+					case "south":
+						moveCostL = 0;
+				}
 		}
-		compas.appendChild(dice);
-		if (compas.style.display != "block") compas.style.display = "block";
-		switch(this.rollDice([dice])[0]) {
-			case 1:
-			case 2:
-				wind = "north";
-				break;
-			case 3:
-			case 4:
-				wind = "south";
-				break;
-			case 5:
-				wind = "west";
-				break;
-			case 6:
-				wind = "east";
-		}
-		return wind;
+		if (MP >= moveCostL) turnLeft.disabled = "";
+		if (MP >= moveCostR) turnRight.disabled = "";
+		if (MP >= moveCostB) turnAround.disabled = "";
+		if (MP) fire.disabled = that.reloading.indexOf(that.direction) == -1 ? "" : "disabled";
+		move.innerHTML = "Полный вперёд! (" + moveCostF + " од)";
+		turnLeft.innerHTML = "Лево руля! (" + moveCostL + " од)";
+		turnRight.innerHTML = "Право руля! (" + moveCostR + " од)";
+		turnAround.innerHTML = "Разворот! (" + moveCostB + " од)";
+		controlPanel.style.display = "grid";
+		infoPanel.innerHTML = "ОД: " + MP;
+		return [moveCostF, moveCostR, moveCostB, moveCostL];
+	},
+	deactivation: function() {
+		// @todo: перенести все стили в CSS и манипулировать классами, а не стилями
+		controlPanel.style.display = "none";
+		move.disabled = "disabled";
+		turnLeft.disabled = "disabled";
+		turnRight.disabled = "disabled";
+		turnAround.disabled = "disabled";
+		fire.disabled = "disabled";
+		grapple.disabled = "disabled";
 	}
 };
 
-window.addEventListener('load', function() {
-	game.PlayTheGame();
-});
+window.addEventListener('load', game.PlayTheGame());
 
 function random(min, max){
 	return Math.floor(Math.random() * (max + 1 - min) + min);

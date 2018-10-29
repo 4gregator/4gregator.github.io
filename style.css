@@ -51,24 +51,40 @@
 	width: inherit;
 	height: inherit;
 }
-#boarding, #fireButton, #controlPanel {
-	width: 100px;
-	height: 100px;
-	position: absolute;
-	top: 350px;
-}
-#boarding {
-	left: 40px;
-}
-#fireButton {
-	left: 160px;
-}
-#grapple:disabled, #fire:disabled {
-	opacity: 0.5;
-}
 #controlPanel {
-	left: 280px;
+	position: absolute;
+	left: 20px;
+	top: 380px;
 	display: none;
+	grid-template-columns: repeat(3, 100px);
+	grid-template-rows: repeat(3, 33px);
+	grid-column-gap: 2px;
+}
+#grapple {
+	height: 99px;
+	margin: 0;
+	padding: 0;
+	grid-area: 1 / 1 / 5 / 2;
+}
+#grapple>img {
+	width: 96px;
+	height: 95px;
+}
+#fire {
+	height: 66px;
+	grid-area: 1 / 2 / 3 / 3;
+}
+#move {
+	grid-area: 3 / 2 / 4 / 3;
+}
+.moveControl {
+	height: auto;
+}
+.moveControl, #grapple, #fire {
+	cursor: pointer;
+}
+.moveControl:disabled, #grapple:disabled, #fire:disabled {
+	opacity: 0.5;
 }
 
 /* положение кораблей */
