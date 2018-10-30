@@ -225,37 +225,27 @@ game = {
 		let self = this, that = player.move ? player : computer;
 		this.wind = this.changeWind();
 		//начислить очкий действий
-		if (!that.ship.movePts) {
-			switch(that.ship.name) {
-				case "Бригантина": that.ship.movePts++;
-				case "Фрегат": that.ship.movePts++;
-				default: that.ship.movePts++;
-			}
+		switch(that.ship.name) {
+			case "Бригантина": that.ship.movePts++;
+			case "Фрегат": that.ship.movePts++;
+			default: that.ship.movePts++;
 		}
 		//активировать возможность сделать действие
 		if (that == computer) {
 			alert("Ход искуственного интеллекта, который в данный момент без мозгов");
 			that.ship.movePts = 0;
-			player.move = player.move ? false : true;
-			computer.move = computer.move ? false : true;
+			this.changeMove();
 			return self.roundPlay();
 		} else this.makeAction.call(that).then(function() {
+			//по окончании очков действий передать ход
+			//сделать рекурсию, если раунд не окончен
 			console.log("checkpoint");
 			if (self.roundEnd) return console.log("endRound");
 			else {
-				if (!that.ship.movePts) {
-					//передать ход и запустить раунд плэй
-				} else return self.roundPlay();
+				self.changeMove();
+				self.roundPlay();
 			}
 		});
-		//по окончании очков действий передать ход
-		//сделать рекурсию, если раунд не окончен
-		/*if (this.roundEnd) return console.log("endRound");
-		else {
-			player.move = player.move ? false : true;
-			computer.move = computer.move ? false : true;
-			return this.roundPlay();
-		}*/
 	},
 	takeStrata: function() {
 		let deck = [], playerTurn = player.move ? true : false;
@@ -273,18 +263,20 @@ game = {
 		}
 	},
 	makeAction: function() {
-		let self = game, that = this, cost = self.renderControl(this.ship.movePts);
-		/*btn = document.createElement("button");
-		btn.innerHTML = "Передать ход";
-		btn.addEventListener( 'click', self.changeMove.bind(self) );
-		let moveOver = function() {
-			if (!this.ship.movePts) {
-				self.roundEnd = true;
-				return btn;
-			} else return self.makeAction.call(this);
-		};*/
-		return new Promise(function(resolve) {
+		let self = game, that = this, cost = self.renderControl(this.ship.movePts),
+		moveOver = function() {
+			if (!that.ship.movePts) {
+				return new Promise(function(resolve) {
+					return resolve();
+				});
+			} else return self.makeAction.call(that);
+		},
+		action = new Promise(function(resolve) {
 			self.makeMove.apply(that, cost).then(function() {return resolve();});
+			self.closeCombat().then(function() {return resolve();});
+		});
+		return action.then(function() {
+			return moveOver();
 		});
 	},
 	makeMove: function(fCost, rCost, bCost, lCost) {
@@ -317,6 +309,35 @@ game = {
 			}
 		});
 	},
+	closeCombat: function() {
+		let plrPower = this.getTotalCrew.call(player.ship.guns),
+			oppPower = this.getTotalCrew.call(computer.ship.guns),
+			self = this;
+		return new Promise(function(resolve) {
+			grapple.addEventListener('click', function() {
+				self.roundEnd = true;
+				self.renderGrapple().then((result) => {
+					let dices = self.rollDice(result);
+					for (let i = 0; i < dices.length; i++) {
+						if (i < 2) oppPower += dices[i];
+						else plrPower += dices[i];
+					}
+					// @todo атакующий получает преимущество attackPwr >= defendPwr
+					plrPower >= oppPower ? player.victPts++ : computer.victPts++;
+					return resolve();
+				});
+			});
+		});
+	},
+	getTotalCrew: function() {
+		let c = 0;
+		for (let board in this) {
+			for (let i = 0; i < this[board].length; i++) {
+				c += this[board][i];
+			}
+		}
+		return c;
+	},
 	move: function() {
 		this.distance = this.distance ? false : true;
 		// @todo проверить, можно ли рендерить движение кораблей в рендерконтрол
@@ -324,9 +345,10 @@ game = {
 		computer.ship.object.style.top = this.distance ? "0px" : "50px";
 		grapple.disabled = this.distance ? "disabled" : "";
 	},
-	/*changeMove: function() {
-		console.log(this.roundEnd);
-	},*/
+	changeMove: function() {
+		player.move = player.move ? false : true;
+		computer.move = computer.move ? false : true;
+	},
 	changeCourse: function(side) {
 		// true при повороте налево
 		let deg = 0;
@@ -504,6 +526,31 @@ game = {
 				obj.style.transform = "rotate(90deg)";
 		}
 	},
+	renderGrapple: function() {
+		dialog.innerHTML = "Бросим кости на абордаж!";
+		for (let i = 0; i < 2; i++) {
+			let div = document.createElement("div"), span = document.createElement("span");
+			div.innerHTML = "Боеспособный экипаж корабля: ";
+			div.innerHTML += !i ? this.getTotalCrew.call(computer.ship.guns) : this.getTotalCrew.call(player.ship.guns);
+			dialog.appendChild(div);
+			for (let j = 0; j < 2; j++) {
+				let dice = document.createElement("img");
+				dice.className = "dices grappleDices";
+				dice.src = "images/dice.gif";
+				div.appendChild(dice);
+			}
+		}
+		dialog.style.display = "block";
+		return new Promise(function(resolve) {
+			let btn = document.createElement("button");
+			btn.innerHTML = "Бросить!";
+			dialog.appendChild(btn);
+			btn.addEventListener('click', function() {
+				dialog.removeChild(btn);
+				return resolve(document.getElementsByClassName("grappleDices"));
+			});
+		});
+	},
 	renderControl: function(MP) {
 		let moveCostF = 1, moveCostL = 1, moveCostR = 1, moveCostB = 2,
 			that = player.ship;
@@ -587,17 +634,19 @@ game = {
 		turnRight.disabled = "disabled";
 		turnAround.disabled = "disabled";
 		fire.disabled = "disabled";
-		grapple.disabled = "disabled";
 	}
 };
 
 window.addEventListener('load', game.PlayTheGame());
 
-function random(min, max){
+function random(min, max) {
 	return Math.floor(Math.random() * (max + 1 - min) + min);
 };
 function compareRandom(a, b) {
 	return Math.random() - 0.5;
+};
+function sum(a, b) {
+	return a + b;
 };
 
 var stratagems = [{
