@@ -225,6 +225,7 @@ game = {
 		let self = this, that = player.move ? player : computer;
 		this.wind = this.changeWind();
 		//начислить очкий действий
+		that.ship.reloading = [];
 		switch(that.ship.name) {
 			case "Бригантина": that.ship.movePts++;
 			case "Фрегат": that.ship.movePts++;
@@ -243,7 +244,7 @@ game = {
 			if (self.roundEnd) return console.log("endRound");
 			else {
 				self.changeMove();
-				self.roundPlay();
+				return self.roundPlay();
 			}
 		});
 	},
@@ -263,6 +264,7 @@ game = {
 		}
 	},
 	makeAction: function() {
+		// @todo выходить из функции если раунд окончен
 		let self = game, that = this, cost = self.renderControl(this.ship.movePts),
 		moveOver = function() {
 			if (!that.ship.movePts) {
@@ -272,8 +274,18 @@ game = {
 			} else return self.makeAction.call(that);
 		},
 		action = new Promise(function(resolve) {
-			self.makeMove.apply(that, cost).then(function() {return resolve();});
-			self.closeCombat().then(function() {return resolve();});
+			self.makeMove.apply(that, cost).then(function() {
+				return resolve();
+			});
+			self.closeCombat().then(function() {
+				--that.ship.movePts;
+				return resolve();
+			});
+			self.salvo.call(that).then(function() {
+				--that.ship.movePts;
+				that.ship.reloading.push(that.ship.direction);
+				return resolve();
+			});
 		});
 		return action.then(function() {
 			return moveOver();
@@ -287,26 +299,26 @@ game = {
 				self.deactivation();
 				self.move();
 				return resolve();
-			}
+			};
 			turnRight.onclick = function() {
 				that.ship.movePts -= rCost;
 				self.deactivation();
 				self.changeCourse.call(that, false);
 				return resolve();
-			}
+			};
 			turnAround.onclick = function() {
 				that.ship.movePts -= bCost;
 				self.deactivation();
 				self.changeCourse.call(that, true);
 				self.changeCourse.call(that, true);
 				return resolve();
-			}
+			};
 			turnLeft.onclick = function() {
 				that.ship.movePts -= lCost;
 				self.deactivation();
 				self.changeCourse.call(that, true);
 				return resolve();
-			}
+			};
 		});
 	},
 	closeCombat: function() {
@@ -314,8 +326,9 @@ game = {
 			oppPower = this.getTotalCrew.call(computer.ship.guns),
 			self = this;
 		return new Promise(function(resolve) {
-			grapple.addEventListener('click', function() {
+			grapple.onclick = function() {
 				self.roundEnd = true;
+				self.deactivation();
 				self.renderGrapple().then((result) => {
 					let dices = self.rollDice(result);
 					for (let i = 0; i < dices.length; i++) {
@@ -326,8 +339,50 @@ game = {
 					plrPower >= oppPower ? player.victPts++ : computer.victPts++;
 					return resolve();
 				});
-			});
+			};
 		});
+	},
+	salvo: function() {
+		let self = game, that = this;
+		return new Promise(function(resolve) {
+			fire.onclick = function() {
+				self.deactivation();
+				self.renderFire.call(that);
+				return resolve();
+			};
+		});
+	},
+	fireResult: function(salvo) {
+		let result = document.createElement("p"), kills = 0, wounds = 0, index = 0, board = "",
+		target = this == player ? computer : player;
+		salvo.sort(function(a, b) {
+			return b - a;
+		});
+		// @todo реализовать критический удар и уклонение
+		board = target.ship.direction;
+		while ( !sumArray(target.ship.guns[board]) ) {
+			switch(board) {
+				case "top":
+					board = "left";
+					break;
+				case "left":
+					board = "bottom";
+					break;
+				case "bottom":
+					board = "right";
+					break;
+				case "right":
+					board = "top";
+					break;
+			}
+		}
+		for (let i = 0; i < salvo.length; i++) {
+			if (salvo[i] > target.ship.guns[board][index]) {
+				console.log(target.ship.guns[board][index]);
+				index++;
+			}
+		}
+		return result;
 	},
 	getTotalCrew: function() {
 		let c = 0;
@@ -365,8 +420,9 @@ game = {
 				deg = -90;
 				this.ship.direction = side ? "bottom" : "top";
 				break;
-			default:
+			case "top":
 				this.ship.direction = side ? "left" : "right";
+				break;
 		}
 		deg += side ? -90 : 90;
 		this.ship.object.style.transform = 'rotate(' + deg + 'deg)';
@@ -551,6 +607,34 @@ game = {
 			});
 		});
 	},
+	renderFire: function() {
+		let btn = document.createElement("button"), self = game, that = this;
+		btn.innerHTML = "Пли!";
+		btn.style.display = "block";
+		dialog.innerHTML = "Товсь!<br>";
+		dialog.style.display = "block";
+		for (let i = 0; i < this.ship.guns[this.ship.direction].length; i++) {
+			let dice = document.createElement("img");
+			dice.className = "dices fireDices";
+			dice.src = "images/dice.gif";
+			dialog.appendChild(dice);
+		}
+		return new Promise(function(resolve) {
+			let dices = document.getElementsByClassName("fireDices");
+			dialog.appendChild(btn);
+			btn.onclick = function() {
+				dialog.innerHTML = "Результаты залпа:<br>";
+				for (let i = 0; i < dices.length; i++) {
+					dialog.appendChild(dices[i]);
+				}
+				let result = self.rollDice(dices);
+				dialog.appendChild( self.fireResult.call(that, result) );
+				btn.innerHTML = "далее";
+				dialog.appendChild(btn);
+				return resolve(btn);
+			};
+		});
+	},
 	renderControl: function(MP) {
 		let moveCostF = 1, moveCostL = 1, moveCostR = 1, moveCostB = 2,
 			that = player.ship;
@@ -647,6 +731,11 @@ function compareRandom(a, b) {
 };
 function sum(a, b) {
 	return a + b;
+};
+function sumArray(arr) {
+	let result = 0;
+	for (let i = 0; i < arr.length; i++) result += arr[i];
+	return result;
 };
 
 var stratagems = [{
