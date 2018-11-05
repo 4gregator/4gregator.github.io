@@ -329,7 +329,7 @@ game = {
 			grapple.onclick = function() {
 				self.roundEnd = true;
 				self.deactivation();
-				self.renderGrapple().then((result) => {
+				self.renderGrapple().then(function(result) {
 					let dices = self.rollDice(result);
 					for (let i = 0; i < dices.length; i++) {
 						if (i < 2) oppPower += dices[i];
@@ -347,41 +347,58 @@ game = {
 		return new Promise(function(resolve) {
 			fire.onclick = function() {
 				self.deactivation();
-				self.renderFire.call(that);
-				return resolve();
+				self.renderFire.call(that).then(function(result) {
+					result.onclick = function() {
+						dialog.style.display = "none";
+						return resolve();
+					};
+				});
 			};
 		});
 	},
 	fireResult: function(salvo) {
 		let result = document.createElement("p"), kills = 0, wounds = 0, index = 0, board = "",
 		target = this == player ? computer : player;
-		salvo.sort(function(a, b) {
-			return b - a;
-		});
+		salvo.sort(sortArray);
 		// @todo реализовать критический удар и уклонение
 		board = target.ship.direction;
 		while ( !sumArray(target.ship.guns[board]) ) {
 			switch(board) {
 				case "top":
-					board = "left";
-					break;
-				case "left":
-					board = "bottom";
-					break;
-				case "bottom":
 					board = "right";
 					break;
 				case "right":
+					board = "bottom";
+					break;
+				case "bottom":
+					board = "left";
+					break;
+				case "left":
 					board = "top";
 					break;
 			}
 		}
 		for (let i = 0; i < salvo.length; i++) {
 			if (salvo[i] > target.ship.guns[board][index]) {
-				console.log(target.ship.guns[board][index]);
+				kills++;
+				wounds += target.ship.guns[board][index];
+				target.ship.guns[board][index] = 0;
+				index++;
+			} else if (salvo[i] == target.ship.guns[board][index]) {
+				if (target.ship.guns[board][index] == 1) kills++;
+				wounds++;
+				target.ship.guns[board][index]--;
 				index++;
 			}
 		}
+		// добавить проверку на оставшееся количество пушек, если 1, то раунд окончен
+		// сортируем массив цели, рендерим. нужно ли вынести в отдельную функцию?
+		target.ship.guns[board] = target.ship.guns[board].filter(function(crew) {
+			return crew > 0;
+		});
+		target.ship.guns[board].sort(sortArray);
+		game.setGuns.call(target);
+		result.innerHTML = "Пушек уничтожено: " + kills + "<br>Членов экипажа ранено: " + wounds;
 		return result;
 	},
 	getTotalCrew: function() {
@@ -482,7 +499,7 @@ game = {
 		for (let side in this.ship.guns) {
 			let guns = this.ship.object.getElementsByClassName(side);
 			for (let i = 0; i < guns.length; i++) {
-				guns[i].innerHTML = this.ship.guns[side][i];
+				guns[i].innerHTML = this.ship.guns[side][i] === undefined ? "X" : this.ship.guns[side][i];
 				game.renderGun.call( this, guns[i], game.getGunCoordinates.call(this, side, i) );
 			}
 		}
@@ -608,11 +625,14 @@ game = {
 		});
 	},
 	renderFire: function() {
-		let btn = document.createElement("button"), self = game, that = this;
+		let btn = document.createElement("button"), msg = document.createElement("p"),
+		self = game, that = this;
+		dialog.innerHTML = "";
+		dialog.style.display = "block";
+		dialog.appendChild(msg);
+		msg.innerHTML = "Товсь!";
 		btn.innerHTML = "Пли!";
 		btn.style.display = "block";
-		dialog.innerHTML = "Товсь!<br>";
-		dialog.style.display = "block";
 		for (let i = 0; i < this.ship.guns[this.ship.direction].length; i++) {
 			let dice = document.createElement("img");
 			dice.className = "dices fireDices";
@@ -620,14 +640,10 @@ game = {
 			dialog.appendChild(dice);
 		}
 		return new Promise(function(resolve) {
-			let dices = document.getElementsByClassName("fireDices");
 			dialog.appendChild(btn);
 			btn.onclick = function() {
-				dialog.innerHTML = "Результаты залпа:<br>";
-				for (let i = 0; i < dices.length; i++) {
-					dialog.appendChild(dices[i]);
-				}
-				let result = self.rollDice(dices);
+				let dices = document.getElementsByClassName("fireDices"), result = self.rollDice(dices);
+				msg.innerHTML = "Результаты залпа:";
 				dialog.appendChild( self.fireResult.call(that, result) );
 				btn.innerHTML = "далее";
 				dialog.appendChild(btn);
@@ -731,6 +747,9 @@ function compareRandom(a, b) {
 };
 function sum(a, b) {
 	return a + b;
+};
+let sortArray = function(a, b) {
+	return b - a;
 };
 function sumArray(arr) {
 	let result = 0;
