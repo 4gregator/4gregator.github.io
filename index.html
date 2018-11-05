@@ -7,7 +7,7 @@
 </head>
 <body>
 	<div class="TheGame">
-		<div class="playField">
+		<div id="playField">
 			<div id="start">
 				<h1>Соль и Порох</h1>
 				<p>Что ещё за пресноводных моллюсков притащило, разрази меня гром!</p>
@@ -16,8 +16,8 @@
 			</div>
 			<div id="dialog">
 				<p>Укажите свой пол</p>
-				<button id="male" class="gender">Муж</button>
-				<button id="female" class="gender">Жен</button>
+				<button id="male" class="gender" type="button">Муж</button>
+				<button id="female" class="gender" type="button">Жен</button>
 			</div>
 			<div id="infoPanel"></div>
 			<div id="compas">
@@ -38,6 +38,7 @@
 				<img src="#" alt="ship" class="ship">
 			</div>
 			<div id="hand">
+				<button id="showStrata" type="button">Посмотреть стратагемы</button>
 				<img src="#" alt="stratagema" class="strata">
 				<img src="#" alt="stratagema" class="strata">
 				<img src="#" alt="stratagema" class="strata">
@@ -49,5 +50,6 @@
 		<img src="#" alt="portret" id="portretOpp">
 	</div>
 	<script src="scripts/oop.js"></script>
+	<script src="scripts/carousel.js"></script>
 </body>
 </html>

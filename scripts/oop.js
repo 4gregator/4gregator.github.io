@@ -42,6 +42,8 @@ var player = {
 			strata[i].src = "images/" + this.hand[i].id + ".jpg";
 			strata[i].style.display = "block";
 		}
+		showStrata.style.display = "block";
+		showStrata.addEventListener('click', strataCarousel);
 	},
 	shipChoice: function() {
 		let text = (this.fleet.length != 1) ? "<p>Выберите корабль:<p>": "<p>У вас остался последний корабль:<p>";
