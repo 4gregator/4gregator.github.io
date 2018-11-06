@@ -359,38 +359,46 @@ game = {
 		});
 	},
 	fireResult: function(salvo) {
-		let result = document.createElement("p"), kills = 0, wounds = 0, index = 0, board = "",
-		target = this == player ? computer : player;
+		let result = document.createElement("p"), kills = 0, wounds = 0, index = 0,
+		target = this == player ? computer : player, board = target.ship.direction,
+		targetSide = function() {
+			while ( !sumArray(target.ship.guns[board]) ) {
+				target.ship.guns[board] = [];
+				switch(board) {
+					case "top":
+						board = "right";
+						break;
+					case "right":
+						board = "bottom";
+						break;
+					case "bottom":
+						board = "left";
+						break;
+					case "left":
+						board = "top";
+						break;
+				}
+				index = 0;
+			}
+			return target.ship.guns[board][index];
+		};
 		salvo.sort(sortArray);
 		// @todo реализовать критический удар и уклонение
-		board = target.ship.direction;
-		while ( !sumArray(target.ship.guns[board]) ) {
-			switch(board) {
-				case "top":
-					board = "right";
-					break;
-				case "right":
-					board = "bottom";
-					break;
-				case "bottom":
-					board = "left";
-					break;
-				case "left":
-					board = "top";
-					break;
-			}
-		}
 		for (let i = 0; i < salvo.length; i++) {
-			if (salvo[i] > target.ship.guns[board][index]) {
+			if (salvo[i] > targetSide()) {
 				kills++;
 				wounds += target.ship.guns[board][index];
 				target.ship.guns[board][index] = 0;
 				index++;
-			} else if (salvo[i] == target.ship.guns[board][index]) {
-				if (target.ship.guns[board][index] == 1) kills++;
-				wounds++;
-				target.ship.guns[board][index]--;
-				index++;
+			} else if (salvo[i] == targetSide()) {
+				if (targetSide() != 1) {
+					wounds++;
+					target.ship.guns[board][index]--;
+				} else {
+					kills++;
+					target.ship.guns[board][index] = 0;
+					index++;
+				}
 			}
 		}
 		// добавить проверку на оставшееся количество пушек, если 1, то раунд окончен
