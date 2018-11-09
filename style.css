@@ -96,10 +96,10 @@ button {
 	width: 143px;
 	height: 200px;
 	position: relative;
-	display: none;
 }
 
 #plrShip, #oppShip {
+	display: none;
 	position: absolute;
 	left: 460px;
 }

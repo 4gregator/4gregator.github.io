@@ -34,7 +34,7 @@ var player = {
 	},
 	renderShip: function() {
 		this.ship.object.getElementsByClassName("ship")[0].src = "images/" + this.ship.name + "1.jpg";
-		this.ship.object.getElementsByClassName("ship")[0].style.display = "block";
+		this.ship.object.style.display = "block";
 	},
 	renderStrata: function() {
 		let strata = document.getElementsByClassName("strata");
@@ -43,19 +43,19 @@ var player = {
 			strata[i].style.display = "block";
 		}
 		showStrata.style.display = "block";
-		showStrata.addEventListener('click', strataCarousel);
+		showStrata.onclick = strataCarousel;
 	},
 	shipChoice: function() {
-		let text = (this.fleet.length != 1) ? "<p>Выберите корабль:<p>": "<p>У вас остался последний корабль:<p>";
+		let text = (this.fleet.length != 1) ? "<p>Выберите корабль:<p>": "<p>У вас остался последний корабль:<p>", self = this;
 		dialog.innerHTML = text;
 		return new Promise(function(resolve) {
 			for (let i = 0; i < player.fleet.length; i++) {
 				let shipAvlbl = document.createElement("button");
-				shipAvlbl.innerHTML = player.fleet[i];
+				shipAvlbl.innerHTML = self.fleet[i];
 				shipAvlbl.addEventListener('click', function() {
-					player.ship.name = (player.fleet.length != 1) ? player.fleet.splice(i, 1)[0] : player.fleet[i];
-					player.renderShip();
-					game.loadGuns.call(player);
+					self.ship.name = (self.fleet.length != 1) ? self.fleet.splice(i, 1)[0] : self.fleet[i];
+					self.renderShip();
+					game.loadGuns.call(self);
 					return resolve();
 				});
 				dialog.appendChild(shipAvlbl);
@@ -117,8 +117,8 @@ computer = {
 	render: function() {
 		portretOpp.src = "images/" + this.gender + ".jpg";
 		portretOpp.style.display = "block";
-		oppShip.getElementsByClassName("ship")[0].src = "images/" + this.ship.name + "2.jpg";
-		oppShip.getElementsByClassName("ship")[0].style.display = "block";
+		this.ship.object.getElementsByClassName("ship")[0].src = "images/" + this.ship.name + "2.jpg";
+		this.ship.object.style.display = "block";
 	}
 },
 game = {
@@ -127,31 +127,36 @@ game = {
 	wind: "",
 	distance: true,
 	PlayTheGame: function() {
-		let self = this;
-		if (player.victPts == 2 || computer.victPts == 2) return 0;
-		this.round++;
-		if (this.round == 1) this.init().then( self.roundStart.bind(self) ).then( self.roundPlay.bind(self) );
-		else this.roundStart.bind(self);
-		//
-		/*let roundOver = new Promise(function(resolve) {
-			let endRound = document.createElement("button");
-			endRound.innerHTML = "Завершить раунд";
-			endRound.onclick = function() {
-				popup.style.display = "none";
-				return resolve();
-			}
-			roundStart();
-			shipChoice().then(function() {
-				chooseDirection().then(function() {
-					loadGuns(enemyShip);
-					roundPlay(endRound);
-				});
+		console.log("GameStart");
+		let self = this, playGame = function() {
+			return self.roundStart.call(self).then( self.roundPlay.bind(self) ).then(function() {
+				self.clean();
+				return self.PlayTheGame();
 			});
-		});
-		roundOver.then(function() {
-			clearField();
-			PlayTheGame();
-		});*/
+		};
+		if (player.victPts == 2 || computer.victPts == 2) return this.GameOver();
+		this.round++;
+		if (this.round == 1) return this.init().then(playGame);
+		else return playGame();
+	},
+	GameOver: function() {
+		if (player.victPts == 2) dialog.innerHTML = "Победа!!!";
+		else dialog.innerHTML = "Поражение...";
+	},
+	clean: function() {
+		console.log("cleaning");
+		let cleaning = function(that) {
+			let gun = that.ship.object.getElementsByTagName("div");
+			that.ship.object.style.display = "none";
+			that.ship.direction = "top";
+			that.hand = [];
+			for (let side in that.ship.guns) that.ship.guns[side] = [];
+			for (let i = gun.length - 1; i >= 0; i--) that.ship.object.removeChild(gun[i]);
+		}
+		if (!this.distance) this.move();
+		compas.style.display = "none";
+		cleaning(player);
+		cleaning(computer);
 	},
 	init: function() {
 		let self = this;
@@ -209,9 +214,10 @@ game = {
 		return value;
 	},
 	roundStart: function() {
+		console.log("start");
 		let self = this;
-		self.roundEnd = false;
-		self.takeStrata();
+		this.roundEnd = false;
+		this.takeStrata();
 		player.renderStrata();
 		return new Promise(function(resolve) {
 			player.shipChoice().then(function() {
@@ -223,27 +229,24 @@ game = {
 		});
 	},
 	roundPlay: function() {
-		//определить, чей ход
 		let self = this, that = player.move ? player : computer;
 		this.wind = this.changeWind();
-		//начислить очкий действий
 		that.ship.reloading = [];
 		switch(that.ship.name) {
 			case "Бригантина": that.ship.movePts++;
 			case "Фрегат": that.ship.movePts++;
 			default: that.ship.movePts++;
 		}
-		//активировать возможность сделать действие
 		if (that == computer) {
 			alert("Ход искуственного интеллекта, который в данный момент без мозгов");
 			that.ship.movePts = 0;
 			this.changeMove();
 			return self.roundPlay();
-		} else this.makeAction.call(that).then(function() {
-			//по окончании очков действий передать ход
-			//сделать рекурсию, если раунд не окончен
-			console.log("checkpoint");
-			if (self.roundEnd) return console.log("endRound");
+		} else return this.makeAction.call(that).then(function() {
+			if (self.roundEnd) return new Promise(function(resolve) {
+				console.log("checkpoint");
+				return resolve();
+			});
 			else {
 				self.changeMove();
 				return self.roundPlay();
@@ -266,10 +269,9 @@ game = {
 		}
 	},
 	makeAction: function() {
-		// @todo выходить из функции если раунд окончен
 		let self = game, that = this, cost = self.renderControl(this.ship.movePts),
 		moveOver = function() {
-			if (!that.ship.movePts) {
+			if (!that.ship.movePts || self.roundEnd) {
 				return new Promise(function(resolve) {
 					return resolve();
 				});
