@@ -108,6 +108,9 @@ button {
 	top: 300px;
 }
 
+.eva, .top, .right, .bottom, .left {
+	position: absolute;
+}
 /* страты в руке */
 #hand {
 	position: relative;

@@ -10,6 +10,7 @@ var player = {
 		name: false,
 		direction: "top",
 		movePts: 0,
+		evasion: 0,
 		guns: {
 			left: [],
 			right: [],
@@ -55,7 +56,7 @@ var player = {
 				shipAvlbl.addEventListener('click', function() {
 					self.ship.name = (self.fleet.length != 1) ? self.fleet.splice(i, 1)[0] : self.fleet[i];
 					self.renderShip();
-					game.loadGuns.call(self);
+					game.loadArms.call(self);
 					return resolve();
 				});
 				dialog.appendChild(shipAvlbl);
@@ -83,8 +84,8 @@ var player = {
 			ready.addEventListener('click', function() {
 				dialog.style.display = "none";
 				computer.init();
-				game.loadGuns.call(computer);
-				game.setGuns.call(computer);
+				game.loadArms.call(computer);
+				game.setArms.call(computer);
 				return resolve();
 			});
 		});
@@ -100,6 +101,7 @@ computer = {
 		name: false,
 		direction: "top",
 		movePts: 0,
+		evasion: 0,
 		guns: {
 			left: [],
 			right: [],
@@ -221,7 +223,7 @@ game = {
 		player.renderStrata();
 		return new Promise(function(resolve) {
 			player.shipChoice().then(function() {
-				self.setGuns.call(player);
+				self.setArms.call(player);
 				player.chooseDirection().then(function() {
 					return resolve();
 				});
@@ -409,7 +411,7 @@ game = {
 			return crew > 0;
 		});
 		target.ship.guns[board].sort(sortArray);
-		game.setGuns.call(target);
+		game.setArms.call(target);
 		result.innerHTML = "Пушек уничтожено: " + kills + "<br>Членов экипажа ранено: " + wounds;
 		return result;
 	},
@@ -455,7 +457,7 @@ game = {
 		}
 		deg += side ? -90 : 90;
 		this.ship.object.style.transform = 'rotate(' + deg + 'deg)';
-		game.setGuns.call(this);
+		game.setArms.call(this);
 	},
 	changeWind: function() {
 		let wind, dice = document.getElementById("windDice");
@@ -483,7 +485,7 @@ game = {
 		}
 		return wind;
 	},
-	loadGuns: function() {
+	loadArms: function() {
 		for (let side in this.ship.guns) {
 			let notBoard = (side != "top" && side != "bottom") ? false : true;
 			for (let i = 0; i < 5; i++) { // максимум 5 орудий по борту
@@ -493,32 +495,44 @@ game = {
 					case "Фрегат": crew++;
 					case "Галеон": this.ship.guns[side].push(crew);
 				}
-				game.createGun.call(this.ship.object, side);
+				game.createDiv.call(this.ship.object, side);
 				if (this.ship.name == "Бригантина" && notBoard) break;
 				else if (i == 1 && this.ship.name == "Фрегат" && notBoard) break;
 				else if ( i == 2 && ( this.ship.name == "Бригантина" || (this.ship.name == "Галеон" && notBoard) ) ) break;
 				else if (i == 3 && this.ship.name == "Фрегат") break;
 			}
 		}
+		switch(this.ship.name) {
+			case "Бригантина": ++this.ship.evasion;
+			case "Фрегат": ++this.ship.evasion;
+			case "Галеон":
+				++this.ship.evasion;
+				game.createDiv.call(this.ship.object, "eva");
+		}
 	},
-	createGun: function(name) {
+	createDiv: function(name) {
 		let div = document.createElement("div");
 		div.className = name;
-		div.style.position = "absolute";
 		this.appendChild(div);
 	},
-	setGuns: function() {
+	setArms: function() {
+		let self = game, eva = this.ship.object.getElementsByClassName("eva")[0];
 		for (let side in this.ship.guns) {
 			let guns = this.ship.object.getElementsByClassName(side);
 			for (let i = 0; i < guns.length; i++) {
 				guns[i].innerHTML = this.ship.guns[side][i] === undefined ? "X" : this.ship.guns[side][i];
-				game.renderGun.call( this, guns[i], game.getGunCoordinates.call(this, side, i) );
+				self.renderArmament.call( this, guns[i], self.getArmCoordinates.call(this, side, i) );
 			}
 		}
+		eva.innerHTML = this.ship.evasion;
+		self.renderArmament.call( this, eva, self.getArmCoordinates.call(this, "evasion") );
 	},
-	getGunCoordinates: function(side, id) {
+	getArmCoordinates: function(side, id) {
 		let x = 0, y = 0, arr = [];
-		switch(this.ship.name) {
+		if (side == "evasion") {
+			if (this.ship.name == "Галеон") return [68, 94];
+			else return [23, 41];
+		} else switch(this.ship.name) {
 			case "Бригантина":
 				switch(side) {
 					case "top":
@@ -543,7 +557,7 @@ game = {
 				switch(side) {
 					case "top":
 						x = 80 + id * 25;
-						y = 13;
+						y = 15;
 						break;
 					case "right":
 						x = 123;
@@ -589,7 +603,7 @@ game = {
 		arr.push(y);
 		return arr;
 	},
-	renderGun: function(obj, arr) {
+	renderArmament: function(obj, arr) {
 		if (this == player) {
 			obj.style.left = arr[0] + "px";
 			obj.style.top = arr[1] + "px";
