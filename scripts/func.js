@@ -32,3 +32,25 @@ let strataCarousel = function() {
 		playField.removeChild(div);
 	});
 };
+
+function random(min, max) {
+	return Math.floor(Math.random() * (max + 1 - min) + min);
+};
+
+function compareRandom(a, b) {
+	return Math.random() - 0.5;
+};
+
+function sum(a, b) {
+	return a + b;
+};
+
+let sortArray = function(a, b) {
+	return b - a;
+};
+
+function sumArray(arr) {
+	let result = 0;
+	for (let i = 0; i < arr.length; i++) result += arr[i];
+	return result;
+};

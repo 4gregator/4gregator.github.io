@@ -242,12 +242,19 @@ game = {
 		if (that == computer) {
 			alert("Ход искуственного интеллекта, который в данный момент без мозгов");
 			that.ship.movePts = 0;
-			this.changeMove();
+			self.changeMove();
 			return self.roundPlay();
 		} else return this.makeAction.call(that).then(function() {
 			if (self.roundEnd) return new Promise(function(resolve) {
-				console.log("checkpoint");
-				return resolve();
+				let btn = document.createElement("button");
+				btn.innerHTML = "Далее";
+				btn.style.display = "block";
+				dialog.innerHTML = self.round + " раунд завершен.<br>Компьютер " + computer.victPts + ":" + player.victPts + " Игрок";
+				dialog.appendChild(btn);
+				dialog.style.display = "block";
+				btn.addEventListener('click', function() {
+					return resolve();
+				});
 			});
 			else {
 				self.changeMove();
@@ -363,11 +370,18 @@ game = {
 		});
 	},
 	fireResult: function(salvo) {
-		let result = document.createElement("p"), kills = 0, wounds = 0, index = 0,
-		target = this == player ? computer : player, board = target.ship.direction,
+		let result = document.createElement("p"), kills = 0, wounds = 0, index = 0, msg = "",
+		target = this == player ? computer : player, board = target.ship.direction, squad,
 		targetSide = function() {
+			squad = 0;
+			if (!sumArray(target.ship.guns[board])) target.ship.guns[board] = []; //посмотреть, как можно улучшить, чтоб не делать двойную проверку
+			for (let side in target.ship.guns) squad += target.ship.guns[side].length;
+			if (!squad) {
+				game.roundEnd = true;
+				msg = "<br>Оставшийся экипаж больше не может оказывать сопротивление и сдаётся!";
+				return 0;
+			}
 			while ( !sumArray(target.ship.guns[board]) ) {
-				target.ship.guns[board] = [];
 				switch(board) {
 					case "top":
 						board = "right";
@@ -389,13 +403,15 @@ game = {
 		salvo.sort(sortArray);
 		// @todo реализовать критический удар и уклонение
 		for (let i = 0; i < salvo.length; i++) {
-			if (salvo[i] > targetSide()) {
+			let trgt = targetSide();
+			if (!trgt) break;
+			if (salvo[i] > trgt) {
 				kills++;
 				wounds += target.ship.guns[board][index];
 				target.ship.guns[board][index] = 0;
 				index++;
-			} else if (salvo[i] == targetSide()) {
-				if (targetSide() != 1) {
+			} else if (salvo[i] == trgt) {
+				if (trgt != 1) {
 					wounds++;
 					target.ship.guns[board][index]--;
 				} else {
@@ -405,14 +421,12 @@ game = {
 				}
 			}
 		}
-		// добавить проверку на оставшееся количество пушек, если 1, то раунд окончен
-		// сортируем массив цели, рендерим. нужно ли вынести в отдельную функцию?
 		target.ship.guns[board] = target.ship.guns[board].filter(function(crew) {
 			return crew > 0;
 		});
 		target.ship.guns[board].sort(sortArray);
 		game.setArms.call(target);
-		result.innerHTML = "Пушек уничтожено: " + kills + "<br>Членов экипажа ранено: " + wounds;
+		result.innerHTML = "Пушек уничтожено: " + kills + "<br>Членов экипажа ранено: " + wounds + msg;
 		return result;
 	},
 	getTotalCrew: function() {
@@ -628,7 +642,7 @@ game = {
 	renderGrapple: function() {
 		dialog.innerHTML = "Бросим кости на абордаж!";
 		for (let i = 0; i < 2; i++) {
-			let div = document.createElement("div"), span = document.createElement("span");
+			let div = document.createElement("div");
 			div.innerHTML = "Боеспособный экипаж корабля: ";
 			div.innerHTML += !i ? this.getTotalCrew.call(computer.ship.guns) : this.getTotalCrew.call(player.ship.guns);
 			dialog.appendChild(div);
@@ -764,112 +778,3 @@ game = {
 };
 
 window.addEventListener('load', game.PlayTheGame());
-
-function random(min, max) {
-	return Math.floor(Math.random() * (max + 1 - min) + min);
-};
-function compareRandom(a, b) {
-	return Math.random() - 0.5;
-};
-function sum(a, b) {
-	return a + b;
-};
-let sortArray = function(a, b) {
-	return b - a;
-};
-function sumArray(arr) {
-	let result = 0;
-	for (let i = 0; i < arr.length; i++) result += arr[i];
-	return result;
-};
-
-var stratagems = [{
-	id: 1,
-},
-{
-	id: 2,
-},
-{
-	id: 3,
-},
-{
-	id: 4,
-},
-{
-	id: 5,
-},
-{
-	id: 6,
-},
-{
-	id: 7,
-},
-{
-	id: 8,
-},
-{
-	id: 9,
-},
-{
-	id: 10,
-},
-{
-	id: 11,
-},
-{
-	id: 12,
-},
-{
-	id: 13,
-},
-{
-	id: 14,
-},
-{
-	id: 15,
-},
-{
-	id: 16,
-},
-{
-	id: 17,
-},
-{
-	id: 18,
-},
-{
-	id: 19,
-},
-{
-	id: 20,
-},
-{
-	id: 21,
-},
-{
-	id: 22,
-},
-{
-	id: 23,
-},
-{
-	id: 24,
-},
-{
-	id: 25,
-},
-{
-	id: 26,
-},
-{
-	id: 27,
-},
-{
-	id: 28,
-},
-{
-	id: 29,
-},
-{
-	id: 30,
-}];
