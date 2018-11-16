@@ -113,7 +113,7 @@ computer = {
 	hand: [],
 	init: function() {
 		if (!this.gender) this.gender = random(0, 1) ? "male" : "female";
-		this.ship.name = this.fleet.splice(random(0, this.fleet.length - 1))[0];
+		this.ship.name = this.fleet.splice(random(0, this.fleet.length - 1), 1)[0];
 		this.render();
 	},
 	render: function() {
@@ -401,7 +401,16 @@ game = {
 			return target.ship.guns[board][index];
 		};
 		salvo.sort(sortArray);
-		// @todo реализовать критический удар и уклонение
+		if (salvo[2] == 6 || (salvo[1] == 6 && game.distance == 0)) {
+			if (target.ship.evasion == 0) {
+				this.victPts++;
+				game.roundEnd = true;
+			}
+			msg = (target.ship.evasion > 0) ? "Оппонент использует уклонение<br>Уклонений осталось: " + --target.ship.evasion : "Вы выиграли раунд!";
+			result.innerHTML = "Удачное попадание вызвало детонацию порохового склада!<br>" + msg;
+			game.setArms.call(target);
+			return result;
+		}
 		for (let i = 0; i < salvo.length; i++) {
 			let trgt = targetSide();
 			if (!trgt) break;
