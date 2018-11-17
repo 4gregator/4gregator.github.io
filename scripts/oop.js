@@ -151,6 +151,7 @@ game = {
 			let gun = that.ship.object.getElementsByTagName("div");
 			that.ship.object.style.display = "none";
 			that.ship.direction = "top";
+			that.ship.evasion = 0;
 			that.hand = [];
 			for (let side in that.ship.guns) that.ship.guns[side] = [];
 			for (let i = gun.length - 1; i >= 0; i--) that.ship.object.removeChild(gun[i]);
@@ -240,10 +241,16 @@ game = {
 			default: that.ship.movePts++;
 		}
 		if (that == computer) {
-			alert("Ход искуственного интеллекта, который в данный момент без мозгов");
-			that.ship.movePts = 0;
-			self.changeMove();
-			return self.roundPlay();
+			if (computer.ship.name == "Галеон") return AI().then(function() {
+				self.changeMove();
+				return self.roundPlay();
+			});
+			else {
+				alert("Ход компьютера пропускается, минимальная логика есть только для галеона.");
+				that.ship.movePts = 0;
+				self.changeMove();
+				return self.roundPlay();
+			}
 		} else return this.makeAction.call(that).then(function() {
 			if (self.roundEnd) return new Promise(function(resolve) {
 				let btn = document.createElement("button");
@@ -252,9 +259,9 @@ game = {
 				dialog.innerHTML = self.round + " раунд завершен.<br>Компьютер " + computer.victPts + ":" + player.victPts + " Игрок";
 				dialog.appendChild(btn);
 				dialog.style.display = "block";
-				btn.addEventListener('click', function() {
+				btn.onclick = function() {
 					return resolve();
-				});
+				};
 			});
 			else {
 				self.changeMove();
@@ -337,20 +344,22 @@ game = {
 	closeCombat: function() {
 		let plrPower = this.getTotalCrew.call(player.ship.guns),
 			oppPower = this.getTotalCrew.call(computer.ship.guns),
-			self = this;
+			self = this, defend = player.move ? false : true;
 		return new Promise(function(resolve) {
 			grapple.onclick = function() {
 				self.roundEnd = true;
 				self.deactivation();
-				self.renderGrapple().then(function(result) {
-					let dices = self.rollDice(result);
+				self.renderGrapple().then(function(btn) {
+					let dices = self.rollDice(document.getElementsByClassName("grappleDices"));
 					for (let i = 0; i < dices.length; i++) {
 						if (i < 2) oppPower += dices[i];
 						else plrPower += dices[i];
 					}
-					// @todo атакующий получает преимущество attackPwr >= defendPwr
-					plrPower >= oppPower ? player.victPts++ : computer.victPts++;
-					return resolve();
+					if (defend) oppPower >= plrPower ? computer.victPts++ : player.victPts++;
+					else plrPower >= oppPower ? player.victPts++ : computer.victPts++;
+					btn.onclick = function() {
+						return resolve();
+					};
 				});
 			};
 		});
@@ -372,6 +381,7 @@ game = {
 	fireResult: function(salvo) {
 		let result = document.createElement("p"), kills = 0, wounds = 0, index = 0, msg = "",
 		target = this == player ? computer : player, board = target.ship.direction, squad,
+		win = this == player ? "Вы выиграли раунд!" : "Компьютер выиграл раунд...",
 		targetSide = function() {
 			squad = 0;
 			if (!sumArray(target.ship.guns[board])) target.ship.guns[board] = []; //посмотреть, как можно улучшить, чтоб не делать двойную проверку
@@ -406,7 +416,7 @@ game = {
 				this.victPts++;
 				game.roundEnd = true;
 			}
-			msg = (target.ship.evasion > 0) ? "Оппонент использует уклонение<br>Уклонений осталось: " + --target.ship.evasion : "Вы выиграли раунд!";
+			msg = (target.ship.evasion > 0) ? "Защищающаяся сторона использует уклонение<br>Уклонений осталось: " + --target.ship.evasion : win;
 			result.innerHTML = "Удачное попадание вызвало детонацию порохового склада!<br>" + msg;
 			game.setArms.call(target);
 			return result;
@@ -649,7 +659,8 @@ game = {
 		}
 	},
 	renderGrapple: function() {
-		dialog.innerHTML = "Бросим кости на абордаж!";
+		dialog.innerHTML = computer.move ? "Компьютер объявляет абордаж.<br>" : "";
+		dialog.innerHTML += "Бросим кости на абордаж!";
 		for (let i = 0; i < 2; i++) {
 			let div = document.createElement("div");
 			div.innerHTML = "Боеспособный экипаж корабля: ";
@@ -667,40 +678,52 @@ game = {
 			let btn = document.createElement("button");
 			btn.innerHTML = "Бросить!";
 			dialog.appendChild(btn);
-			btn.addEventListener('click', function() {
-				dialog.removeChild(btn);
-				return resolve(document.getElementsByClassName("grappleDices"));
-			});
+			btn.onclick = function() {
+				btn.innerHTML = "далее";
+				return resolve(btn);
+			};
 		});
 	},
 	renderFire: function() {
 		let btn = document.createElement("button"), msg = document.createElement("p"),
-		self = game, that = this;
+		that = this, shooting = function() {
+			let dices = document.getElementsByClassName("fireDices"), result = game.rollDice(dices);
+			msg.innerHTML = "Результаты залпа:";
+			dialog.appendChild(game.fireResult.call(that, result));
+			btn.innerHTML = player.move ? "далее" : "принять";
+			dialog.appendChild(btn);
+		};
 		dialog.innerHTML = "";
 		dialog.style.display = "block";
 		dialog.appendChild(msg);
-		msg.innerHTML = "Товсь!";
-		btn.innerHTML = "Пли!";
-		btn.style.display = "block";
 		for (let i = 0; i < this.ship.guns[this.ship.direction].length; i++) {
 			let dice = document.createElement("img");
 			dice.className = "dices fireDices";
 			dice.src = "images/dice.gif";
 			dialog.appendChild(dice);
 		}
-		return new Promise(function(resolve) {
-			dialog.appendChild(btn);
-			btn.onclick = function() {
-				let dices = document.getElementsByClassName("fireDices"), result = self.rollDice(dices);
-				msg.innerHTML = "Результаты залпа:";
-				dialog.appendChild( self.fireResult.call(that, result) );
-				btn.innerHTML = "далее";
+		if (player.move) {
+			msg.innerHTML = "Товсь!";
+			btn.innerHTML = "Пли!";
+			btn.style.display = "block";
+			return new Promise(function(resolve) {
 				dialog.appendChild(btn);
-				return resolve(btn);
-			};
-		});
+				btn.onclick = function() {
+					shooting();
+					return resolve(btn);
+				};
+			});
+		} else {
+			return new Promise(function(resolve) {
+				shooting();
+				btn.onclick = function() {
+					dialog.style.display = "none";
+					return resolve();
+				};
+			});
+		}
 	},
-	renderControl: function(MP) {
+	renderControl: function(MP) { // @todo расчет стоимости движения вынести в отдельную функцию
 		let moveCostF = 1, moveCostL = 1, moveCostR = 1, moveCostB = 2,
 			that = player.ship;
 		//влияние ветра на стоимость движения
