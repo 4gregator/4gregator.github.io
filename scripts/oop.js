@@ -150,8 +150,10 @@ game = {
 		let cleaning = function(that) {
 			let gun = that.ship.object.getElementsByTagName("div");
 			that.ship.object.style.display = "none";
+			that.ship.object.style.transform = "rotate(0)";
 			that.ship.direction = "top";
 			that.ship.evasion = 0;
+			that.ship.movePts = 0;
 			that.hand = [];
 			for (let side in that.ship.guns) that.ship.guns[side] = [];
 			for (let i = gun.length - 1; i >= 0; i--) that.ship.object.removeChild(gun[i]);
@@ -240,7 +242,7 @@ game = {
 			case "Фрегат": that.ship.movePts++;
 			default: that.ship.movePts++;
 		}
-		if (that == computer) {
+		/*if (that == computer) {
 			if (computer.ship.name == "Галеон") return AI().then(function() {
 				self.changeMove();
 				return self.roundPlay();
@@ -251,7 +253,9 @@ game = {
 				self.changeMove();
 				return self.roundPlay();
 			}
-		} else return this.makeAction.call(that).then(function() {
+		} else */
+		alert(player.move ? "Ход игрока" : "Ход компьютера");
+		return this.makeAction.call(that).then(function() {
 			if (self.roundEnd) return new Promise(function(resolve) {
 				let btn = document.createElement("button");
 				btn.innerHTML = "Далее";
@@ -307,6 +311,7 @@ game = {
 				return resolve();
 			});
 		});
+		if (computer.move) AI();
 		return action.then(function() {
 			return moveOver();
 		});
@@ -716,16 +721,13 @@ game = {
 		} else {
 			return new Promise(function(resolve) {
 				shooting();
-				btn.onclick = function() {
-					dialog.style.display = "none";
-					return resolve();
-				};
+				return resolve(btn);
 			});
 		}
 	},
 	renderControl: function(MP) { // @todo расчет стоимости движения вынести в отдельную функцию
 		let moveCostF = 1, moveCostL = 1, moveCostR = 1, moveCostB = 2,
-			that = player.ship;
+			that = player.move ? player.ship : computer.ship;
 		//влияние ветра на стоимость движения
 		switch(that.direction) {
 			case "top":
@@ -745,18 +747,6 @@ game = {
 				}
 				if (this.distance && MP >= moveCostF) move.disabled = "";
 				break;
-			case "right":
-				switch(this.wind) {
-					case "north":
-						moveCostL = 0;
-						break;
-					case "south":
-						moveCostR = 0;
-						break;
-					case "west":
-						moveCostB = 1;
-				}
-				break;
 			case "bottom":
 				switch(this.wind) {
 					case "north":
@@ -774,17 +764,6 @@ game = {
 				}
 				if (!this.distance && MP >= moveCostF) move.disabled = "";
 				break;
-			case "left":
-				switch(this.wind) {
-					case "north":
-						moveCostR = 0;
-						break;
-					case "east":
-						moveCostB = 1;
-						break;
-					case "south":
-						moveCostL = 0;
-				}
 		}
 		if (MP >= moveCostL) turnLeft.disabled = "";
 		if (MP >= moveCostR) turnRight.disabled = "";
