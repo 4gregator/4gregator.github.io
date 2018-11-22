@@ -18,6 +18,12 @@ let strataCarousel = function() {
 	img.id = "strataView";
 	img.src = stratas[i].src;
 	div.appendChild(img);
+	img.addEventListener('click', function() {
+		if (player.hand[i].active) {
+			playField.removeChild(div);
+			useStrata.call(player, player.hand[i].id);
+		}
+	});
 	right.src = "images/right.png";
 	right.className = "arrows";
 	div.appendChild(right);
