@@ -6,12 +6,26 @@ var stratagems = [{
 },
 {
 	id: 3,
+	active: true,
+	init: function() {
+		let that = player.move ? player : computer;
+		if (player.ship.name == "Фрегат") ++that.ship.evasion;
+		if (computer.ship.name == "Фрегат") ++that.ship.evasion;
+		game.setArms.call(that);
+	}
 },
 {
 	id: 4,
 },
 {
 	id: 5,
+	active: true,
+	init: function() {
+		let that = player.move ? player : computer;
+		if (player.ship.name == "Галеон") ++that.ship.evasion;
+		if (computer.ship.name == "Галеон") ++that.ship.evasion;
+		game.setArms.call(that);
+	}
 },
 {
 	id: 6,

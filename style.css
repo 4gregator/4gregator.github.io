@@ -130,7 +130,12 @@ button {
 	width: 89px;
 	height: 124px;
 	margin-right: 11px;
+	opacity: 0.5;
 	display: none;
+}
+.init {
+	opacity: 1;
+	cursor: pointer;
 }
 #strataCarousel {
 	width: inherit;

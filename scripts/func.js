@@ -54,3 +54,15 @@ function sumArray(arr) {
 	for (let i = 0; i < arr.length; i++) result += arr[i];
 	return result;
 };
+
+function useStrata(id) {
+	if (this.move && this.ship.name != "") {
+		for (let i = 0; i < this.hand.length; i++) {
+			if (this.hand[i].id == id) {
+				if (this == player) hand.removeChild(document.getElementsByClassName("strata")[i]);
+				this.hand.splice(i, 1)[0].init();
+				break;
+			}
+		}
+	}
+};

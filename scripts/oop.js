@@ -40,8 +40,13 @@ var player = {
 	renderStrata: function() {
 		let strata = document.getElementsByClassName("strata");
 		for (let i = 0; i < strata.length; i++) {
-			strata[i].src = "images/" + this.hand[i].id + ".jpg";
+			let self = this, that = this.hand[i];
+			strata[i].src = "images/" + that.id + ".jpg";
 			strata[i].style.display = "block";
+			if (that.active) { // здесь навешивать только инит по клику, класс инит добавлять только после проверки либо в начале раунда
+				strata[i].classList.add("init");
+				strata[i].addEventListener('click', useStrata.bind(self, that.id));
+			}
 		}
 		showStrata.style.display = "block";
 		showStrata.onclick = strataCarousel;
