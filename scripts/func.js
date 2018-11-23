@@ -70,5 +70,5 @@ function useStrata(id) {
 				break;
 			}
 		}
-	}
+	} else if (this == player) alert("В данный момент использовать нельзя. Ход игрока ещё не начался.");
 };

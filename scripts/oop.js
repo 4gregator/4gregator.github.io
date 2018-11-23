@@ -38,14 +38,14 @@ var player = {
 		this.ship.object.style.display = "block";
 	},
 	renderStrata: function() {
-		let strata = document.getElementsByClassName("strata");
-		for (let i = 0; i < strata.length; i++) {
-			let self = this, that = this.hand[i];
-			strata[i].src = "images/" + that.id + ".jpg";
-			strata[i].style.display = "block";
+		for (let i = 0; i < this.hand.length; i++) {
+			let strata = document.createElement("img"), self = this, that = this.hand[i];
+			strata.className = "strata";
+			strata.src = "images/" + that.id + ".jpg";
+			hand.appendChild(strata);
 			if (that.active) { // здесь навешивать только инит по клику, класс инит добавлять только после проверки либо в начале раунда
-				strata[i].classList.add("init");
-				strata[i].addEventListener('click', useStrata.bind(self, that.id));
+				strata.classList.add("init");
+				strata.addEventListener('click', useStrata.bind(self, that.id));
 			}
 		}
 		showStrata.style.display = "block";
@@ -162,7 +162,9 @@ game = {
 			that.hand = [];
 			for (let side in that.ship.guns) that.ship.guns[side] = [];
 			for (let i = gun.length - 1; i >= 0; i--) that.ship.object.removeChild(gun[i]);
-		}
+		}, btn = document.getElementById("showStrata");
+		hand.innerHTML = "";
+		hand.appendChild(btn);
 		if (!this.distance) this.move();
 		compas.style.display = "none";
 		cleaning(player);
