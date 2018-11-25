@@ -46,7 +46,7 @@ var player = {
 			if (that.active) { // здесь навешивать только инит по клику, класс инит добавлять только после проверки либо в начале раунда
 				strata.classList.add("init");
 				strata.addEventListener('click', useStrata.bind(self, that.id));
-			}
+			} else if (that.hasOwnProperty('init')) that.init(strata, self);
 		}
 		showStrata.style.display = "block";
 		showStrata.onclick = strataCarousel;
@@ -231,6 +231,7 @@ game = {
 		this.roundEnd = false;
 		this.takeStrata();
 		player.renderStrata();
+		trigger([strataChange]);
 		return new Promise(function(resolve) {
 			player.shipChoice().then(function() {
 				self.setArms.call(player);
@@ -249,6 +250,7 @@ game = {
 			case "Фрегат": that.ship.movePts++;
 			default: that.ship.movePts++;
 		}
+		trigger([permanent]);
 		/*if (that == computer) {
 			if (computer.ship.name == "Галеон") return AI().then(function() {
 				self.changeMove();
@@ -306,6 +308,7 @@ game = {
 		},
 		action = new Promise(function(resolve) {
 			self.makeMove.apply(that, cost).then(function() {
+				trigger([permanent, maneuver]);
 				return resolve();
 			});
 			self.closeCombat().then(function() {

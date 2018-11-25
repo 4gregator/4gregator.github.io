@@ -62,13 +62,25 @@ function sumArray(arr) {
 };
 
 function useStrata(id) {
-	if (this.move && this.ship.name != "") {
+	if (this.ship.name != "") {
 		for (let i = 0; i < this.hand.length; i++) {
 			if (this.hand[i].id == id) {
 				if (this == player) hand.removeChild(document.getElementsByClassName("strata")[i]);
-				this.hand.splice(i, 1)[0].init();
+				this.hand.splice(i, 1)[0].effect();
 				break;
 			}
 		}
-	} else if (this == player) alert("В данный момент использовать нельзя. Ход игрока ещё не начался.");
+	} else alert("В данный момент использовать нельзя.");
+};
+
+function trigger(events) {
+	let strata = document.getElementsByClassName("strata");
+	for (let i = 0; i < player.hand.length; i++) {
+		if (player.hand[i].active) player.hand[i].deactivation();
+	}
+	events.forEach(function(event) {
+		for (let i = 0; i < strata.length; i++) {
+			strata[i].dispatchEvent(event);
+		}
+	});
 };
