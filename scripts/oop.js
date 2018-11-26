@@ -39,14 +39,11 @@ var player = {
 	},
 	renderStrata: function() {
 		for (let i = 0; i < this.hand.length; i++) {
-			let strata = document.createElement("img"), self = this, that = this.hand[i];
+			let strata = document.createElement("img"), that = this.hand[i];
 			strata.className = "strata";
 			strata.src = "images/" + that.id + ".jpg";
 			hand.appendChild(strata);
-			if (that.active) { // здесь навешивать только инит по клику, класс инит добавлять только после проверки либо в начале раунда
-				strata.classList.add("init");
-				strata.addEventListener('click', useStrata.bind(self, that.id));
-			} else if (that.hasOwnProperty('init')) that.init(strata, self);
+			this.hand[i] = new Strata(strata, this, that.trigger, that.active, that.effect);
 		}
 		showStrata.style.display = "block";
 		showStrata.onclick = strataCarousel;
@@ -149,6 +146,7 @@ game = {
 	GameOver: function() {
 		if (player.victPts == 2) dialog.innerHTML = "Победа!!!";
 		else dialog.innerHTML = "Поражение...";
+		return 0;
 	},
 	clean: function() {
 		console.log("cleaning");
@@ -167,6 +165,7 @@ game = {
 		hand.appendChild(btn);
 		if (!this.distance) this.move();
 		compas.style.display = "none";
+		showStrata.style.display = "none";
 		cleaning(player);
 		cleaning(computer);
 	},
@@ -179,6 +178,17 @@ game = {
 		});
 		return new Promise(function(resolve) {
 			gender.then( self.firstMove.bind(self) ).then(function() {return resolve();});
+		});
+	},
+	trigger: function(events) {
+		let strata = document.getElementsByClassName("strata");
+		for (let i = 0; i < player.hand.length; i++) {
+			if (player.hand[i].active) player.hand[i].deactivation();
+		}
+		events.forEach(function(event) {
+			for (let i = 0; i < strata.length; i++) {
+				strata[i].dispatchEvent(event);
+			}
 		});
 	},
 	firstMove: function() {
@@ -231,10 +241,11 @@ game = {
 		this.roundEnd = false;
 		this.takeStrata();
 		player.renderStrata();
-		trigger([strataChange]);
+		this.trigger([strataChange]);
 		return new Promise(function(resolve) {
 			player.shipChoice().then(function() {
 				self.setArms.call(player);
+				self.trigger([strataChange, firstMove]);
 				player.chooseDirection().then(function() {
 					return resolve();
 				});
@@ -250,7 +261,7 @@ game = {
 			case "Фрегат": that.ship.movePts++;
 			default: that.ship.movePts++;
 		}
-		trigger([permanent]);
+		this.trigger([permanent]);
 		/*if (that == computer) {
 			if (computer.ship.name == "Галеон") return AI().then(function() {
 				self.changeMove();
@@ -307,8 +318,10 @@ game = {
 			} else return self.makeAction.call(that);
 		},
 		action = new Promise(function(resolve) {
-			self.makeMove.apply(that, cost).then(function() {
-				trigger([permanent, maneuver]);
+			self.makeMove.apply(that, cost).then(function(res) {
+				let triggers = [permanent, maneuver];
+				if (res) triggers.push(res);
+				self.trigger(triggers);
 				return resolve();
 			});
 			self.closeCombat().then(function() {
@@ -318,6 +331,7 @@ game = {
 			self.salvo.call(that).then(function() {
 				--that.ship.movePts;
 				that.ship.reloading.push(that.ship.direction);
+				self.trigger([permanent, afterShooting]);
 				return resolve();
 			});
 		});
@@ -333,7 +347,7 @@ game = {
 				that.ship.movePts -= fCost;
 				self.deactivation();
 				self.move();
-				return resolve();
+				return resolve(approaching);
 			};
 			turnRight.onclick = function() {
 				that.ship.movePts -= rCost;
@@ -364,14 +378,22 @@ game = {
 			grapple.onclick = function() {
 				self.roundEnd = true;
 				self.deactivation();
+				self.trigger([permanent, beforeFighting]);
 				self.renderGrapple().then(function(btn) {
-					let dices = self.rollDice(document.getElementsByClassName("grappleDices"));
+					let dices = self.rollDice(document.getElementsByClassName("grappleDices")),
+						msg = document.createElement("p"), winner = "";
 					for (let i = 0; i < dices.length; i++) {
-						if (i < 2) oppPower += dices[i];
-						else plrPower += dices[i];
+						document.getElementsByClassName("grappleDices")[i].getAttribute("own") == "opp" ? oppPower += dices[i] : plrPower += dices[i];
 					}
-					if (defend) oppPower >= plrPower ? computer.victPts++ : player.victPts++;
-					else plrPower >= oppPower ? player.victPts++ : computer.victPts++;
+					if ((defend && plrPower > oppPower) || plrPower >= oppPower) {
+						player.victPts++;
+						winner = "игрок";
+					} else {
+						computer.victPts++;
+						winner = "компьютер";
+					}
+					msg.innerHTML = oppPower + " : " + plrPower + " Побеждает " + winner;
+					dialog.insertBefore(msg, btn);
 					btn.onclick = function() {
 						return resolve();
 					};
@@ -678,6 +700,7 @@ game = {
 		dialog.innerHTML += "Бросим кости на абордаж!";
 		for (let i = 0; i < 2; i++) {
 			let div = document.createElement("div");
+			div.id = i ? "plr" : "opp";
 			div.innerHTML = "Боеспособный экипаж корабля: ";
 			div.innerHTML += !i ? this.getTotalCrew.call(computer.ship.guns) : this.getTotalCrew.call(player.ship.guns);
 			dialog.appendChild(div);
@@ -685,6 +708,7 @@ game = {
 				let dice = document.createElement("img");
 				dice.className = "dices grappleDices";
 				dice.src = "images/dice.gif";
+				dice.setAttribute("own", div.id);
 				div.appendChild(dice);
 			}
 		}
@@ -695,6 +719,7 @@ game = {
 			dialog.appendChild(btn);
 			btn.onclick = function() {
 				btn.innerHTML = "далее";
+				game.trigger([]);
 				return resolve(btn);
 			};
 		});
