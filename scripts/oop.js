@@ -39,11 +39,14 @@ var player = {
 	},
 	renderStrata: function() {
 		for (let i = 0; i < this.hand.length; i++) {
-			let strata = document.createElement("img"), that = this.hand[i];
-			strata.className = "strata";
-			strata.src = "images/" + that.id + ".jpg";
-			hand.appendChild(strata);
-			this.hand[i] = new Strata(strata, this, that.trigger, that.active, that.effect);
+			let that = this.hand[i];
+			if (that.owner != this) {
+				let strata = document.createElement("img");
+				strata.className = "strata";
+				strata.src = "images/" + that.id + ".jpg";
+				hand.appendChild(strata);
+				this.hand[i] = new Strata(strata, this, that.trigger, that.active, that.effect);
+			}
 		}
 		showStrata.style.display = "block";
 		showStrata.onclick = strataCarousel;
@@ -130,6 +133,7 @@ game = {
 	roundEnd: true,
 	wind: "",
 	distance: true,
+	deck: [],
 	PlayTheGame: function() {
 		console.log("GameStart");
 		let self = this, playGame = function() {
@@ -294,17 +298,21 @@ game = {
 		});
 	},
 	takeStrata: function() {
-		let deck = [], playerTurn = player.move ? true : false;
-		for (let i = stratagems.length - 1; i >= 0; i--) deck.push(stratagems[i]);
-		deck.sort(compareRandom);
+		let playerTurn = player.move ? true : false;
+		if (this.deck = []) {
+			let deck = [];
+			for (let i = stratagems.length - 1; i >= 0; i--) deck.push(stratagems[i]);
+			deck.sort(compareRandom);
+			this.deck = deck;
+		}
 		// @todo: победивший в прошлом раунде берет 7 карт стратагем
 		while(player.hand.length < 6 || computer.hand.length < 6) {
 			if (playerTurn) {
 				playerTurn = false;
-				player.hand.push(deck.shift());
+				if (player.hand.length < 6) player.hand.push(this.deck.shift());
 			} else {
 				playerTurn = true;
-				computer.hand.push(deck.shift());
+				if (computer.hand.length < 6) computer.hand.push(this.deck.shift());
 			}
 		}
 	},

@@ -14,15 +14,20 @@ class Strata {
 			if (self.condition()) {
 				self.active = true;
 				this.classList.add("init");
-				this.addEventListener('click', self.effect.bind(self));
+				this.addEventListener('click', self.activation.bind(self));
 			}
 		});
+	}
+	activation() {
+		if (this.owner == player) hand.removeChild(this.elem);
+		this.owner.hand.splice(this.owner.hand.indexOf(this), 1);
+		this.effect();
 	}
 	deactivation() {
 		let self = this;
 		this.active = false;
 		this.elem.classList.remove("init");
-		this.elem.removeEventListener('click', self.effect.bind(self));
+		this.elem.removeEventListener('click', self.activation.bind(self));
 	}
 };
 
@@ -40,7 +45,6 @@ var strataChange = new Event('strataChange'),
 	},
 	trigger: "afterShooting",
 	effect: function() {
-		hand.removeChild(this.elem);
 		game.move();
 	}
 },
@@ -51,7 +55,6 @@ var strataChange = new Event('strataChange'),
 	},
 	trigger: "beforeFighting",
 	effect: function() {
-		hand.removeChild(this.elem);
 		let id = this.owner == player ? "plr" : "opp",
 			dice = document.createElement("img");
 		dice.className = "dices grappleDices";
@@ -65,7 +68,6 @@ var strataChange = new Event('strataChange'),
 	active: function() {return true;},
 	trigger: "permanent",
 	effect: function() {
-		hand.removeChild(this.elem);
 		if (player.ship.name == "Фрегат") ++this.owner.ship.evasion;
 		if (computer.ship.name == "Фрегат") ++this.owner.ship.evasion;
 		game.setArms.call(this.owner);
@@ -78,7 +80,6 @@ var strataChange = new Event('strataChange'),
 	},
 	trigger: "maneuver",
 	effect: function() {
-		hand.removeChild(this.elem);
 		console.log("use strata shoot");
 		game.deactivation();
 		game.renderFire.call(this.owner).then(function(result) {
@@ -95,7 +96,6 @@ var strataChange = new Event('strataChange'),
 	active: function() {return true;},
 	trigger: "permanent",
 	effect: function() {
-		hand.removeChild(this.elem);
 		if (player.ship.name == "Галеон") ++this.owner.ship.evasion;
 		if (computer.ship.name == "Галеон") ++this.owner.ship.evasion;
 		game.setArms.call(this.owner);
@@ -108,7 +108,6 @@ var strataChange = new Event('strataChange'),
 	},
 	trigger: "approaching",
 	effect: function() {
-		hand.removeChild(this.elem);
 		let target = this.owner != player ? player : computer;
 		if (target.ship.evasion > 0) --target.ship.evasion;
 		game.setArms.call(target);
@@ -121,7 +120,6 @@ var strataChange = new Event('strataChange'),
 	},
 	trigger: "maneuver",
 	effect: function() {
-		hand.removeChild(this.elem);
 		let target = this.owner != player ? player : computer;
 		target.ship.reloading = ["top", "right", "bottom", "left"];
 	}
@@ -157,7 +155,6 @@ var strataChange = new Event('strataChange'),
 	},
 	trigger: "firstMove",
 	effect: function() {
-		hand.removeChild(this.elem);
 		game.changeMove();
 	}
 },
@@ -177,9 +174,8 @@ var strataChange = new Event('strataChange'),
 	id: 21,
 	active: function() {return true;},
 	trigger: "strataChange",
-	effect: function() {
-		alert("test");
-		console.log("strata test");
+	effect: function() { //сделать для компа
+		strataCarousel(true);
 	}
 },
 {
@@ -195,7 +191,6 @@ var strataChange = new Event('strataChange'),
 	},
 	trigger: "beforeFighting",
 	effect: function() {
-		hand.removeChild(this.elem);
 		let id = this.owner == player ? "opp" : "plr",
 			div = document.getElementById(id),
 			arr = div.getElementsByTagName("img");
@@ -210,7 +205,6 @@ var strataChange = new Event('strataChange'),
 	active: function() {return true;},
 	trigger: "permanent",
 	effect: function() {
-		hand.removeChild(this.elem);
 		let target = this.owner != player ? player : computer;
 		if (target.ship.evasion > 0) --target.ship.evasion;
 		game.setArms.call(target);
@@ -221,7 +215,6 @@ var strataChange = new Event('strataChange'),
 	active: function() {return true;},
 	trigger: "permanent",
 	effect: function() { // доделать влияние смены ветра
-		hand.removeChild(this.elem);
 		game.changeWind();
 	}
 },
@@ -230,7 +223,6 @@ var strataChange = new Event('strataChange'),
 	active: function() {return true;},
 	trigger: "permanent",
 	effect: function() {
-		hand.removeChild(this.elem);
 		let target = this.owner != player ? player : computer;
 		if (this.owner.gender == "female") ++this.owner.ship.evasion;
 		if (target.gender == "male" && target.ship.evasion > 0) --target.ship.evasion;
@@ -242,11 +234,10 @@ var strataChange = new Event('strataChange'),
 	id: 28,
 	active: function() {
 		let target = this.owner != player ? player : computer;
-		if (this.owner.evasion < target.evasion) return true;
+		if (this.owner.ship.evasion < target.ship.evasion) return true;
 	},
 	trigger: "permanent",
 	effect: function() { // доделать страту
-		hand.removeChild(this.elem);
 		let target = this.owner != player ? player : computer;
 		if (target.ship.evasion > 0) --target.ship.evasion;
 		game.setArms.call(target);
