@@ -6,6 +6,13 @@ button {
 	position: absolute;
 }
 
+.intro {
+	width: calc(100vw - 33px);
+	position: absolute;
+	z-index: 1;
+	transition-duration: 2s;
+}
+
 #dialog {
 	position: absolute;
 	top: 44px;

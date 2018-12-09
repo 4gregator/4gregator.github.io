@@ -52,6 +52,15 @@ let strataCarousel = function(change) {
 			playField.removeChild(div);
 		});
 	}
+},
+introduction = function() {
+	let img = document.createElement("img");
+	img.className = "intro";
+	img.src = "images/load.jpg";
+	document.body.firstElementChild.insertBefore(img, document.body.firstElementChild.firstElementChild);
+	img.addEventListener('click', function() {
+		document.body.firstElementChild.removeChild(img);
+	});
 };
 
 function random(min, max) {
@@ -75,3 +84,5 @@ function sumArray(arr) {
 	for (let i = 0; i < arr.length; i++) result += arr[i];
 	return result;
 };
+
+window.addEventListener('load', introduction());
