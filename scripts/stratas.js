@@ -213,10 +213,17 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 26,
-	active: function() {return true;},
+	active: function() {
+		if (this.owner.move) {
+			game.strataWind = true;
+			this.elem.setAttribute("wind", "true");
+			return true;
+		}
+	},
 	trigger: "permanent",
-	effect: function() { // доделать влияние смены ветра
-		game.changeWind();
+	effect: function() {
+		game.strataWind = false;
+		game.wind = game.changeWind();
 	}
 },
 {

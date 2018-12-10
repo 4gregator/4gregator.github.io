@@ -132,6 +132,7 @@ game = {
 	round: 0,
 	roundEnd: true,
 	wind: "",
+	strataWind: false,
 	distance: true,
 	deck: [],
 	PlayTheGame: function() {
@@ -171,6 +172,7 @@ game = {
 		if (!this.distance) this.move();
 		compas.style.display = "none";
 		showStrata.style.display = "none";
+		this.strataWind = false;
 		cleaning(player);
 		cleaning(computer);
 	},
@@ -315,6 +317,13 @@ game = {
 			} else return self.makeAction.call(that);
 		},
 		action = new Promise(function(resolve) {
+			self.trigger([permanent]);
+			if (self.strataWind) {
+				let el = document.querySelector("*[wind]");
+				el.onclick = function() {
+					return resolve();
+				};
+			}
 			self.makeMove.apply(that, cost).then(function(res) {
 				let triggers = [permanent, maneuver];
 				if (res) triggers.push(res);
@@ -374,7 +383,6 @@ game = {
 		return new Promise(function(resolve) {
 			grapple.onclick = function() {
 				self.deactivation();
-				// если атакует комп, то спросить про уклонение, если атакует человек, то запустить конфиг по уклонению
 				self.evade().then(function(result) {
 					if (result) {
 						self.roundEnd = true;
@@ -794,34 +802,40 @@ game = {
 			case "top":
 				switch(this.wind) {
 					case "north":
-						moveCostF = 0;
+						moveCostF = player.move ? 0 : 2;
+						if (!player.move) moveCostB = 1;
 						break;
 					case "east":
-						moveCostR = 0;
+						if (player.move) moveCostR = 0;
+						else moveCostL = 0;
 						break;
 					case "south":
-						moveCostF = 2;
-						moveCostB = 1;
+						moveCostF = player.move ? 2 : 0;
+						if (player.move) moveCostB = 1;
 						break;
 					case "west":
-						moveCostL = 0;
+						if (player.move) moveCostL = 0;
+						else moveCostR = 0;
 				}
 				if (this.distance && MP >= moveCostF) move.disabled = "";
 				break;
 			case "bottom":
 				switch(this.wind) {
 					case "north":
-						moveCostF = 2;
-						moveCostB = 1;
+						moveCostF = player.move ? 2 : 0;
+						if (player.move) moveCostB = 1;
 						break;
 					case "east":
-						moveCostL = 0;
+						if (player.move) moveCostL = 0;
+						else moveCostR = 0;
 						break;
 					case "south":
-						moveCostF = 0;
+						moveCostF = player.move ? 0 : 2;
+						if (!player.move) moveCostB = 1;
 						break;
 					case "west":
-						moveCostR = 0;
+						if (player.move) moveCostR = 0;
+						else moveCostL = 0;
 				}
 				if (!this.distance && MP >= moveCostF) move.disabled = "";
 				break;
