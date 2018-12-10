@@ -384,29 +384,58 @@ game = {
 			self = this, defend = player.move ? false : true;
 		return new Promise(function(resolve) {
 			grapple.onclick = function() {
-				self.roundEnd = true;
 				self.deactivation();
-				self.trigger([permanent, beforeFighting]);
-				self.renderGrapple().then(function(btn) {
-					let dices = self.rollDice(document.getElementsByClassName("grappleDices")),
-						msg = document.createElement("p"), winner = "";
-					for (let i = 0; i < dices.length; i++) {
-						document.getElementsByClassName("grappleDices")[i].getAttribute("own") == "opp" ? oppPower += dices[i] : plrPower += dices[i];
-					}
-					if ((defend && plrPower > oppPower) || plrPower >= oppPower) {
-						player.victPts++;
-						winner = "игрок";
+				// если атакует комп, то спросить про уклонение, если атакует человек, то запустить конфиг по уклонению
+				self.evade().then(function(result) {
+					if (result) {
+						self.roundEnd = true;
+						self.trigger([permanent, beforeFighting]);
+						self.renderGrapple().then(function(btn) {
+							let dices = self.rollDice(document.getElementsByClassName("grappleDices")),
+								msg = document.createElement("p"), winner = "";
+							for (let i = 0; i < dices.length; i++) {
+								document.getElementsByClassName("grappleDices")[i].getAttribute("own") == "opp" ? oppPower += dices[i] : plrPower += dices[i];
+							}
+							if ((defend && plrPower > oppPower) || plrPower >= oppPower) {
+								player.victPts++;
+								winner = "игрок";
+							} else {
+								computer.victPts++;
+								winner = "компьютер";
+							}
+							msg.innerHTML = oppPower + " : " + plrPower + " Побеждает " + winner;
+							dialog.insertBefore(msg, btn);
+							btn.onclick = function() {
+								return resolve();
+							};
+						});
 					} else {
-						computer.victPts++;
-						winner = "компьютер";
-					}
-					msg.innerHTML = oppPower + " : " + plrPower + " Побеждает " + winner;
-					dialog.insertBefore(msg, btn);
-					btn.onclick = function() {
+						defend ? --player.ship.evasion : --computer.ship.evasion;
+						self.setArms.call(defend ? player : computer);
 						return resolve();
-					};
+					}
 				});
 			};
+		});
+	},
+	evade: function() {
+		return new Promise(function(resolve) {
+			if (computer.move && player.ship.evasion > 0) {
+				dialog.innerHTML = "Противник объявляет абордаж! Можно использовать уклонение.<br>";
+				for (let i = 0; i < 2; i++) {
+					let btn = document.createElement("button");
+					dialog.appendChild(btn);
+					btn.innerHTML = i ? "Сразиться!" : "Уклониться!";
+					btn.addEventListener('click', function() {
+						let answer = i ? true : false;
+						dialog.style.display = "none";
+						return resolve(answer);
+					});
+				}
+				dialog.style.display = "block";
+			} else if (player.move && computer.ship.evasion > 0) {
+				// evasion config
+			} else return resolve(true);
 		});
 	},
 	salvo: function() {
@@ -704,7 +733,7 @@ game = {
 		}
 	},
 	renderGrapple: function() {
-		dialog.innerHTML = computer.move ? "Компьютер объявляет абордаж.<br>" : "";
+		dialog.innerHTML = computer.move ? "Компьютер объявил абордаж.<br>" : "";
 		dialog.innerHTML += "Бросим кости на абордаж!";
 		for (let i = 0; i < 2; i++) {
 			let div = document.createElement("div");
