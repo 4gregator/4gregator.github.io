@@ -194,10 +194,11 @@ var strataChange = new Event('strataChange'),
 		let id = this.owner == player ? "opp" : "plr",
 			div = document.getElementById(id),
 			arr = div.getElementsByTagName("img");
-		arr = arr.splice(1, arr.length);
-		arr.forEach(function(elem) {
-			div.removeChild(elem);
-		});
+		if (arr.length > 1) {
+			for (let i = 0; i < arr.length; i++) {
+				if (i) div.removeChild(arr[i]);
+			}
+		}
 	}
 },
 {

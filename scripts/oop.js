@@ -167,6 +167,7 @@ game = {
 		}, btn = document.getElementById("showStrata");
 		hand.innerHTML = "";
 		hand.appendChild(btn);
+		this.deck = [];
 		if (!this.distance) this.move();
 		compas.style.display = "none";
 		showStrata.style.display = "none";
@@ -266,18 +267,6 @@ game = {
 			default: that.ship.movePts++;
 		}
 		this.trigger([permanent]);
-		/*if (that == computer) {
-			if (computer.ship.name == "Галеон") return AI().then(function() {
-				self.changeMove();
-				return self.roundPlay();
-			});
-			else {
-				alert("Ход компьютера пропускается, минимальная логика есть только для галеона.");
-				that.ship.movePts = 0;
-				self.changeMove();
-				return self.roundPlay();
-			}
-		} else */
 		alert(player.move ? "Ход игрока" : "Ход компьютера");
 		return this.makeAction.call(that).then(function() {
 			if (self.roundEnd) return new Promise(function(resolve) {
@@ -299,7 +288,7 @@ game = {
 	},
 	takeStrata: function() {
 		let playerTurn = player.move ? true : false;
-		if (this.deck = []) {
+		if (this.deck.length == 0) {
 			let deck = [];
 			for (let i = stratagems.length - 1; i >= 0; i--) deck.push(stratagems[i]);
 			deck.sort(compareRandom);
