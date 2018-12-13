@@ -111,6 +111,7 @@ var strataChange = new Event('strataChange'),
 		let target = this.owner != player ? player : computer;
 		if (target.ship.evasion > 0) --target.ship.evasion;
 		game.setArms.call(target);
+		strataDialog.click();
 	}
 },
 {
@@ -122,6 +123,7 @@ var strataChange = new Event('strataChange'),
 	effect: function() {
 		let target = this.owner != player ? player : computer;
 		target.ship.reloading = ["top", "right", "bottom", "left"];
+		strataDialog.click();
 	}
 },
 {
@@ -141,6 +143,16 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 13,
+	active: function() {
+		if (this.owner.move && this.owner.ship.movePts == 1) return true;
+	},
+	trigger: "permanent",
+	effect: function() {
+		let target = this.owner != player ? player : computer;
+		this.owner.ship.movePts--;
+		target.ship.movePts -= 2;
+		playField.dispatchEvent(strataAction);
+	}
 },
 {
 	id: 14,
@@ -214,16 +226,12 @@ var strataChange = new Event('strataChange'),
 {
 	id: 26,
 	active: function() {
-		if (this.owner.move) {
-			game.strataWind = true;
-			this.elem.setAttribute("wind", "true");
-			return true;
-		}
+		if (this.owner.move) return true;
 	},
 	trigger: "permanent",
 	effect: function() {
-		game.strataWind = false;
 		game.wind = game.changeWind();
+		playField.dispatchEvent(strataAction);
 	}
 },
 {

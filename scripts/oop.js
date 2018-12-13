@@ -1,6 +1,7 @@
 "use strict";
 
-var player = {
+var strataAction = new Event('strataAction'),
+player = {
 	gender: false,
 	move: false,
 	victPts: 0,
@@ -132,7 +133,6 @@ game = {
 	round: 0,
 	roundEnd: true,
 	wind: "",
-	strataWind: false,
 	distance: true,
 	deck: [],
 	PlayTheGame: function() {
@@ -268,9 +268,13 @@ game = {
 			case "Фрегат": that.ship.movePts++;
 			default: that.ship.movePts++;
 		}
+		if (that.ship.movePts < 0) that.ship.movePts = 0;
 		this.trigger([permanent]);
 		alert(player.move ? "Ход игрока" : "Ход компьютера");
-		return this.makeAction.call(that).then(function() {
+		if (that.ship.movePts == 0) {
+			self.changeMove();
+			return self.roundPlay();
+		} else return this.makeAction.call(that).then(function() {
 			if (self.roundEnd) return new Promise(function(resolve) {
 				let btn = document.createElement("button");
 				btn.innerHTML = "Далее";
@@ -310,25 +314,57 @@ game = {
 	makeAction: function() {
 		let self = game, that = this, cost = self.renderControl(this.ship.movePts),
 		moveOver = function() {
+			playField.removeEventListener('strataAction', function() {
+				return resolve();
+			});
 			if (!that.ship.movePts || self.roundEnd) {
 				return new Promise(function(resolve) {
 					return resolve();
 				});
 			} else return self.makeAction.call(that);
 		},
+		strataAsk = function() {
+			return new Promise(function(resolve) {
+				if (player.move) return resolve();
+				else {
+					let check = false;
+					for (let i = 0; i < player.hand.length; i++) {
+						if (player.hand[i].active && player.hand[i].trigger != "permanent") {
+							check = true;
+							break;
+						}
+					}
+					if (!check) return resolve();
+					else {
+						let text = document.createElement("p"),
+							btn = document.createElement("button");
+						dialog.innerHTML = "";
+						dialog.appendChild(text);
+						dialog.appendChild(btn);
+						dialog.style.display = "block";
+						text.innerHTML = "Можно использовать стратагему";
+						btn.innerHTML = "отказаться";
+						btn.id = "strataDialog";
+						btn.addEventListener('click', function() {
+							dialog.style.display = "none";
+							return resolve();
+						});
+					}
+				}
+			});
+		},
 		action = new Promise(function(resolve) {
 			self.trigger([permanent]);
-			if (self.strataWind) {
-				let el = document.querySelector("*[wind]");
-				el.onclick = function() {
-					return resolve();
-				};
-			}
+			playField.addEventListener('strataAction', function() {
+				return resolve();
+			});
 			self.makeMove.apply(that, cost).then(function(res) {
 				let triggers = [permanent, maneuver];
 				if (res) triggers.push(res);
 				self.trigger(triggers);
-				return resolve();
+				return strataAsk().then(function() {
+					return resolve();
+				});
 			});
 			self.closeCombat().then(function() {
 				--that.ship.movePts;
