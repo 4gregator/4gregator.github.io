@@ -34,6 +34,7 @@ class Strata {
 var strataChange = new Event('strataChange'),
 	firstMove = new Event('firstMove'),
 	permanent = new Event('permanent'),
+	beforeAction = new Event('beforeAction'),
 	maneuver = new Event('maneuver'),
 	approaching = new Event('approaching'),
 	afterShooting = new Event('afterShooting'),
@@ -65,7 +66,7 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 3,
-	active: function() {return true;},
+	active: () => true,
 	trigger: "permanent",
 	effect: function() {
 		if (player.ship.name == "Фрегат") ++this.owner.ship.evasion;
@@ -80,7 +81,6 @@ var strataChange = new Event('strataChange'),
 	},
 	trigger: "maneuver",
 	effect: function() {
-		console.log("use strata shoot");
 		game.deactivation();
 		game.renderFire.call(this.owner).then(function(result) {
 			result.onclick = function() {
@@ -93,7 +93,7 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 5,
-	active: function() {return true;},
+	active: () => true,
 	trigger: "permanent",
 	effect: function() {
 		if (player.ship.name == "Галеон") ++this.owner.ship.evasion;
@@ -140,6 +140,15 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 12,
+	active: function() {
+		if (!this.owner.move && game.distance) return true;
+	},
+	trigger: "beforeAction",
+	effect: function() {
+		alert("testing");
+		// в рендере должна деактивизироваться кнопка сближения до конца хода
+		strataDialog.click();
+	}
 },
 {
 	id: 13,
@@ -181,10 +190,16 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 20,
+	active: () => true,
+	trigger: "beforeFighting",
+	effect: function() {
+		let target = this.owner == player ? "plr" : "opp";
+		dialog.getElementsByTagName("button")[0].setAttribute("deuce", target);
+	}	
 },
 {
 	id: 21,
-	active: function() {return true;},
+	active: () => true,
 	trigger: "strataChange",
 	effect: function() { //сделать для компа
 		strataCarousel(true);
@@ -195,6 +210,12 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 23,
+	active: () => true,
+	trigger: "beforeFighting",
+	effect: function() {
+		let target = this.owner == player ? "opp" : "plr";
+		dialog.getElementsByTagName("button")[0].setAttribute("cinque", target);
+	}		
 },
 {
 	id: 24,
@@ -215,7 +236,7 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 25,
-	active: function() {return true;},
+	active: () => true,
 	trigger: "permanent",
 	effect: function() {
 		let target = this.owner != player ? player : computer;
@@ -236,7 +257,7 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 27,
-	active: function() {return true;},
+	active: () => true,
 	trigger: "permanent",
 	effect: function() {
 		let target = this.owner != player ? player : computer;
@@ -261,7 +282,18 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 29,
+	active: () => true,
+	trigger: "firstMove",
+	effect: function() {
+		if (this.owner == player) computer.hand.splice(random(1, computer.hand.length) - 1, 1);
+		// доделать под человека
+	}
 },
 {
 	id: 30,
+	active: () => true,
+	trigger: "permanent",
+	effect: function() {
+		game.reroll = this.owner == player ? "plr" : "opp";
+	}
 }];

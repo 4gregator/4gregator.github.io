@@ -132,9 +132,10 @@ computer = {
 game = {
 	round: 0,
 	roundEnd: true,
-	wind: "",
+	reroll: false,
 	distance: true,
 	deck: [],
+	wind: "",
 	PlayTheGame: function() {
 		console.log("GameStart");
 		let self = this, playGame = function() {
@@ -168,6 +169,7 @@ game = {
 		}, btn = document.getElementById("showStrata");
 		hand.innerHTML = "";
 		hand.appendChild(btn);
+		this.reroll = false;
 		this.deck = [];
 		if (!this.distance) this.move();
 		compas.style.display = "none";
@@ -180,11 +182,11 @@ game = {
 		let self = this;
 		let gender = new Promise(function(resolve) {
 			play.addEventListener('click', function() {
-				player.init( document.getElementsByClassName("gender") ).then(function() {return resolve();});
+				player.init( document.getElementsByClassName("gender") ).then( () => resolve() );
 			});
 		});
 		return new Promise(function(resolve) {
-			gender.then( self.firstMove.bind(self) ).then(function() {return resolve();});
+			gender.then( self.firstMove.bind(self) ).then( () => resolve() );
 		});
 	},
 	trigger: function(events) {
@@ -253,9 +255,7 @@ game = {
 			player.shipChoice().then(function() {
 				self.setArms.call(player);
 				self.trigger([strataChange, firstMove]);
-				player.chooseDirection().then(function() {
-					return resolve();
-				});
+				player.chooseDirection().then( () => resolve() );
 			});
 		});
 	},
@@ -282,9 +282,7 @@ game = {
 				dialog.innerHTML = self.round + " раунд завершен.<br>Компьютер " + computer.victPts + ":" + player.victPts + " Игрок";
 				dialog.appendChild(btn);
 				dialog.style.display = "block";
-				btn.onclick = function() {
-					return resolve();
-				};
+				btn.onclick = () => resolve();
 			});
 			else {
 				self.changeMove();
@@ -314,13 +312,9 @@ game = {
 	makeAction: function() {
 		let self = game, that = this, cost = self.renderControl(this.ship.movePts),
 		moveOver = function() {
-			playField.removeEventListener('strataAction', function() {
-				return resolve();
-			});
+			playField.removeEventListener('strataAction', () => resolve());
 			if (!that.ship.movePts || self.roundEnd) {
-				return new Promise(function(resolve) {
-					return resolve();
-				});
+				return new Promise(resolve => resolve());
 			} else return self.makeAction.call(that);
 		},
 		strataAsk = function() {
@@ -354,33 +348,30 @@ game = {
 			});
 		},
 		action = new Promise(function(resolve) {
-			self.trigger([permanent]);
-			playField.addEventListener('strataAction', function() {
-				return resolve();
-			});
-			self.makeMove.apply(that, cost).then(function(res) {
-				let triggers = [permanent, maneuver];
-				if (res) triggers.push(res);
-				self.trigger(triggers);
-				return strataAsk().then(function() {
+			self.trigger([permanent, beforeAction]);
+			playField.addEventListener('strataAction', () => resolve());
+			return strataAsk().then(function() {
+				// убрать панель контроля во время вопроса
+				self.makeMove.apply(that, cost).then(function(res) {
+					let triggers = [permanent, maneuver];
+					if (res) triggers.push(res);
+					self.trigger(triggers);
+					return strataAsk().then( () => resolve() );
+				});
+				self.closeCombat().then(function() {
+					--that.ship.movePts;
 					return resolve();
 				});
-			});
-			self.closeCombat().then(function() {
-				--that.ship.movePts;
-				return resolve();
-			});
-			self.salvo.call(that).then(function() {
-				--that.ship.movePts;
-				that.ship.reloading.push(that.ship.direction);
-				self.trigger([permanent, afterShooting]);
-				return resolve();
+				self.salvo.call(that).then(function() {
+					--that.ship.movePts;
+					that.ship.reloading.push(that.ship.direction);
+					self.trigger([permanent, afterShooting]);
+					return resolve();
+				});
+				if (computer.move) AI();
 			});
 		});
-		if (computer.move) AI();
-		return action.then(function() {
-			return moveOver();
-		});
+		return action.then( () => moveOver() );
 	},
 	makeMove: function(fCost, rCost, bCost, lCost) {
 		let self = game, that = this;
@@ -423,24 +414,29 @@ game = {
 					if (result) {
 						self.roundEnd = true;
 						self.trigger([permanent, beforeFighting]);
-						self.renderGrapple().then(function(btn) {
-							let dices = self.rollDice(document.getElementsByClassName("grappleDices")),
-								msg = document.createElement("p"), winner = "";
-							for (let i = 0; i < dices.length; i++) {
-								document.getElementsByClassName("grappleDices")[i].getAttribute("own") == "opp" ? oppPower += dices[i] : plrPower += dices[i];
-							}
-							if ((defend && plrPower > oppPower) || plrPower >= oppPower) {
-								player.victPts++;
-								winner = "игрок";
-							} else {
-								computer.victPts++;
-								winner = "компьютер";
-							}
-							msg.innerHTML = oppPower + " : " + plrPower + " Побеждает " + winner;
-							dialog.insertBefore(msg, btn);
-							btn.onclick = function() {
-								return resolve();
-							};
+						self.renderGrapple().then(function() {
+							let dices = document.getElementsByClassName("grappleDices"),
+								values = self.rollDice(dices),
+								msg = document.createElement("p"),
+								winner = "";
+							self.rerolling(dices, values).then(function(values) {
+								for (let i = 0; i < values.length; i++) {
+									dices[i].getAttribute("own") == "opp" ? oppPower += values[i] : plrPower += values[i];
+								}
+								if ((defend && plrPower > oppPower) || plrPower >= oppPower) {
+									player.victPts++;
+									winner = "игрок";
+								} else {
+									computer.victPts++;
+									winner = "компьютер";
+								}
+								roll.innerHTML = "далее";
+								msg.innerHTML = oppPower + " : " + plrPower + " Побеждает " + winner;
+								dialog.insertBefore(msg, roll);
+								roll.onclick = function() {
+									return resolve();
+								};
+							});
 						});
 					} else {
 						defend ? --player.ship.evasion : --computer.ship.evasion;
@@ -449,6 +445,105 @@ game = {
 					}
 				});
 			};
+		});
+	},
+	rerolling: function(dices, values) {
+		let cinque = roll.getAttribute("cinque") != null ? true : false,
+			deuce = roll.getAttribute("deuce") != null ? true : false,
+			self = this,
+			rerollCheck = function(target, first, second) {
+				if (!target) return false;
+				else {
+					let position = [];
+					for (let i = 0; i < dices.length; i++) {
+						if (dices[i].getAttribute("own") == target && (values[i] == first || values[i] == second)) position.push(i);
+					}
+					if (position.length) return position;
+					else return false;
+				}
+			},
+			rerollAsk = function() {
+				roll.innerHTML = "перебросить кости";
+				return new Promise(function(resolve) {
+					roll.onclick = () => resolve();
+				});
+			},
+			reroll = function() {
+				let target = [], play = dices[this[0]].getAttribute("own") == "plr" ? true : false;
+				for (let i = 0; i < this.length; i++) {
+					dices[this[i]].src = "images/dice.gif";
+					target.push(dices[this[i]]);
+				}
+				roll.innerHTML = "Бросить!";
+				return new Promise(function(resolve) {
+					roll.onclick = () => resolve(target);
+					if (!play) {
+						roll.style.display = "none";
+						window.setTimeout(() => {
+							roll.style.display = "block";
+							roll.click();
+						}, 2500);
+					}
+				});
+			},
+			rerolling = function(result) {
+				return new Promise(function(resolve) {
+					return rerollAsk().then(reroll.bind(result)).then(function(target) {
+						let revalue = self.rollDice(target);
+						for (let i = 0; i < result.length; i++) {
+							values.splice(result[i], 1, revalue[i]);
+						}
+						return resolve();
+					});
+				});
+			},
+			rerollOne = function() {
+				let that = rerollChecking("ones");
+				return new Promise(function(resolve) {
+					if (self.reroll && that) return rerolling(that).then(function() {
+						self.reroll = false; // при абордаже 30я страта перебрасывает еденички один раз и перестает действовать
+						return resolve();
+					});
+					else return resolve();
+				});
+			},
+			rerollDeuce = function() {
+				let that = rerollChecking("deuces");
+				return new Promise(function(resolve) {
+					if (deuce && that) return rerolling(that).then( () => resolve() );
+					else return resolve();
+				});
+			},
+			rerollCinque = function() {
+				let that = rerollChecking("cinques");
+				return new Promise(function(resolve) {
+					if (cinque && that) return rerolling(that).then( () => resolve() );
+					else return resolve();
+				});
+			},
+			rerollChecking = function(term) {
+				let checking = false,
+					ones = rerollCheck(self.reroll, 1),
+					deuces = rerollCheck(roll.getAttribute("deuce"), 1, 2),
+					cinques = rerollCheck(roll.getAttribute("cinque"), 5, 6);
+				if (ones || deuces || cinques) checking = true;
+				switch(term) {
+					case undefined: return checking;
+					case "ones": return ones;
+					case "deuces": return deuces;
+					case "cinques": return cinques;
+				}
+			},
+			rerollInit = function() {
+				return new Promise(function(resolve) {
+					console.log(values);
+					if (!rerollChecking()) return resolve();
+					else return rerollCinque().then(rerollOne).then(rerollDeuce).then(rerollInit).then( () => resolve() );
+				});
+			};
+		return new Promise(function(resolve) {
+			if (!self.reroll && !deuce && !cinque) return resolve(values);
+			else return rerollInit().then( () => resolve(values) );
 		});
 	},
 	evade: function() {
@@ -468,6 +563,7 @@ game = {
 				dialog.style.display = "block";
 			} else if (player.move && computer.ship.evasion > 0) {
 				// evasion config
+				return resolve(true);
 			} else return resolve(true);
 		});
 	},
@@ -785,12 +881,12 @@ game = {
 		dialog.style.display = "block";
 		return new Promise(function(resolve) {
 			let btn = document.createElement("button");
+			btn.id = "roll";
 			btn.innerHTML = "Бросить!";
 			dialog.appendChild(btn);
 			btn.onclick = function() {
-				btn.innerHTML = "далее";
 				game.trigger([]);
-				return resolve(btn);
+				return resolve();
 			};
 		});
 	},
