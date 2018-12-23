@@ -420,8 +420,13 @@ game = {
 								msg = document.createElement("p"),
 								winner = "";
 							self.rerolling(dices, values).then(function(values) {
+								let duelist = roll.getAttribute("duelist");
 								for (let i = 0; i < values.length; i++) {
 									dices[i].getAttribute("own") == "opp" ? oppPower += values[i] : plrPower += values[i];
+								}
+								if (duelist != null) {
+									defend = duelist == "plr" ? false : true;
+									duelist == "plr" ? plrPower += 3 : oppPower += 3;
 								}
 								if ((defend && plrPower > oppPower) || plrPower >= oppPower) {
 									player.victPts++;
@@ -471,6 +476,7 @@ game = {
 			reroll = function() {
 				let target = [], play = dices[this[0]].getAttribute("own") == "plr" ? true : false;
 				for (let i = 0; i < this.length; i++) {
+					dices[this[i]].classList.remove("rerollDices");
 					dices[this[i]].src = "images/dice.gif";
 					target.push(dices[this[i]]);
 				}
@@ -487,6 +493,9 @@ game = {
 				});
 			},
 			rerolling = function(result) {
+				for (let i = 0; i < result.length; i++) {
+					dices[result[i]].classList.add("rerollDices");
+				}
 				return new Promise(function(resolve) {
 					return rerollAsk().then(reroll.bind(result)).then(function(target) {
 						let revalue = self.rollDice(target);
@@ -572,8 +581,9 @@ game = {
 		return new Promise(function(resolve) {
 			fire.onclick = function() {
 				self.deactivation();
-				self.renderFire.call(that).then(function(result) {
-					result.onclick = function() {
+				self.renderFire.call(that).then(function(eva) {
+					if (eva) eva.addEventListener('click', () => resolve());
+					roll.onclick = function() {
 						dialog.style.display = "none";
 						return resolve();
 					};
@@ -583,7 +593,7 @@ game = {
 	},
 	fireResult: function(salvo) {
 		let result = document.createElement("p"), kills = 0, wounds = 0, index = 0, msg = "",
-		target = this == player ? computer : player, board = target.ship.direction, squad,
+		target = this == player ? computer : player, board = target.ship.direction, squad, //когда корабль повернут, то стреляет в противоположный борт
 		win = this == player ? "Вы выиграли раунд!" : "Компьютер выиграл раунд...",
 		targetSide = function() {
 			squad = 0;
@@ -893,12 +903,32 @@ game = {
 	renderFire: function() {
 		let btn = document.createElement("button"), msg = document.createElement("p"),
 		that = this, shooting = function() {
-			let dices = document.getElementsByClassName("fireDices"), result = game.rollDice(dices);
+			let eva = document.createElement("button"),
+				dices = document.getElementsByClassName("fireDices"),
+				result = game.rollDice(dices),
+				target = that == player ? computer : player,
+				copy = {};
+			for (let side in target.ship.guns) {
+				copy[side] = target.ship.guns[side].slice();
+			}
 			msg.innerHTML = "Результаты залпа:";
+			eva.innerHTML = "Уклониться!";
 			dialog.appendChild(game.fireResult.call(that, result));
 			btn.innerHTML = player.move ? "далее" : "принять";
 			dialog.appendChild(btn);
+			if (target.ship.evasion == 0 || player.move) return false;
+			else {
+				dialog.appendChild(eva);
+				eva.addEventListener('click', () => {
+					dialog.style.display = "none";
+					--target.ship.evasion;
+					target.ship.guns = copy;
+					game.setArms.call(target);
+				});
+				return eva;
+			}
 		};
+		btn.id = "roll";
 		dialog.innerHTML = "";
 		dialog.style.display = "block";
 		dialog.appendChild(msg);
@@ -915,16 +945,10 @@ game = {
 			return new Promise(function(resolve) {
 				dialog.appendChild(btn);
 				btn.onclick = function() {
-					shooting();
-					return resolve(btn);
+					return resolve(shooting());
 				};
 			});
-		} else {
-			return new Promise(function(resolve) {
-				shooting();
-				return resolve(btn);
-			});
-		}
+		} else return new Promise( resolve => resolve(shooting()) );
 	},
 	renderControl: function(MP) { // @todo расчет стоимости движения вынести в отдельную функцию
 		let moveCostF = 1, moveCostL = 1, moveCostR = 1, moveCostB = 2,

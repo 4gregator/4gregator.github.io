@@ -181,6 +181,12 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 17,
+	active: () => true,
+	trigger: "beforeFighting",
+	effect: function() {
+		let target = this.owner == player ? "plr" : "opp";
+		dialog.getElementsByTagName("button")[0].setAttribute("duelist", target);
+	}	
 },
 {
 	id: 18,

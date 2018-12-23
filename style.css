@@ -40,6 +40,11 @@ button {
 	width: 44px;
 	height: 44px;
 }
+.rerollDices {
+	width: 42px;
+	height: 42px;
+	border: 1px solid red;
+}
 #windDice {
 	position: absolute;
 	top: 30px;
