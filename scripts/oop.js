@@ -365,7 +365,6 @@ game = {
 				self.salvo.call(that).then(function() {
 					--that.ship.movePts;
 					that.ship.reloading.push(that.ship.direction);
-					self.trigger([permanent, afterShooting]);
 					return resolve();
 				});
 				if (computer.move) AI();
@@ -582,11 +581,14 @@ game = {
 			fire.onclick = function() {
 				self.deactivation();
 				self.renderFire.call(that).then(function(eva) {
+					game.trigger([permanent, afterShooting]);
 					if (eva) eva.addEventListener('click', () => resolve());
-					roll.onclick = function() {
-						dialog.style.display = "none";
-						return resolve();
-					};
+					roll.addEventListener('click', function() {
+						if (this.getAttribute("sniper") == null) {
+							dialog.style.display = "none";
+							return resolve();
+						}
+					});
 				});
 			};
 		});
@@ -623,6 +625,7 @@ game = {
 			}
 			return target.ship.guns[board][index];
 		};
+		result.id = "fireResult";
 		salvo.sort(sortArray);
 		if (salvo[2] == 6 || (salvo[1] == 6 && game.distance == 0)) {
 			if (target.ship.evasion == 0) {
@@ -911,11 +914,30 @@ game = {
 			for (let side in target.ship.guns) {
 				copy[side] = target.ship.guns[side].slice();
 			}
+			for (let i = 0; i < result.length; i++) {
+				if (result[i] == 1) {
+					dices[i].setAttribute("ones", "true");
+				}
+			}
 			msg.innerHTML = "Результаты залпа:";
-			eva.innerHTML = "Уклониться!";
+			eva.innerHTML = "уклониться!";
 			dialog.appendChild(game.fireResult.call(that, result));
 			btn.innerHTML = player.move ? "далее" : "принять";
 			dialog.appendChild(btn);
+			btn.onclick = function() {
+				if (this.getAttribute("sniper") == "true") {
+					for (let i = 0; i < result.length; i++) {
+						if (result[i] == 1) {
+							result[i] = 6;
+							dices[i].classList.remove("rerollDices");
+						}
+					}
+					target.ship.guns = copy;
+					dialog.replaceChild(game.fireResult.call(that, result), fireResult);
+					this.innerHTML = "далее";
+					this.setAttribute("sniper", "false");
+				} else if (this.getAttribute("sniper") == "false") this.removeAttribute("sniper");
+			};
 			if (target.ship.evasion == 0 || player.move) return false;
 			else {
 				dialog.appendChild(eva);
@@ -944,9 +966,7 @@ game = {
 			btn.style.display = "block";
 			return new Promise(function(resolve) {
 				dialog.appendChild(btn);
-				btn.onclick = function() {
-					return resolve(shooting());
-				};
+				btn.onclick = () => resolve(shooting());
 			});
 		} else return new Promise( resolve => resolve(shooting()) );
 	},

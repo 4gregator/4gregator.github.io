@@ -168,6 +168,26 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 15,
+	active: function() {
+		if (this.owner.move) {
+			let dices = document.getElementsByClassName("fireDices");
+			for (let i = 0; i < dices.length; i++) {
+				if (dices[i].getAttribute("ones") == "true") return true;
+			}
+		}
+	},
+	trigger: "afterShooting",
+	effect: function() {
+		let dices = document.getElementsByClassName("fireDices");
+		for (let i = 0; i < dices.length; i++) {
+			if (dices[i].getAttribute("ones") == "true") {
+				dices[i].src = "images/6.png";
+				dices[i].classList.add("rerollDices");
+			}
+		}
+		roll.innerHTML = "пересчитать";
+		roll.setAttribute("sniper", "true");
+	}
 },
 {
 	id: 16,
