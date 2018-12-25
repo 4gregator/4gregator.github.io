@@ -662,6 +662,7 @@ game = {
 		target.ship.guns[board].sort(sortArray);
 		game.setArms.call(target);
 		result.innerHTML = "Пушек уничтожено: " + kills + "<br>Членов экипажа ранено: " + wounds + msg;
+		if (kills) result.setAttribute("kills", board);
 		return result;
 	},
 	getTotalCrew: function() {

@@ -85,4 +85,15 @@ function sumArray(arr) {
 	return result;
 };
 
+function strata22(obj) {
+	let min = 6, max = 1;
+	for (let side in obj) {
+		for (let i = 0; i < obj[side].length; i++) {
+			if (obj[side][i] > max) max = obj[side][i];
+			if (obj[side][i] < min) min = obj[side][i];
+		}
+	}
+	return max - min > 1 ? max : false;
+};
+
 window.addEventListener('load', introduction());

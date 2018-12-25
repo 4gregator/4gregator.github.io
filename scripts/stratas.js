@@ -213,6 +213,16 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 19,
+	active: function() {
+		if (!this.owner.move && fireResult.getAttribute("kills") != null) return true;
+	},
+	trigger: "afterShooting",
+	effect: function() {
+		console.log(fireResult.getAttribute("kills"));
+		this.owner.ship.guns[fireResult.getAttribute("kills")].unshift(6);
+		game.setArms.call(this.owner);
+		roll.click();
+	}
 },
 {
 	id: 20,
@@ -233,6 +243,20 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 22,
+	active: function() {
+		if (strata22(this.owner.ship.guns)) return true;
+	},
+	trigger: "permanent",
+	effect: function() {
+		let guns = this.owner.ship.guns,
+			max = strata22(guns);
+		for (let side in guns) {
+			for (let i = 0; i < guns[side].length; i++) {
+				if (max - guns[side][i] > 1) guns[side][i] = max - 1;
+			}
+		}
+		game.setArms.call(this.owner);
+	}
 },
 {
 	id: 23,
