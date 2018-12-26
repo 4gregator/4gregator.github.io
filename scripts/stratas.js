@@ -37,6 +37,7 @@ var strataChange = new Event('strataChange'),
 	beforeAction = new Event('beforeAction'),
 	maneuver = new Event('maneuver'),
 	approaching = new Event('approaching'),
+	beforeShooting = new Event('beforeShooting'),
 	afterShooting = new Event('afterShooting'),
 	beforeFighting = new Event('beforeFighting'),
 	stratagems = [{
@@ -122,6 +123,11 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 8,
+	active: () => true,
+	trigger: "beforeShooting",
+	effect: function() {
+		roll.setAttribute("buckshot", "true");
+	}
 },
 {
 	id: 9,

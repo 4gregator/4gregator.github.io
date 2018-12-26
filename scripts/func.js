@@ -79,6 +79,10 @@ let sortArray = function(a, b) {
 	return b - a;
 };
 
+let sortZero = function(a) {
+	return a > 0;
+};
+
 function activeGuns(obj) {
 	switch(obj.ship.direction) {
 		case "top": return "top";

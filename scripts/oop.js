@@ -581,6 +581,7 @@ game = {
 		return new Promise(function(resolve) {
 			fire.onclick = function() {
 				self.deactivation();
+				self.trigger([permanent, beforeShooting]);
 				self.renderFire.call(that).then(function(eva) {
 					game.trigger([permanent, afterShooting]);
 					if (eva) eva.addEventListener('click', () => resolve());
@@ -636,30 +637,39 @@ game = {
 			game.setArms.call(target);
 			return result;
 		}
-		for (let i = 0, index = 0, side; i < salvo.length; i++) {
+		for (let i = 0, index = 0, side, buckshot = roll.getAttribute("buckshot") == null ? false : true; i < salvo.length; i++) {
 			side = !index ? targetSide() : target.ship.guns[board];
 			if (!side) break;
 			for (; index < side.length; index++) {
-				if (salvo[i] > side[index]) {
-					kills++;
-					wounds += side[index];
-					side[index] = 0;
-					break;
-				} else if (salvo[i] == side[index]) {
-					if (side[index] != 1) {
-						wounds++;
-						side[index]--;
-					} else {
+				if (!buckshot) {
+					if (salvo[i] > side[index]) {
 						kills++;
+						wounds += side[index];
 						side[index] = 0;
+						break;
+					} else if (salvo[i] == side[index]) {
+						if (side[index] != 1) {
+							wounds++;
+							side[index]--;
+						} else {
+							kills++;
+							side[index] = 0;
+						}
+						break;
 					}
-					break;
+				} else {
+					if (salvo[i] >= side[index]) {
+						if (side[index] > 1) {
+							let n = side[index] == 2 ? 1 : 2;
+							wounds += n;
+							side[index] -= n;
+						}
+						break;
+					}
 				}
 			}
 			if (index == side.length) break;
-			target.ship.guns[board] = side.filter(function(crew) {
-				return crew > 0;
-			});
+			target.ship.guns[board] = buckshot ? side.sort(sortArray) : side.filter(sortZero);
 		}
 		target.ship.guns[board].sort(sortArray);
 		game.setArms.call(target);
