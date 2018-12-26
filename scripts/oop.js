@@ -90,8 +90,6 @@ player = {
 			ready.addEventListener('click', function() {
 				dialog.style.display = "none";
 				computer.init();
-				game.loadArms.call(computer);
-				game.setArms.call(computer);
 				return resolve();
 			});
 		});
@@ -127,6 +125,9 @@ computer = {
 		portretOpp.style.display = "block";
 		this.ship.object.getElementsByClassName("ship")[0].src = "images/" + this.ship.name + "2.jpg";
 		this.ship.object.style.display = "block";
+		game.loadArms.call(computer);
+		game.setArms.call(computer);
+		if (this.ship.name == "Галеон") game.changeCourse.call(this, true);
 	}
 },
 game = {
@@ -594,19 +595,18 @@ game = {
 		});
 	},
 	fireResult: function(salvo) {
-		let result = document.createElement("p"), kills = 0, wounds = 0, index = 0, msg = "",
-		target = this == player ? computer : player, board = target.ship.direction, squad, //когда корабль повернут, то стреляет в противоположный борт
-		win = this == player ? "Вы выиграли раунд!" : "Компьютер выиграл раунд...",
+		let result = document.createElement("p"), kills = 0, wounds = 0,
+		target = this == player ? computer : player, board = activeGuns(target),
+		msg = "", win = this == player ? "Вы выиграли раунд!" : "Компьютер выиграл раунд...",
 		targetSide = function() {
-			squad = 0;
-			if (!sumArray(target.ship.guns[board])) target.ship.guns[board] = []; //посмотреть, как можно улучшить, чтоб не делать двойную проверку
+			let squad = 0;
 			for (let side in target.ship.guns) squad += target.ship.guns[side].length;
-			if (!squad) {
+			if (squad <= 1) {
 				game.roundEnd = true;
 				msg = "<br>Оставшийся экипаж больше не может оказывать сопротивление и сдаётся!";
 				return 0;
 			}
-			while ( !sumArray(target.ship.guns[board]) ) {
+			while (!target.ship.guns[board].length) {
 				switch(board) {
 					case "top":
 						board = "right";
@@ -621,9 +621,8 @@ game = {
 						board = "top";
 						break;
 				}
-				index = 0;
 			}
-			return target.ship.guns[board][index];
+			return target.ship.guns[board];
 		};
 		result.id = "fireResult";
 		salvo.sort(sortArray);
@@ -637,28 +636,31 @@ game = {
 			game.setArms.call(target);
 			return result;
 		}
-		for (let i = 0; i < salvo.length; i++) {
-			let trgt = targetSide();
-			if (!trgt) break;
-			if (salvo[i] > trgt) {
-				kills++;
-				wounds += target.ship.guns[board][index];
-				target.ship.guns[board][index] = 0;
-				index++;
-			} else if (salvo[i] == trgt) {
-				if (trgt != 1) {
-					wounds++;
-					target.ship.guns[board][index]--;
-				} else {
+		for (let i = 0, index = 0, side; i < salvo.length; i++) {
+			side = !index ? targetSide() : target.ship.guns[board];
+			if (!side) break;
+			for (; index < side.length; index++) {
+				if (salvo[i] > side[index]) {
 					kills++;
-					target.ship.guns[board][index] = 0;
-					index++;
+					wounds += side[index];
+					side[index] = 0;
+					break;
+				} else if (salvo[i] == side[index]) {
+					if (side[index] != 1) {
+						wounds++;
+						side[index]--;
+					} else {
+						kills++;
+						side[index] = 0;
+					}
+					break;
 				}
 			}
+			if (index == side.length) break;
+			target.ship.guns[board] = side.filter(function(crew) {
+				return crew > 0;
+			});
 		}
-		target.ship.guns[board] = target.ship.guns[board].filter(function(crew) {
-			return crew > 0;
-		});
 		target.ship.guns[board].sort(sortArray);
 		game.setArms.call(target);
 		result.innerHTML = "Пушек уничтожено: " + kills + "<br>Членов экипажа ранено: " + wounds + msg;
@@ -906,7 +908,7 @@ game = {
 	},
 	renderFire: function() {
 		let btn = document.createElement("button"), msg = document.createElement("p"),
-		that = this, shooting = function() {
+		active = activeGuns(this), that = this,	shooting = function() {
 			let eva = document.createElement("button"),
 				dices = document.getElementsByClassName("fireDices"),
 				result = game.rollDice(dices),
@@ -955,7 +957,7 @@ game = {
 		dialog.innerHTML = "";
 		dialog.style.display = "block";
 		dialog.appendChild(msg);
-		for (let i = 0; i < this.ship.guns[this.ship.direction].length; i++) {
+		for (let i = 0; i < this.ship.guns[active].length; i++) {
 			let dice = document.createElement("img");
 			dice.className = "dices fireDices";
 			dice.src = "images/dice.gif";

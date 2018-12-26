@@ -77,18 +77,12 @@ var strataChange = new Event('strataChange'),
 {
 	id: 4,
 	active: function() {
-		if (this.owner.move && this.owner.ship.reloading.indexOf(this.owner.ship.direction) == -1) return true;
+		if (this.owner.move && !fire.disabled) return true;
 	},
 	trigger: "maneuver",
 	effect: function() {
-		game.deactivation();
-		game.renderFire.call(this.owner).then(function(result) {
-			result.onclick = function() {
-				dialog.style.display = "none";
-				if (player.move) game.renderControl(player.ship.movePts);
-			};
-		});
-		this.owner.ship.reloading.push(this.owner.ship.direction);
+		this.owner.ship.movePts++;
+		fire.click();
 	}
 },
 {

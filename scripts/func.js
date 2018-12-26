@@ -79,10 +79,13 @@ let sortArray = function(a, b) {
 	return b - a;
 };
 
-function sumArray(arr) {
-	let result = 0;
-	for (let i = 0; i < arr.length; i++) result += arr[i];
-	return result;
+function activeGuns(obj) {
+	switch(obj.ship.direction) {
+		case "top": return "top";
+		case "bottom": return "bottom";
+		case "left": return "right";
+		case "right": return "left";
+	}
 };
 
 function strata22(obj) {
@@ -96,4 +99,4 @@ function strata22(obj) {
 	return max - min > 1 ? max : false;
 };
 
-window.addEventListener('load', introduction());
+window.addEventListener('load', introduction);
