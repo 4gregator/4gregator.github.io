@@ -320,8 +320,9 @@ game = {
 		},
 		strataAsk = function() {
 			return new Promise(function(resolve) {
-				if (player.move) return resolve();
-				else {
+				// 4 страта может не сработать, если перед маневром стреляли, для решения запуститьрендерконтрол
+				//if (player.move) return resolve();
+				//else {
 					let check = false;
 					for (let i = 0; i < player.hand.length; i++) {
 						if (player.hand[i].active && player.hand[i].trigger != "permanent") {
@@ -345,14 +346,14 @@ game = {
 							return resolve();
 						});
 					}
-				}
+				//}
 			});
 		},
 		action = new Promise(function(resolve) {
 			self.trigger([permanent, beforeAction]);
 			playField.addEventListener('strataAction', () => resolve());
 			return strataAsk().then(function() {
-				// убрать панель контроля во время вопроса
+				//@todo убрать панель контроля во время вопроса
 				self.makeMove.apply(that, cost).then(function(res) {
 					let triggers = [permanent, maneuver];
 					if (res) triggers.push(res);
@@ -691,7 +692,7 @@ game = {
 		// @todo проверить, можно ли рендерить движение кораблей в рендерконтрол
 		player.ship.object.style.top = this.distance ? "300px" : "250px";
 		computer.ship.object.style.top = this.distance ? "0px" : "50px";
-		grapple.disabled = this.distance ? "disabled" : "";
+		grapple.disabled = this.distance ? true : false;
 	},
 	changeMove: function() {
 		player.move = player.move ? false : true;
@@ -981,7 +982,10 @@ game = {
 				dialog.appendChild(btn);
 				btn.onclick = () => resolve(shooting());
 			});
-		} else return new Promise( resolve => resolve(shooting()) );
+		} else {
+			dialog.appendChild(btn);
+			return new Promise( resolve => resolve(shooting()) );
+		}
 	},
 	renderControl: function(MP) { // @todo расчет стоимости движения вынести в отдельную функцию
 		let moveCostF = 1, moveCostL = 1, moveCostR = 1, moveCostB = 2,
@@ -1006,7 +1010,7 @@ game = {
 						if (player.move) moveCostL = 0;
 						else moveCostR = 0;
 				}
-				if (this.distance && MP >= moveCostF) move.disabled = "";
+				move.disabled = this.distance && MP >= moveCostF ? false : true;
 				break;
 			case "bottom":
 				switch(this.wind) {
@@ -1026,13 +1030,13 @@ game = {
 						if (player.move) moveCostR = 0;
 						else moveCostL = 0;
 				}
-				if (!this.distance && MP >= moveCostF) move.disabled = "";
+				move.disabled = !this.distance && MP >= moveCostF ? false : true;
 				break;
 		}
-		if (MP >= moveCostL) turnLeft.disabled = "";
-		if (MP >= moveCostR) turnRight.disabled = "";
-		if (MP >= moveCostB) turnAround.disabled = "";
-		if (MP) fire.disabled = that.reloading.indexOf(that.direction) == -1 ? "" : "disabled";
+		turnLeft.disabled = MP >= moveCostL ? false : true;
+		turnRight.disabled = MP >= moveCostR ? false : true;
+		turnAround.disabled = MP >= moveCostB ? false : true;
+		fire.disabled = that.reloading.indexOf(that.direction) == -1 && MP ? false : true;
 		move.innerHTML = "Полный вперёд! (" + moveCostF + " од)";
 		turnLeft.innerHTML = "Лево руля! (" + moveCostL + " од)";
 		turnRight.innerHTML = "Право руля! (" + moveCostR + " од)";
@@ -1044,11 +1048,11 @@ game = {
 	deactivation: function() {
 		// @todo: перенести все стили в CSS и манипулировать классами, а не стилями
 		controlPanel.style.display = "none";
-		move.disabled = "disabled";
-		turnLeft.disabled = "disabled";
-		turnRight.disabled = "disabled";
-		turnAround.disabled = "disabled";
-		fire.disabled = "disabled";
+		/*move.disabled = true;
+		turnLeft.disabled = true;
+		turnRight.disabled = true;
+		turnAround.disabled = true;
+		fire.disabled = true;*/
 	}
 };
 

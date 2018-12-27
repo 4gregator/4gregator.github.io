@@ -145,8 +145,7 @@ var strataChange = new Event('strataChange'),
 	},
 	trigger: "beforeAction",
 	effect: function() {
-		alert("testing");
-		// в рендере должна деактивизироваться кнопка сближения до конца хода
+		move.disabled = true;
 		strataDialog.click();
 	}
 },
