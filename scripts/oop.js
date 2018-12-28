@@ -315,7 +315,13 @@ game = {
 		moveOver = function() {
 			playField.removeEventListener('strataAction', () => resolve());
 			if (!that.ship.movePts || self.roundEnd) {
-				return new Promise(resolve => resolve());
+				return new Promise(function(resolve) {
+					if (self.roundEnd) return resolve();
+					else {
+						self.trigger([permanent, endTurn]);
+						strataAsk().then( () => resolve() );
+					}
+				});
 			} else return self.makeAction.call(that);
 		},
 		strataAsk = function() {
@@ -342,6 +348,7 @@ game = {
 						btn.innerHTML = "отказаться";
 						btn.id = "strataDialog";
 						btn.addEventListener('click', function() {
+							that.ship.object.removeAttribute("maneuver");
 							dialog.style.display = "none";
 							return resolve();
 						});
@@ -356,7 +363,8 @@ game = {
 				//@todo убрать панель контроля во время вопроса
 				self.makeMove.apply(that, cost).then(function(res) {
 					let triggers = [permanent, maneuver];
-					if (res) triggers.push(res);
+					if (res == "approaching") triggers.push(approaching);
+					that.ship.object.setAttribute("maneuver", res);
 					self.trigger(triggers);
 					return strataAsk().then( () => resolve() );
 				});
@@ -378,29 +386,30 @@ game = {
 		let self = game, that = this;
 		return new Promise(function(resolve) {
 			move.onclick = function() {
+				let res = self.distance ? "approaching" : "away";
 				that.ship.movePts -= fCost;
 				self.deactivation();
 				self.move();
-				return resolve(approaching);
+				return resolve(res);
 			};
 			turnRight.onclick = function() {
 				that.ship.movePts -= rCost;
 				self.deactivation();
 				self.changeCourse.call(that, false);
-				return resolve();
+				return resolve("right");
 			};
 			turnAround.onclick = function() {
 				that.ship.movePts -= bCost;
 				self.deactivation();
 				self.changeCourse.call(that, true);
 				self.changeCourse.call(that, true);
-				return resolve();
+				return resolve("around");
 			};
 			turnLeft.onclick = function() {
 				that.ship.movePts -= lCost;
 				self.deactivation();
 				self.changeCourse.call(that, true);
-				return resolve();
+				return resolve("left");
 			};
 		});
 	},

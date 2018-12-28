@@ -40,7 +40,8 @@ var strataChange = new Event('strataChange'),
 	beforeShooting = new Event('beforeShooting'),
 	afterShooting = new Event('afterShooting'),
 	beforeFighting = new Event('beforeFighting'),
-	stratagems = [{
+	endTurn = new Event('endTurn'),
+stratagems = [{
 	id: 1,
 	active: function() {
 		if (this.owner.move && !game.distance) return true;
@@ -131,6 +132,16 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 9,
+	active: function() {
+		if (this.owner.move) return true;
+	},
+	trigger: "endTurn",
+	effect: function() {// доделать: задавать вопрос
+		let target = this.owner != player ? player : computer;
+		if (target.ship.evasion > 0) --target.ship.evasion;
+		game.setArms.call(target);
+		strataDialog.click();
+	}
 },
 {
 	id: 10,
@@ -164,6 +175,21 @@ var strataChange = new Event('strataChange'),
 },
 {
 	id: 14,
+	active: function() {
+		if (!this.owner.move) return true;
+	},
+	trigger: "maneuver",
+	effect: function() {
+		let target = this.owner != player ? player : computer,
+			motion = target.ship.object.getAttribute("maneuver");
+		if (motion == "left") game.changeCourse.call(target, false);
+		else if (motion == "right") game.changeCourse.call(target, true);
+		else if (motion == "around") {
+			game.changeCourse.call(target, false);
+			game.changeCourse.call(target, false);
+		} else game.move();
+		strataDialog.click();
+	}
 },
 {
 	id: 15,
