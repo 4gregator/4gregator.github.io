@@ -11,7 +11,7 @@ class Strata {
 	init() {
 		let self = this;
 		this.elem.addEventListener(this.trigger, function() {
-			if (self.condition()) {
+			if (self.condition() && this.owner.ship.object.getAttribute("strataBlock") == null) {
 				self.active = true;
 				this.classList.add("init");
 				this.addEventListener('click', self.activation.bind(self));
@@ -148,6 +148,14 @@ stratagems = [{
 },
 {
 	id: 11,
+	active: function() {
+		if (this.owner.move) return true;
+	},
+	trigger: "permanent",
+	effect: function() {
+		let target = this.owner != player ? player : computer;
+		target.ship.object.setAttribute("strataBlock", "true");
+	}
 },
 {
 	id: 12,

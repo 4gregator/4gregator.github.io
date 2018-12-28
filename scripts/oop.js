@@ -705,7 +705,9 @@ game = {
 	},
 	changeMove: function() {
 		player.move = player.move ? false : true;
+		if (player.ship.object.getAttribute("strataBlock") != null) player.ship.object.removeAttribute("strataBlock");
 		computer.move = computer.move ? false : true;
+		if (computer.ship.object.getAttribute("strataBlock") != null) computer.ship.object.removeAttribute("strataBlock");
 	},
 	changeCourse: function(side) {
 		// true при повороте налево
