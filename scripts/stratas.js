@@ -10,8 +10,9 @@ class Strata {
 	}
 	init() {
 		let self = this;
+		if ((this.owner.ship.object && this.owner.ship.object.getAttribute("strataBlock") != null)) return 0;
 		this.elem.addEventListener(this.trigger, function() {
-			if (self.condition() && this.owner.ship.object.getAttribute("strataBlock") == null) {
+			if (self.condition()) {
 				self.active = true;
 				this.classList.add("init");
 				this.addEventListener('click', self.activation.bind(self));
@@ -144,7 +145,15 @@ stratagems = [{
 	}
 },
 {
-	id: 10,
+	id: 10, //доделать возможность отмены страты
+	active: function() {
+		if (this.owner.ship.name != "Галеон" && this.owner.move) return true;
+	},
+	trigger: "permanent",
+	effect: function() {
+		this.owner.ship.movePts++;
+		playField.dispatchEvent(strataAction);
+	}
 },
 {
 	id: 11,
