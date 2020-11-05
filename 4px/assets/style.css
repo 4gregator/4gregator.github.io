@@ -1,99 +1,71 @@
 @font-face {
   font-family: 'Volvo Novum';
-  src: url("/_source/font/volvonovum/VolvoNovum-Bold.eot");
-  src: url("/_source/font/volvonovum/VolvoNovum-Bold.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-Bold.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-Bold.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-Bold.svg") format("svg");
+  src: url("/source/font/volvonovum/VolvoNovum-Bold.eot");
+  src: url("/source/font/volvonovum/VolvoNovum-Bold.eot?#iefix") format("embedded-opentype"), url("/source/font/volvonovum/VolvoNovum-Bold.woff") format("woff"), url("/source/font/volvonovum/VolvoNovum-Bold.ttf") format("truetype"), url("/source/font/volvonovum/VolvoNovum-Bold.svg") format("svg");
   font-weight: bold;
   font-style: normal;
 }
 @font-face {
   font-family: 'Volvo Novum';
-  src: url("/_source/font/volvonovum/VolvoNovum-BoldItalic.eot");
-  src: url("/_source/font/volvonovum/VolvoNovum-BoldItalic.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-BoldItalic.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-BoldItalic.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-BoldItalic.svg") format("svg");
+  src: url("/source/font/volvonovum/VolvoNovum-BoldItalic.eot");
+  src: url("/source/font/volvonovum/VolvoNovum-BoldItalic.eot?#iefix") format("embedded-opentype"), url("/source/font/volvonovum/VolvoNovum-BoldItalic.woff") format("woff"), url("/source/font/volvonovum/VolvoNovum-BoldItalic.ttf") format("truetype"), url("/source/font/volvonovum/VolvoNovum-BoldItalic.svg") format("svg");
   font-weight: bold;
   font-style: italic;
 }
 @font-face {
   font-family: 'Volvo Novum';
-  src: url("/_source/font/volvonovum/VolvoNovum-Italic.eot");
-  src: url("/_source/font/volvonovum/VolvoNovum-Italic.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-Italic.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-Italic.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-Italic.svg") format("svg");
+  src: url("/source/font/volvonovum/VolvoNovum-Italic.eot");
+  src: url("/source/font/volvonovum/VolvoNovum-Italic.eot?#iefix") format("embedded-opentype"), url("/source/font/volvonovum/VolvoNovum-Italic.woff") format("woff"), url("/source/font/volvonovum/VolvoNovum-Italic.ttf") format("truetype"), url("/source/font/volvonovum/VolvoNovum-Italic.svg") format("svg");
   font-weight: normal;
   font-style: italic;
 }
 @font-face {
   font-family: 'Volvo Novum';
-  src: url("/_source/font/volvonovum/VolvoNovum-Light.eot");
-  src: url("/_source/font/volvonovum/VolvoNovum-Light.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-Light.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-Light.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-Light.svg") format("svg");
+  src: url("/source/font/volvonovum/VolvoNovum-Light.eot");
+  src: url("/source/font/volvonovum/VolvoNovum-Light.eot?#iefix") format("embedded-opentype"), url("/source/font/volvonovum/VolvoNovum-Light.woff") format("woff"), url("/source/font/volvonovum/VolvoNovum-Light.ttf") format("truetype"), url("/source/font/volvonovum/VolvoNovum-Light.svg") format("svg");
   font-weight: 200;
   font-style: normal;
 }
 @font-face {
   font-family: 'Volvo Novum';
-  src: url("/_source/font/volvonovum/VolvoNovum-LightItalic.eot");
-  src: url("/_source/font/volvonovum/VolvoNovum-LightItalic.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-LightItalic.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-LightItalic.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-LightItalic.svg") format("svg");
+  src: url("/source/font/volvonovum/VolvoNovum-LightItalic.eot");
+  src: url("/source/font/volvonovum/VolvoNovum-LightItalic.eot?#iefix") format("embedded-opentype"), url("/source/font/volvonovum/VolvoNovum-LightItalic.woff") format("woff"), url("/source/font/volvonovum/VolvoNovum-LightItalic.ttf") format("truetype"), url("/source/font/volvonovum/VolvoNovum-LightItalic.svg") format("svg");
   font-weight: 200;
   font-style: italic;
 }
 @font-face {
   font-family: 'Volvo Novum';
-  src: url("/_source/font/volvonovum/VolvoNovum-Medium.eot");
-  src: url("/_source/font/volvonovum/VolvoNovum-Medium.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-Medium.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-Medium.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-Medium.svg") format("svg");
+  src: url("/source/font/volvonovum/VolvoNovum-Medium.eot");
+  src: url("/source/font/volvonovum/VolvoNovum-Medium.eot?#iefix") format("embedded-opentype"), url("/source/font/volvonovum/VolvoNovum-Medium.woff") format("woff"), url("/source/font/volvonovum/VolvoNovum-Medium.ttf") format("truetype"), url("/source/font/volvonovum/VolvoNovum-Medium.svg") format("svg");
   font-weight: 500;
   font-style: normal;
 }
 @font-face {
   font-family: 'Volvo Novum';
-  src: url("/_source/font/volvonovum/VolvoNovum-MediumItalic.eot");
-  src: url("/_source/font/volvonovum/VolvoNovum-MediumItalic.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-MediumItalic.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-MediumItalic.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-MediumItalic.svg") format("svg");
+  src: url("/source/font/volvonovum/VolvoNovum-MediumItalic.eot");
+  src: url("/source/font/volvonovum/VolvoNovum-MediumItalic.eot?#iefix") format("embedded-opentype"), url("/source/font/volvonovum/VolvoNovum-MediumItalic.woff") format("woff"), url("/source/font/volvonovum/VolvoNovum-MediumItalic.ttf") format("truetype"), url("/source/font/volvonovum/VolvoNovum-MediumItalic.svg") format("svg");
   font-weight: 500;
   font-style: italic;
 }
 @font-face {
   font-family: 'Volvo Novum';
-  src: url("/_source/font/volvonovum/VolvoNovum-Regular.eot");
-  src: url("/_source/font/volvonovum/VolvoNovum-Regular.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-Regular.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-Regular.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-Regular.svg") format("svg");
+  src: url("/source/font/volvonovum/VolvoNovum-Regular.eot");
+  src: url("/source/font/volvonovum/VolvoNovum-Regular.eot?#iefix") format("embedded-opentype"), url("/source/font/volvonovum/VolvoNovum-Regular.woff") format("woff"), url("/source/font/volvonovum/VolvoNovum-Regular.ttf") format("truetype"), url("/source/font/volvonovum/VolvoNovum-Regular.svg") format("svg");
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'Volvo Novum';
-  src: url("/_source/font/volvonovum/VolvoNovum-SemiLight.eot");
-  src: url("/_source/font/volvonovum/VolvoNovum-SemiLight.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-SemiLight.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-SemiLight.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-SemiLight.svg") format("svg");
+  src: url("/source/font/volvonovum/VolvoNovum-SemiLight.eot");
+  src: url("/source/font/volvonovum/VolvoNovum-SemiLight.eot?#iefix") format("embedded-opentype"), url("/source/font/volvonovum/VolvoNovum-SemiLight.woff") format("woff"), url("/source/font/volvonovum/VolvoNovum-SemiLight.ttf") format("truetype"), url("/source/font/volvonovum/VolvoNovum-SemiLight.svg") format("svg");
   font-weight: 300;
   font-style: normal;
 }
 @font-face {
   font-family: 'Volvo Novum';
-  src: url("/_source/font/volvonovum/VolvoNovum-SemiLightItalic.eot");
-  src: url("/_source/font/volvonovum/VolvoNovum-SemiLightItalic.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-SemiLightItalic.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-SemiLightItalic.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-SemiLightItalic.svg") format("svg");
+  src: url("/source/font/volvonovum/VolvoNovum-SemiLightItalic.eot");
+  src: url("/source/font/volvonovum/VolvoNovum-SemiLightItalic.eot?#iefix") format("embedded-opentype"), url("/source/font/volvonovum/VolvoNovum-SemiLightItalic.woff") format("woff"), url("/source/font/volvonovum/VolvoNovum-SemiLightItalic.ttf") format("truetype"), url("/source/font/volvonovum/VolvoNovum-SemiLightItalic.svg") format("svg");
   font-weight: 300;
-  font-style: italic;
-}
-@font-face {
-  font-family: 'Conv_VolvoBroadPro';
-  src: url("fonts/VolvoBroadPro.eot");
-  src: url("fonts/VolvoBroadPro.eot?#iefix") format("embedded-opentype"), url("fonts/VolvoBroadPro.woff") format("woff"), url("fonts/VolvoBroadPro.ttf") format("truetype"), url("fonts/VolvoBroadPro.svg") format("svg");
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Conv_VolvoSansPro-Light';
-  src: url("fonts/VolvoSansPro-Light.eot");
-  src: url("fonts/VolvoSansPro-Light.eot?#iefix") format("embedded-opentype"), url("fonts/VolvoSansPro-Light.woff") format("woff"), url("fonts/VolvoSansPro-Light.ttf") format("truetype"), url("fonts/VolvoSansPro-Light.svg") format("svg");
-  font-weight: 300;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Conv_VolvoSansPro-Regular';
-  src: url("fonts/VolvoSansPro-Regular.eot");
-  src: url("fonts/VolvoSansPro-Regular.eot?#iefix") format("embedded-opentype"), url("fonts/VolvoSansPro-Regular.woff") format("woff"), url("fonts/VolvoSansPro-Regular.ttf") format("truetype"), url("fonts/VolvoSansPro-Regular.svg") format("svg");
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Conv_VolvoSerifPro-Italic';
-  src: url("fonts/VolvoSerifPro-Italic.eot");
-  src: url("fonts/VolvoSerifPro-Italic.eot?#iefix") format("embedded-opentype"), url("fonts/VolvoSerifPro-Italic.woff") format("woff"), url("fonts/VolvoSerifPro-Italic.ttf") format("truetype"), url("fonts/VolvoSerifPro-Italic.svg") format("svg");
-  font-weight: normal;
   font-style: italic;
 }
 * {
@@ -101,7 +73,8 @@
   padding: 0;
   text-decoration: none;
   list-style-type: none;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   color: inherit;
   border: none;
 }
@@ -217,7 +190,8 @@ h1 {
  * 2. Show the overflow in Edge and IE.
  */
 hr {
-  box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
   /* 1 */
   height: 0;
   /* 1 */
@@ -254,7 +228,8 @@ abbr[title] {
   /* 1 */
   text-decoration: underline;
   /* 2 */
-  text-decoration: underline dotted;
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted;
   /* 2 */
 }
 
@@ -401,7 +376,8 @@ fieldset {
  *    `fieldset` elements in all browsers.
  */
 legend {
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   /* 1 */
   color: inherit;
   /* 2 */
@@ -435,7 +411,8 @@ textarea {
  */
 [type="checkbox"],
 [type="radio"] {
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   /* 1 */
   padding: 0;
   /* 2 */
@@ -539,8 +516,12 @@ template {
   }
 }
 .js-carbody-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 .js-carbody-list__name {
   font-family: "Volvo Novum", Arial, sans-serif;
@@ -575,7 +556,8 @@ template {
 }
 @media screen and (max-width: 577px) {
   .js-carbody-list {
-    flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
     margin-top: 5px;
   }
   .js-carbody-list__name {
@@ -586,14 +568,23 @@ template {
 }
 .js-model-list {
   display: none !important;
-  justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 .js-model-list_active {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
   display: flex !important;
 }
 .js-model-list__unit {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   cursor: pointer;
   margin: 0 10px;
 }
@@ -649,7 +640,8 @@ template {
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
-  transition-duration: 130ms;
+  -webkit-transition-duration: 130ms;
+          transition-duration: 130ms;
 }
 .js-model-list__name {
   margin-top: 10px;
@@ -704,9 +696,13 @@ template {
 }
 .car-info {
   display: none;
-  justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 .car-info_active {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 .car-info__view {
@@ -723,10 +719,19 @@ template {
 .car-info__label {
   width: 220px;
   height: 68px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   position: absolute;
   bottom: 242px;
   right: 44px;
@@ -734,14 +739,16 @@ template {
 .car-info__label::before {
   content: '';
   background-color: #007BCD;
-  box-shadow: 0px 10px 20px rgba(0, 123, 205, 0.3);
+  -webkit-box-shadow: 0px 10px 20px rgba(0, 123, 205, 0.3);
+          box-shadow: 0px 10px 20px rgba(0, 123, 205, 0.3);
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   z-index: -1;
-  transform: skew(-20deg);
+  -webkit-transform: skew(-20deg);
+          transform: skew(-20deg);
 }
 .car-info__label-text {
   font-family: "Volvo Novum", Arial, sans-serif;
@@ -773,18 +780,32 @@ template {
   color: #161618;
 }
 .car-info__data-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   margin-top: 40px;
   width: 388px;
 }
 .car-info__data-col {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 .car-info__data-unit {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 .car-info__data-unit:not(:first-of-type) {
   margin-top: 30px;
@@ -810,9 +831,15 @@ template {
   margin-top: 30px;
 }
 .car-info__feedback {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   margin-top: 50px;
 }
 .car-info__test-drive {
@@ -821,7 +848,8 @@ template {
   font-weight: normal;
   font-style: normal;
   line-height: 100%;
-  text-decoration-line: underline;
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
   color: #161618;
 }
 
@@ -844,6 +872,8 @@ template {
 }
 
 .credit-type {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 .credit-type__credit-name {
@@ -873,7 +903,8 @@ template {
   width: 11px;
   position: absolute;
   top: 2px;
-  transition-duration: 130ms;
+  -webkit-transition-duration: 130ms;
+          transition-duration: 130ms;
 }
 .credit-type__switcher_position_left {
   left: 2px;
@@ -966,8 +997,13 @@ template {
     font-size: 22px;
   }
   .car-info__feedback {
-    flex-direction: column;
-    justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
     margin-top: 30px;
   }
   .car-info__test-drive {
@@ -988,8 +1024,13 @@ template {
 }
 @media screen and (max-width: 577px) {
   .car-info {
-    flex-direction: column;
-    align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
   }
   .car-info__view {
     width: 290px;
@@ -1043,8 +1084,13 @@ template {
   padding: 60px 73px;
 }
 .modal__get-proposal {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 .modal__title {
   font-family: "Volvo Novum", Arial, sans-serif;
@@ -1082,6 +1128,15 @@ template {
   line-height: 100%;
   color: #161618;
 }
+.modal__phone-input::-webkit-input-placeholder {
+  color: #161618;
+}
+.modal__phone-input:-ms-input-placeholder {
+  color: #161618;
+}
+.modal__phone-input::-ms-input-placeholder {
+  color: #161618;
+}
 .modal__phone-input::placeholder {
   color: #161618;
 }
@@ -1095,6 +1150,8 @@ template {
   margin-top: 15px;
 }
 .modal__privacy {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   margin-top: 14px;
 }
@@ -1103,7 +1160,8 @@ template {
   margin-top: 4px;
 }
 .modal__personal-data {
-  text-decoration-line: underline;
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
 }
 .modal__answer {
   display: none;
