@@ -598,50 +598,50 @@ template {
   margin: 0 10px;
 }
 .js-model-list__unit[data-model="XC90"] .js-model-list__img {
-  background-image: url(4px/source/img/models-small/xc90.png);
+  background-image: url(/4px/source/img/models-small/xc90.png);
 }
 .js-model-list__unit[data-model="XC60"] .js-model-list__img {
-  background-image: url(4px/source/img/models-small/xc60.png);
+  background-image: url(/4px/source/img/models-small/xc60.png);
 }
 .js-model-list__unit[data-model="XC40"] .js-model-list__img {
-  background-image: url(4px/source/img/models-small/xc40.png);
+  background-image: url(/4px/source/img/models-small/xc40.png);
 }
 .js-model-list__unit[data-model="S60"] .js-model-list__img {
-  background-image: url(4px/source/img/models-small/s60.png);
+  background-image: url(/4px/source/img/models-small/s60.png);
 }
 .js-model-list__unit[data-model="S90"] .js-model-list__img {
-  background-image: url(4px/source/img/models-small/s90.png);
+  background-image: url(/4px/source/img/models-small/s90.png);
 }
 .js-model-list__unit[data-model="V90"] .js-model-list__img {
-  background-image: url(4px/source/img/models-small/v90.png);
+  background-image: url(/4px/source/img/models-small/v90.png);
 }
 .js-model-list__unit[data-model="V60"] .js-model-list__img {
-  background-image: url(4px/source/img/models-small/v60.png);
+  background-image: url(/4px/source/img/models-small/v60.png);
 }
 .js-model-list__unit_active .js-model-list__name {
   color: #007BCD;
   font-weight: bold;
 }
 .js-model-list__unit_active[data-model="XC90"] .js-model-list__img {
-  background-image: url(4px/source/img/models-small/xc90a.png);
+  background-image: url(/4px/source/img/models-small/xc90a.png);
 }
 .js-model-list__unit_active[data-model="XC60"] .js-model-list__img {
-  background-image: url(4px/source/img/models-small/xc60a.png);
+  background-image: url(/4px/source/img/models-small/xc60a.png);
 }
 .js-model-list__unit_active[data-model="XC40"] .js-model-list__img {
-  background-image: url(4px/source/img/models-small/xc40a.png);
+  background-image: url(/4px/source/img/models-small/xc40a.png);
 }
 .js-model-list__unit_active[data-model="S60"] .js-model-list__img {
-  background-image: url(4px/source/img/models-small/s60a.png);
+  background-image: url(/4px/source/img/models-small/s60a.png);
 }
 .js-model-list__unit_active[data-model="S90"] .js-model-list__img {
-  background-image: url(4px/source/img/models-small/s90a.png);
+  background-image: url(/4px/source/img/models-small/s90a.png);
 }
 .js-model-list__unit_active[data-model="V90"] .js-model-list__img {
-  background-image: url(4px/source/img/models-small/v90a.png);
+  background-image: url(/4px/source/img/models-small/v90a.png);
 }
 .js-model-list__unit_active[data-model="V60"] .js-model-list__img {
-  background-image: url(4px/source/img/models-small/v60a.png);
+  background-image: url(/4px/source/img/models-small/v60a.png);
 }
 .js-model-list__img {
   width: 305px;
@@ -668,25 +668,25 @@ template {
     font-weight: bold;
   }
   .js-model-list__unit:hover[data-model="XC90"] .js-model-list__img {
-    background-image: url(4px/source/img/models-small/xc90a.png);
+    background-image: url(/4px/source/img/models-small/xc90a.png);
   }
   .js-model-list__unit:hover[data-model="XC60"] .js-model-list__img {
-    background-image: url(4px/source/img/models-small/xc60a.png);
+    background-image: url(/4px/source/img/models-small/xc60a.png);
   }
   .js-model-list__unit:hover[data-model="XC40"] .js-model-list__img {
-    background-image: url(4px/source/img/models-small/xc40a.png);
+    background-image: url(/4px/source/img/models-small/xc40a.png);
   }
   .js-model-list__unit:hover[data-model="S60"] .js-model-list__img {
-    background-image: url(4px/source/img/models-small/s60a.png);
+    background-image: url(/4px/source/img/models-small/s60a.png);
   }
   .js-model-list__unit:hover[data-model="S90"] .js-model-list__img {
-    background-image: url(4px/source/img/models-small/s90a.png);
+    background-image: url(/4px/source/img/models-small/s90a.png);
   }
   .js-model-list__unit:hover[data-model="V90"] .js-model-list__img {
-    background-image: url(4px/source/img/models-small/v90a.png);
+    background-image: url(/4px/source/img/models-small/v90a.png);
   }
   .js-model-list__unit:hover[data-model="V60"] .js-model-list__img {
-    background-image: url(4px/source/img/models-small/v60a.png);
+    background-image: url(/4px/source/img/models-small/v60a.png);
   }
 }
 @media screen and (max-width: 577px) {
