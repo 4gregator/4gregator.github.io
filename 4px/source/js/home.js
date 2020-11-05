@@ -1,3 +1,4 @@
+alert('home');
 $(function () {
   // отслеживание события drag
   let dragging = false;

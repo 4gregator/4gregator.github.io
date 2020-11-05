@@ -1,4 +1,5 @@
-const inputError = function() {
+alert('func');
+const inputError = function () {
   $('.modal__phone-input').toggleClass('modal__phone-input_invalid');
   setTimeout(() => {
     $('.modal__phone-input').toggleClass('modal__phone-input_invalid');

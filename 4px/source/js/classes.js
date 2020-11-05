@@ -1,3 +1,4 @@
+alert('classes');
 class Changer {
   constructor(e, t) {
     this.element = '.' + e;
