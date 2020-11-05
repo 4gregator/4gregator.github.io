@@ -1,0 +1,158 @@
+.js-model-list {
+  display: none !important;
+  justify-content: center;
+
+  &_active {
+    display: flex !important;
+  }
+
+  &__unit {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    margin: 0 10px;
+
+    &[data-model="XC90"] .js-model-list__img {
+      background-image: url(/_source/img/models-small/xc90.png);
+    }
+
+    &[data-model="XC60"] .js-model-list__img {
+      background-image: url(/_source/img/models-small/xc60.png);
+    }
+
+    &[data-model="XC40"] .js-model-list__img {
+      background-image: url(/_source/img/models-small/xc40.png);
+    }
+
+    &[data-model="S60"] .js-model-list__img {
+      background-image: url(/_source/img/models-small/s60.png);
+    }
+
+    &[data-model="S90"] .js-model-list__img {
+      background-image: url(/_source/img/models-small/s90.png);
+    }
+
+    &[data-model="V90"] .js-model-list__img {
+      background-image: url(/_source/img/models-small/v90.png);
+    }
+
+    &[data-model="V60"] .js-model-list__img {
+      background-image: url(/_source/img/models-small/v60.png);
+    }
+
+    &_active {
+
+      & .js-model-list__name {
+        color: $color_secondary;
+        font-weight: bold;
+      }
+
+      &[data-model="XC90"] .js-model-list__img {
+        background-image: url(/_source/img/models-small/xc90a.png);
+      }
+
+      &[data-model="XC60"] .js-model-list__img {
+        background-image: url(/_source/img/models-small/xc60a.png);
+      }
+
+      &[data-model="XC40"] .js-model-list__img {
+        background-image: url(/_source/img/models-small/xc40a.png);
+      }
+
+      &[data-model="S60"] .js-model-list__img {
+        background-image: url(/_source/img/models-small/s60a.png);
+      }
+
+      &[data-model="S90"] .js-model-list__img {
+        background-image: url(/_source/img/models-small/s90a.png);
+      }
+
+      &[data-model="V90"] .js-model-list__img {
+        background-image: url(/_source/img/models-small/v90a.png);
+      }
+      
+      &[data-model="V60"] .js-model-list__img {
+        background-image: url(/_source/img/models-small/v60a.png);
+      }
+    }
+  }
+
+  &__img {
+    width: 305px;
+    height: 172px;
+    background: {
+      position: center;
+      size: contain;
+      repeat: no-repeat;
+    }
+    transition-duration: 130ms;
+  }
+  
+  &__name {
+    margin-top: 10px;
+    margin-left: 10px;
+    font: {
+      family: $font_novum;
+      style: normal;
+      weight: normal;
+      size: 18px;
+    }
+    line-height: 22px;
+    color: $color_main;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .js-model-list__unit:hover {
+    & .js-model-list__name {
+      color: $color_secondary;
+      font-weight: bold;
+    }
+
+    &[data-model="XC90"] .js-model-list__img {
+      background-image: url(/_source/img/models-small/xc90a.png);
+    }
+
+    &[data-model="XC60"] .js-model-list__img {
+      background-image: url(/_source/img/models-small/xc60a.png);
+    }
+
+    &[data-model="XC40"] .js-model-list__img {
+      background-image: url(/_source/img/models-small/xc40a.png);
+    }
+
+    &[data-model="S60"] .js-model-list__img {
+      background-image: url(/_source/img/models-small/s60a.png);
+    }
+
+    &[data-model="S90"] .js-model-list__img {
+      background-image: url(/_source/img/models-small/s90a.png);
+    }
+
+    &[data-model="V90"] .js-model-list__img {
+      background-image: url(/_source/img/models-small/v90a.png);
+    }
+    
+    &[data-model="V60"] .js-model-list__img {
+      background-image: url(/_source/img/models-small/v60a.png);
+    }
+  }
+}
+
+@media screen and (max-width: 577px) {
+  .js-model-list {  
+    &__unit {
+      margin: 0 5px;
+    }
+  
+    &__img {
+      width: 220px;
+      height: 124px;
+    }
+    
+    &__name {
+      font-size: 16px;
+      line-height: 19px;
+    }
+  }
+}

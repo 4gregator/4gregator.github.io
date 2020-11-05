@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <g id="right-arrow">
+    <path d="M1 0.5L5 4.5L1 8.5" fill="none"/>
+  </g>
+  <g id="switcher">
+    <circle cx="5.5" cy="5.5" r="5.5"/>
+  </g>
+</svg>

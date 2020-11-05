@@ -1,0 +1,60 @@
+.js-carbody-list {
+  display: flex;
+  justify-content: center;
+
+  &__name {
+    font: {
+      family: $font_novum;
+      style: normal;
+      weight: normal;
+      size: 16px;
+    }
+    line-height: 19px;
+    color: rgba($color_main, 0.5);
+    cursor: pointer;
+    margin: 0 30px;
+    
+    &_active {
+      color: $color_main;
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .js-carbody-list {  
+    &__name {
+      margin: 0 25px 0;
+    }
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .js-carbody-list {  
+    &__name {
+      margin: 0 20px 0;
+    }
+  }
+}
+
+@media screen and (max-width: 769px) {
+  .js-carbody-list {
+    &__name {
+      font-size: 15px;
+      line-height: 18px;
+      margin: 0 15px 0;
+    }
+  }
+}
+
+@media screen and (max-width: 577px) {
+  .js-carbody-list {
+    flex-wrap: wrap;
+    margin-top: 5px;
+  
+    &__name {
+      font-size: 14px;
+      line-height: 17px;
+      margin: 15px 15px 0;
+    }
+  }
+}

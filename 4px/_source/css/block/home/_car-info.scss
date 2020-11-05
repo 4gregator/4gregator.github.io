@@ -1,0 +1,422 @@
+.car-info {
+  display: none;
+  justify-content: center;
+
+  &_active {
+    display: flex;
+  }
+
+  &__view {
+    width: 669px;
+    margin-left: -120px;
+    position: relative;
+  }
+
+  &__img {
+    width: 100%;
+    position: absolute;
+    bottom: 38px;
+    right: 0;
+  }
+
+  &__label {
+    width: 220px;
+    height: 68px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 242px;
+    right: 44px;
+
+    &::before {
+      content: '';
+      background-color: $color_secondary;
+      box-shadow: 0px 10px 20px rgba(0, 123, 205, 0.3);
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: -1;
+      transform: skew(-20deg);
+    }
+  }
+
+  &__label-text {
+    font: {
+      family: $font_novum;
+      size: 19px;
+      weight: bold;
+      style: normal;
+    }
+    line-height: 100%;
+    color: $color_tertiary;
+    text-transform: uppercase;
+  }
+
+  &__label-undertext {
+    margin-top: 3px;
+    font: {
+      family: $font_novum;
+      size: 14px;
+      weight: normal;
+      style: normal;
+    }
+    line-height: 17px;
+    color: rgba($color_tertiary, 0.8);
+  }
+
+  &__credit {
+    margin-left: 68px;
+  }
+
+  &__model {
+    font: {
+      family: $font_novum;
+      size: 48px;
+      weight: 300;
+      style: normal;
+    }
+    line-height: 100%;
+    color: $color_main;
+  }
+
+  &__data-list {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    width: 388px;
+  }
+
+  &__data-col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__data-unit {
+    display: flex;
+    flex-direction: column;
+
+    &:not(:first-of-type) {
+      margin-top: 30px;
+    }
+  }
+
+  &__data-name {
+    font: {
+      family: $font_novum;
+      size: 14px;
+      weight: normal;
+      style: normal;
+    }
+    line-height: 17px;
+    color: rgba($color_main, 0.8);
+  }
+
+  &__data-value {
+    font: {
+      family: $font_novum;
+      size: 28px;
+      weight: 500;
+      style: normal;
+    }
+    line-height: 100%;
+    color: $color_main;
+    margin-top: 4px;
+  }
+
+  &__credit-type {
+    margin-top: 30px;
+  }
+
+  &__feedback {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+  }
+
+  &__test-drive {
+    font: {
+      family: $font_novum;
+      size: 15px;
+      weight: normal;
+      style: normal;
+    }
+    line-height: 100%;
+    text-decoration-line: underline;
+    color: $color_main;
+  }
+}
+
+.proposal {
+  width: 270px;
+  height: 55px;
+  background-color: $color_secondary;
+  font: {
+    family: $font_novum;
+    size: 15px;
+    weight: normal;
+    style: normal;
+  }
+  color: $color_tertiary;
+  cursor: pointer;
+  position: relative;
+
+  &__arrow {
+    margin-left: 13px;
+    stroke: $color_tertiary;
+    height: 8px;
+  }
+}
+
+.credit-type {
+  display: flex;
+
+  &__credit-name {
+    font: {
+      family: $font_novum;
+      size: 16px;
+      weight: normal;
+      style: normal;
+    }
+    line-height: 19px;
+    color: rgba($color_main, 0.5);
+    cursor: pointer;
+
+    &_active {
+      color: $color_main;
+      cursor: default;
+    }
+  }
+  &__credit-switch {
+    width: 30px;
+    height: 17px;
+    margin: 0 10px;
+    border: 1px solid $color_secondary;
+    border-radius: 31px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  &__switcher {
+    fill: $color_secondary;
+    width: 11px;
+    position: absolute;
+    top: 2px;
+    transition-duration: 130ms;
+
+    &_position_left {
+      left: 2px;
+    }
+    
+    &_position_right {
+      left: 15px;
+    }
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .car-info__test-drive:hover {
+    color: $color_secondary;
+  }
+
+  .proposal:hover {
+    background-color: #008EEC;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .car-info {  
+    &__view {
+      width: 480px;
+      margin-left: 0;
+    }
+  
+    &__img {
+      bottom: 20px;
+    }
+  
+    &__label {
+      width: 180px;
+      height: 60px;
+      bottom: 170px;
+      right: 20px;
+    }
+  
+    &__label-text {
+      font-size: 17px;
+    }
+  
+    &__label-undertext {
+      font-size: 12px;
+      line-height: 15px;
+    }
+  
+    &__credit {
+      margin-left: 40px;
+    }
+  
+    &__model {
+      font-size: 40px;
+    }
+  
+    &__data-list {
+      margin-top: 32px;
+    }
+  
+    &__data-unit {  
+      &:not(:first-of-type) {
+        margin-top: 25px;
+      }
+    }
+  
+    &__data-value {
+      font-size: 25px;
+      margin-top: 3px;
+    }
+  
+    &__feedback {
+      margin-top: 44px;
+    }
+  }
+  
+  .proposal {
+    width: 225px;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .car-info {  
+    &__view {
+      width: 61%;
+    }
+  
+    &__label {
+      width: 150px;
+      height: 50px;
+      bottom: 180px;
+    }
+  
+    &__label-text {
+      font-size: 14px;
+    }
+  
+    &__label-undertext {
+      font-size: 11px;
+      line-height: 13px;
+    }
+  
+    &__credit {
+      width: 35%;
+      margin-left: 4%;
+    }
+  
+    &__model {
+      font-size: 32px;
+    }
+  
+    &__data-list {
+      width: 100%;
+    }
+  
+    &__data-value {
+      font-size: 22px;
+    }
+  
+    &__feedback {
+      flex-direction: column;
+      justify-content: center;
+      margin-top: 30px;
+    }
+  
+    &__test-drive {
+      margin-top: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 769px) {
+  .car-info {  
+    &__view {
+      width: 55%;
+    }
+  
+    &__img {
+      bottom: 60px;
+    }
+  
+    &__credit {
+      width: 44%;
+      margin-left: 1%;
+    }
+  }
+}
+
+@media screen and (max-width: 577px) {
+  .car-info {
+    flex-direction: column;
+    align-items: center;
+  
+    &__view {
+      width: 290px;
+    }
+  
+    &__img {
+      bottom: 20px;
+    }
+  
+    &__label {
+      width: 126px;
+      height: 43px;
+      bottom: 120px;
+      right: 15px;
+    }
+  
+    &__label-text {
+      font-size: 12px;
+    }
+  
+    &__label-undertext {
+      margin-top: 2px;
+      font-size: 9px;
+      line-height: 11px;
+    }
+  
+    &__credit {
+      width: 100%;
+      margin-left: 0;
+    }
+  
+    &__model {
+      font-size: 26px;
+    }
+  
+    &__data-list {
+      //width: 100%;
+      margin-top: 15px;
+    }
+  
+    &__data-unit {  
+      :not(:first-of-type) {
+        margin-top: 20px;
+      }
+    }
+  
+    &__data-name {
+      font-size: 12px;
+      line-height: 14px;
+    }
+  
+    &__data-value {
+      font-size: 20px;
+      margin-top: 2px;
+    }
+  }
+  
+  .proposal {
+    width: 290px;
+  }
+}

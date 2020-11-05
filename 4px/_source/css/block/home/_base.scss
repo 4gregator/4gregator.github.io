@@ -1,0 +1,46 @@
+.home {
+  padding: 97px 0 129px;
+
+  &__title {
+    margin-bottom: 40px;
+    margin-top: 0;
+  }
+
+  &__model-list-wrapper {
+    margin-top: 40px;
+  }
+  
+  &__car-info-wrapper {
+    margin-top: 90px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  //
+}
+
+@media screen and (max-width: 991px) {
+  //
+}
+
+@media screen and (max-width: 769px) {
+  //
+}
+
+@media screen and (max-width: 577px) {
+  .home {
+    padding: 29px 0 57px;
+  
+    &__title {
+      margin-bottom: 0px;
+    }
+  
+    &__model-list-wrapper {
+      margin-top: 30px;
+    }
+    
+    &__car-info-wrapper {
+      margin-top: 224px;
+    }
+  }
+}

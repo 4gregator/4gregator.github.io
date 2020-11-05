@@ -1,0 +1,1216 @@
+@font-face {
+  font-family: 'Volvo Novum';
+  src: url("/_source/font/volvonovum/VolvoNovum-Bold.eot");
+  src: url("/_source/font/volvonovum/VolvoNovum-Bold.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-Bold.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-Bold.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-Bold.svg") format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Volvo Novum';
+  src: url("/_source/font/volvonovum/VolvoNovum-BoldItalic.eot");
+  src: url("/_source/font/volvonovum/VolvoNovum-BoldItalic.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-BoldItalic.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-BoldItalic.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-BoldItalic.svg") format("svg");
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Volvo Novum';
+  src: url("/_source/font/volvonovum/VolvoNovum-Italic.eot");
+  src: url("/_source/font/volvonovum/VolvoNovum-Italic.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-Italic.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-Italic.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-Italic.svg") format("svg");
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Volvo Novum';
+  src: url("/_source/font/volvonovum/VolvoNovum-Light.eot");
+  src: url("/_source/font/volvonovum/VolvoNovum-Light.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-Light.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-Light.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-Light.svg") format("svg");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Volvo Novum';
+  src: url("/_source/font/volvonovum/VolvoNovum-LightItalic.eot");
+  src: url("/_source/font/volvonovum/VolvoNovum-LightItalic.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-LightItalic.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-LightItalic.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-LightItalic.svg") format("svg");
+  font-weight: 200;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Volvo Novum';
+  src: url("/_source/font/volvonovum/VolvoNovum-Medium.eot");
+  src: url("/_source/font/volvonovum/VolvoNovum-Medium.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-Medium.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-Medium.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-Medium.svg") format("svg");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Volvo Novum';
+  src: url("/_source/font/volvonovum/VolvoNovum-MediumItalic.eot");
+  src: url("/_source/font/volvonovum/VolvoNovum-MediumItalic.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-MediumItalic.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-MediumItalic.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-MediumItalic.svg") format("svg");
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Volvo Novum';
+  src: url("/_source/font/volvonovum/VolvoNovum-Regular.eot");
+  src: url("/_source/font/volvonovum/VolvoNovum-Regular.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-Regular.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-Regular.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-Regular.svg") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Volvo Novum';
+  src: url("/_source/font/volvonovum/VolvoNovum-SemiLight.eot");
+  src: url("/_source/font/volvonovum/VolvoNovum-SemiLight.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-SemiLight.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-SemiLight.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-SemiLight.svg") format("svg");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Volvo Novum';
+  src: url("/_source/font/volvonovum/VolvoNovum-SemiLightItalic.eot");
+  src: url("/_source/font/volvonovum/VolvoNovum-SemiLightItalic.eot?#iefix") format("embedded-opentype"), url("/_source/font/volvonovum/VolvoNovum-SemiLightItalic.woff") format("woff"), url("/_source/font/volvonovum/VolvoNovum-SemiLightItalic.ttf") format("truetype"), url("/_source/font/volvonovum/VolvoNovum-SemiLightItalic.svg") format("svg");
+  font-weight: 300;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Conv_VolvoBroadPro';
+  src: url("fonts/VolvoBroadPro.eot");
+  src: url("fonts/VolvoBroadPro.eot?#iefix") format("embedded-opentype"), url("fonts/VolvoBroadPro.woff") format("woff"), url("fonts/VolvoBroadPro.ttf") format("truetype"), url("fonts/VolvoBroadPro.svg") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Conv_VolvoSansPro-Light';
+  src: url("fonts/VolvoSansPro-Light.eot");
+  src: url("fonts/VolvoSansPro-Light.eot?#iefix") format("embedded-opentype"), url("fonts/VolvoSansPro-Light.woff") format("woff"), url("fonts/VolvoSansPro-Light.ttf") format("truetype"), url("fonts/VolvoSansPro-Light.svg") format("svg");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Conv_VolvoSansPro-Regular';
+  src: url("fonts/VolvoSansPro-Regular.eot");
+  src: url("fonts/VolvoSansPro-Regular.eot?#iefix") format("embedded-opentype"), url("fonts/VolvoSansPro-Regular.woff") format("woff"), url("fonts/VolvoSansPro-Regular.ttf") format("truetype"), url("fonts/VolvoSansPro-Regular.svg") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Conv_VolvoSerifPro-Italic';
+  src: url("fonts/VolvoSerifPro-Italic.eot");
+  src: url("fonts/VolvoSerifPro-Italic.eot?#iefix") format("embedded-opentype"), url("fonts/VolvoSerifPro-Italic.woff") format("woff"), url("fonts/VolvoSerifPro-Italic.ttf") format("truetype"), url("fonts/VolvoSerifPro-Italic.svg") format("svg");
+  font-weight: normal;
+  font-style: italic;
+}
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style-type: none;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  color: inherit;
+  border: none;
+}
+
+:active, :hover, :focus {
+  outline: 0;
+  outline-offset: 0;
+}
+
+.container {
+  max-width: 1920px;
+  margin: auto;
+  padding: 0 60px;
+}
+
+.title {
+  font-family: "Volvo Novum", Arial, sans-serif;
+  font-weight: bold;
+  font-style: normal;
+  font-size: 34px;
+  line-height: 41px;
+  color: #161618;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 1200px) {
+  .container {
+    max-width: 1024px;
+    padding: 0 40px;
+  }
+
+  .title {
+    font-size: 32px;
+    line-height: 39px;
+  }
+}
+@media screen and (max-width: 991px) {
+  .container {
+    max-width: 100%;
+    width: 100%;
+    padding: 0 30px;
+  }
+
+  .title {
+    font-size: 30px;
+    line-height: 37px;
+  }
+}
+@media screen and (max-width: 769px) {
+  .container {
+    padding: 0 20px;
+  }
+
+  .title {
+    font-size: 28px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 577px) {
+  .container {
+    padding: 0 15px;
+  }
+
+  .title {
+    font-size: 26px;
+    line-height: 31px;
+  }
+}
+/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+/* Document
+   ========================================================================== */
+/**
+ * 1. Correct the line height in all browsers.
+ * 2. Prevent adjustments of font size after orientation changes in iOS.
+ */
+html {
+  line-height: 1.15;
+  /* 1 */
+  -webkit-text-size-adjust: 100%;
+  /* 2 */
+}
+
+/* Sections
+   ========================================================================== */
+/**
+ * Remove the margin in all browsers.
+ */
+body {
+  margin: 0;
+}
+
+/**
+ * Render the `main` element consistently in IE.
+ */
+main {
+  display: block;
+}
+
+/**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+/* Grouping content
+   ========================================================================== */
+/**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+hr {
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
+  /* 1 */
+  height: 0;
+  /* 1 */
+  overflow: visible;
+  /* 2 */
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+pre {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
+}
+
+/* Text-level semantics
+   ========================================================================== */
+/**
+ * Remove the gray background on active links in IE 10.
+ */
+a {
+  background-color: transparent;
+}
+
+/**
+ * 1. Remove the bottom border in Chrome 57-
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+abbr[title] {
+  border-bottom: none;
+  /* 1 */
+  text-decoration: underline;
+  /* 2 */
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted;
+  /* 2 */
+}
+
+/**
+ * Add the correct font weight in Chrome, Edge, and Safari.
+ */
+b,
+strong {
+  font-weight: bolder;
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+code,
+kbd,
+samp {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
+}
+
+/**
+ * Add the correct font size in all browsers.
+ */
+small {
+  font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/* Embedded content
+   ========================================================================== */
+/**
+ * Remove the border on images inside links in IE 10.
+ */
+img {
+  border-style: none;
+}
+
+/* Forms
+   ========================================================================== */
+/**
+ * 1. Change the font styles in all browsers.
+ * 2. Remove the margin in Firefox and Safari.
+ */
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  /* 1 */
+  font-size: 100%;
+  /* 1 */
+  line-height: 1.15;
+  /* 1 */
+  margin: 0;
+  /* 2 */
+}
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+button,
+input {
+  /* 1 */
+  overflow: visible;
+}
+
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+button,
+select {
+  /* 1 */
+  text-transform: none;
+}
+
+/**
+ * Correct the inability to style clickable types in iOS and Safari.
+ */
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+}
+
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+/**
+ * Restore the focus styles unset by the previous rule.
+ */
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+/**
+ * Correct the padding in Firefox.
+ */
+fieldset {
+  padding: 0.35em 0.75em 0.625em;
+}
+
+/**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *    `fieldset` elements in all browsers.
+ */
+legend {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  /* 1 */
+  color: inherit;
+  /* 2 */
+  display: table;
+  /* 1 */
+  max-width: 100%;
+  /* 1 */
+  padding: 0;
+  /* 3 */
+  white-space: normal;
+  /* 1 */
+}
+
+/**
+ * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+progress {
+  vertical-align: baseline;
+}
+
+/**
+ * Remove the default vertical scrollbar in IE 10+.
+ */
+textarea {
+  overflow: auto;
+}
+
+/**
+ * 1. Add the correct box sizing in IE 10.
+ * 2. Remove the padding in IE 10.
+ */
+[type="checkbox"],
+[type="radio"] {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  /* 1 */
+  padding: 0;
+  /* 2 */
+}
+
+/**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+ * 1. Correct the odd appearance in Chrome and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+[type="search"] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  outline-offset: -2px;
+  /* 2 */
+}
+
+/**
+ * Remove the inner padding in Chrome and Safari on macOS.
+ */
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/**
+ * 1. Correct the inability to style clickable types in iOS and Safari.
+ * 2. Change font properties to `inherit` in Safari.
+ */
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  /* 1 */
+  font: inherit;
+  /* 2 */
+}
+
+/* Interactive
+   ========================================================================== */
+/*
+ * Add the correct display in Edge, IE 10+, and Firefox.
+ */
+details {
+  display: block;
+}
+
+/*
+ * Add the correct display in all browsers.
+ */
+summary {
+  display: list-item;
+}
+
+/* Misc
+   ========================================================================== */
+/**
+ * Add the correct display in IE 10+.
+ */
+template {
+  display: none;
+}
+
+/**
+ * Add the correct display in IE 10.
+ */
+[hidden] {
+  display: none;
+}
+
+.home {
+  padding: 97px 0 129px;
+}
+.home__title {
+  margin-bottom: 40px;
+  margin-top: 0;
+}
+.home__model-list-wrapper {
+  margin-top: 40px;
+}
+.home__car-info-wrapper {
+  margin-top: 90px;
+}
+
+@media screen and (max-width: 577px) {
+  .home {
+    padding: 29px 0 57px;
+  }
+  .home__title {
+    margin-bottom: 0px;
+  }
+  .home__model-list-wrapper {
+    margin-top: 30px;
+  }
+  .home__car-info-wrapper {
+    margin-top: 224px;
+  }
+}
+.js-carbody-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.js-carbody-list__name {
+  font-family: "Volvo Novum", Arial, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+  color: rgba(22, 22, 24, 0.5);
+  cursor: pointer;
+  margin: 0 30px;
+}
+.js-carbody-list__name_active {
+  color: #161618;
+}
+
+@media screen and (max-width: 1200px) {
+  .js-carbody-list__name {
+    margin: 0 25px 0;
+  }
+}
+@media screen and (max-width: 991px) {
+  .js-carbody-list__name {
+    margin: 0 20px 0;
+  }
+}
+@media screen and (max-width: 769px) {
+  .js-carbody-list__name {
+    font-size: 15px;
+    line-height: 18px;
+    margin: 0 15px 0;
+  }
+}
+@media screen and (max-width: 577px) {
+  .js-carbody-list {
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    margin-top: 5px;
+  }
+  .js-carbody-list__name {
+    font-size: 14px;
+    line-height: 17px;
+    margin: 15px 15px 0;
+  }
+}
+.js-model-list {
+  display: none !important;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.js-model-list_active {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+.js-model-list__unit {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  cursor: pointer;
+  margin: 0 10px;
+}
+.js-model-list__unit[data-model="XC90"] .js-model-list__img {
+  background-image: url(/_source/img/models-small/xc90.png);
+}
+.js-model-list__unit[data-model="XC60"] .js-model-list__img {
+  background-image: url(/_source/img/models-small/xc60.png);
+}
+.js-model-list__unit[data-model="XC40"] .js-model-list__img {
+  background-image: url(/_source/img/models-small/xc40.png);
+}
+.js-model-list__unit[data-model="S60"] .js-model-list__img {
+  background-image: url(/_source/img/models-small/s60.png);
+}
+.js-model-list__unit[data-model="S90"] .js-model-list__img {
+  background-image: url(/_source/img/models-small/s90.png);
+}
+.js-model-list__unit[data-model="V90"] .js-model-list__img {
+  background-image: url(/_source/img/models-small/v90.png);
+}
+.js-model-list__unit[data-model="V60"] .js-model-list__img {
+  background-image: url(/_source/img/models-small/v60.png);
+}
+.js-model-list__unit_active .js-model-list__name {
+  color: #007BCD;
+  font-weight: bold;
+}
+.js-model-list__unit_active[data-model="XC90"] .js-model-list__img {
+  background-image: url(/_source/img/models-small/xc90a.png);
+}
+.js-model-list__unit_active[data-model="XC60"] .js-model-list__img {
+  background-image: url(/_source/img/models-small/xc60a.png);
+}
+.js-model-list__unit_active[data-model="XC40"] .js-model-list__img {
+  background-image: url(/_source/img/models-small/xc40a.png);
+}
+.js-model-list__unit_active[data-model="S60"] .js-model-list__img {
+  background-image: url(/_source/img/models-small/s60a.png);
+}
+.js-model-list__unit_active[data-model="S90"] .js-model-list__img {
+  background-image: url(/_source/img/models-small/s90a.png);
+}
+.js-model-list__unit_active[data-model="V90"] .js-model-list__img {
+  background-image: url(/_source/img/models-small/v90a.png);
+}
+.js-model-list__unit_active[data-model="V60"] .js-model-list__img {
+  background-image: url(/_source/img/models-small/v60a.png);
+}
+.js-model-list__img {
+  width: 305px;
+  height: 172px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  -webkit-transition-duration: 130ms;
+          transition-duration: 130ms;
+}
+.js-model-list__name {
+  margin-top: 10px;
+  margin-left: 10px;
+  font-family: "Volvo Novum", Arial, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  color: #161618;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .js-model-list__unit:hover .js-model-list__name {
+    color: #007BCD;
+    font-weight: bold;
+  }
+  .js-model-list__unit:hover[data-model="XC90"] .js-model-list__img {
+    background-image: url(/_source/img/models-small/xc90a.png);
+  }
+  .js-model-list__unit:hover[data-model="XC60"] .js-model-list__img {
+    background-image: url(/_source/img/models-small/xc60a.png);
+  }
+  .js-model-list__unit:hover[data-model="XC40"] .js-model-list__img {
+    background-image: url(/_source/img/models-small/xc40a.png);
+  }
+  .js-model-list__unit:hover[data-model="S60"] .js-model-list__img {
+    background-image: url(/_source/img/models-small/s60a.png);
+  }
+  .js-model-list__unit:hover[data-model="S90"] .js-model-list__img {
+    background-image: url(/_source/img/models-small/s90a.png);
+  }
+  .js-model-list__unit:hover[data-model="V90"] .js-model-list__img {
+    background-image: url(/_source/img/models-small/v90a.png);
+  }
+  .js-model-list__unit:hover[data-model="V60"] .js-model-list__img {
+    background-image: url(/_source/img/models-small/v60a.png);
+  }
+}
+@media screen and (max-width: 577px) {
+  .js-model-list__unit {
+    margin: 0 5px;
+  }
+  .js-model-list__img {
+    width: 220px;
+    height: 124px;
+  }
+  .js-model-list__name {
+    font-size: 16px;
+    line-height: 19px;
+  }
+}
+.car-info {
+  display: none;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.car-info_active {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.car-info__view {
+  width: 669px;
+  margin-left: -120px;
+  position: relative;
+}
+.car-info__img {
+  width: 100%;
+  position: absolute;
+  bottom: 38px;
+  right: 0;
+}
+.car-info__label {
+  width: 220px;
+  height: 68px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: absolute;
+  bottom: 242px;
+  right: 44px;
+}
+.car-info__label::before {
+  content: '';
+  background-color: #007BCD;
+  -webkit-box-shadow: 0px 10px 20px rgba(0, 123, 205, 0.3);
+          box-shadow: 0px 10px 20px rgba(0, 123, 205, 0.3);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  -webkit-transform: skew(-20deg);
+          transform: skew(-20deg);
+}
+.car-info__label-text {
+  font-family: "Volvo Novum", Arial, sans-serif;
+  font-size: 19px;
+  font-weight: bold;
+  font-style: normal;
+  line-height: 100%;
+  color: #fff;
+  text-transform: uppercase;
+}
+.car-info__label-undertext {
+  margin-top: 3px;
+  font-family: "Volvo Novum", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 17px;
+  color: rgba(255, 255, 255, 0.8);
+}
+.car-info__credit {
+  margin-left: 68px;
+}
+.car-info__model {
+  font-family: "Volvo Novum", Arial, sans-serif;
+  font-size: 48px;
+  font-weight: 300;
+  font-style: normal;
+  line-height: 100%;
+  color: #161618;
+}
+.car-info__data-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-top: 40px;
+  width: 388px;
+}
+.car-info__data-col {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.car-info__data-unit {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.car-info__data-unit:not(:first-of-type) {
+  margin-top: 30px;
+}
+.car-info__data-name {
+  font-family: "Volvo Novum", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 17px;
+  color: rgba(22, 22, 24, 0.8);
+}
+.car-info__data-value {
+  font-family: "Volvo Novum", Arial, sans-serif;
+  font-size: 28px;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 100%;
+  color: #161618;
+  margin-top: 4px;
+}
+.car-info__credit-type {
+  margin-top: 30px;
+}
+.car-info__feedback {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 50px;
+}
+.car-info__test-drive {
+  font-family: "Volvo Novum", Arial, sans-serif;
+  font-size: 15px;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 100%;
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
+  color: #161618;
+}
+
+.proposal {
+  width: 270px;
+  height: 55px;
+  background-color: #007BCD;
+  font-family: "Volvo Novum", Arial, sans-serif;
+  font-size: 15px;
+  font-weight: normal;
+  font-style: normal;
+  color: #fff;
+  cursor: pointer;
+  position: relative;
+}
+.proposal__arrow {
+  margin-left: 13px;
+  stroke: #fff;
+  height: 8px;
+}
+
+.credit-type {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.credit-type__credit-name {
+  font-family: "Volvo Novum", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 19px;
+  color: rgba(22, 22, 24, 0.5);
+  cursor: pointer;
+}
+.credit-type__credit-name_active {
+  color: #161618;
+  cursor: default;
+}
+.credit-type__credit-switch {
+  width: 30px;
+  height: 17px;
+  margin: 0 10px;
+  border: 1px solid #007BCD;
+  border-radius: 31px;
+  position: relative;
+  cursor: pointer;
+}
+.credit-type__switcher {
+  fill: #007BCD;
+  width: 11px;
+  position: absolute;
+  top: 2px;
+  -webkit-transition-duration: 130ms;
+          transition-duration: 130ms;
+}
+.credit-type__switcher_position_left {
+  left: 2px;
+}
+.credit-type__switcher_position_right {
+  left: 15px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .car-info__test-drive:hover {
+    color: #007BCD;
+  }
+
+  .proposal:hover {
+    background-color: #008EEC;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .car-info__view {
+    width: 480px;
+    margin-left: 0;
+  }
+  .car-info__img {
+    bottom: 20px;
+  }
+  .car-info__label {
+    width: 180px;
+    height: 60px;
+    bottom: 170px;
+    right: 20px;
+  }
+  .car-info__label-text {
+    font-size: 17px;
+  }
+  .car-info__label-undertext {
+    font-size: 12px;
+    line-height: 15px;
+  }
+  .car-info__credit {
+    margin-left: 40px;
+  }
+  .car-info__model {
+    font-size: 40px;
+  }
+  .car-info__data-list {
+    margin-top: 32px;
+  }
+  .car-info__data-unit:not(:first-of-type) {
+    margin-top: 25px;
+  }
+  .car-info__data-value {
+    font-size: 25px;
+    margin-top: 3px;
+  }
+  .car-info__feedback {
+    margin-top: 44px;
+  }
+
+  .proposal {
+    width: 225px;
+  }
+}
+@media screen and (max-width: 991px) {
+  .car-info__view {
+    width: 61%;
+  }
+  .car-info__label {
+    width: 150px;
+    height: 50px;
+    bottom: 180px;
+  }
+  .car-info__label-text {
+    font-size: 14px;
+  }
+  .car-info__label-undertext {
+    font-size: 11px;
+    line-height: 13px;
+  }
+  .car-info__credit {
+    width: 35%;
+    margin-left: 4%;
+  }
+  .car-info__model {
+    font-size: 32px;
+  }
+  .car-info__data-list {
+    width: 100%;
+  }
+  .car-info__data-value {
+    font-size: 22px;
+  }
+  .car-info__feedback {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    margin-top: 30px;
+  }
+  .car-info__test-drive {
+    margin-top: 20px;
+  }
+}
+@media screen and (max-width: 769px) {
+  .car-info__view {
+    width: 55%;
+  }
+  .car-info__img {
+    bottom: 60px;
+  }
+  .car-info__credit {
+    width: 44%;
+    margin-left: 1%;
+  }
+}
+@media screen and (max-width: 577px) {
+  .car-info {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  .car-info__view {
+    width: 290px;
+  }
+  .car-info__img {
+    bottom: 20px;
+  }
+  .car-info__label {
+    width: 126px;
+    height: 43px;
+    bottom: 120px;
+    right: 15px;
+  }
+  .car-info__label-text {
+    font-size: 12px;
+  }
+  .car-info__label-undertext {
+    margin-top: 2px;
+    font-size: 9px;
+    line-height: 11px;
+  }
+  .car-info__credit {
+    width: 100%;
+    margin-left: 0;
+  }
+  .car-info__model {
+    font-size: 26px;
+  }
+  .car-info__data-list {
+    margin-top: 15px;
+  }
+  .car-info__data-unit :not(:first-of-type) {
+    margin-top: 20px;
+  }
+  .car-info__data-name {
+    font-size: 12px;
+    line-height: 14px;
+  }
+  .car-info__data-value {
+    font-size: 20px;
+    margin-top: 2px;
+  }
+
+  .proposal {
+    width: 290px;
+  }
+}
+.modal {
+  display: none;
+  width: 416px;
+  padding: 60px 73px;
+}
+.modal__get-proposal {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.modal__title {
+  font-family: "Volvo Novum", Arial, sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  font-style: normal;
+  line-height: 36px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #161618;
+  margin-bottom: 10px;
+}
+.modal__text {
+  font-family: "Volvo Novum", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 19px;
+  text-align: center;
+  color: #4F4F4F;
+}
+.modal__text_align_left {
+  text-align: left;
+}
+.modal__phone-input {
+  border: 1px solid #E0E0E0;
+  margin-top: 30px;
+  width: 100%;
+  height: 55px;
+  padding: 20px 15px;
+  font-family: "Volvo Novum", Arial, sans-serif;
+  font-size: 15px;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 100%;
+  color: #161618;
+}
+.modal__phone-input::-webkit-input-placeholder {
+  color: #161618;
+}
+.modal__phone-input:-ms-input-placeholder {
+  color: #161618;
+}
+.modal__phone-input::-ms-input-placeholder {
+  color: #161618;
+}
+.modal__phone-input::placeholder {
+  color: #161618;
+}
+.modal__phone-input:focus, .modal__phone-input:active {
+  border: 1px solid #161618;
+}
+.modal__phone-input_invalid {
+  border: 1px solid #EB5757;
+}
+.modal__proposal {
+  margin-top: 15px;
+}
+.modal__privacy {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 14px;
+}
+.modal__checkbox {
+  margin-right: 10px;
+  margin-top: 4px;
+}
+.modal__personal-data {
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
+}
+.modal__answer {
+  display: none;
+}
+.modal__undertitle {
+  font-family: "Volvo Novum", Arial, sans-serif;
+  font-size: 20px;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 24px;
+  color: #161618;
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+@media screen and (max-width: 577px) {
+  .modal {
+    width: 100%;
+    padding: 20px;
+  }
+  .modal__proposal {
+    width: 100%;
+  }
+}
