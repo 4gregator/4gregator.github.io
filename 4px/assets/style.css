@@ -101,8 +101,7 @@
   padding: 0;
   text-decoration: none;
   list-style-type: none;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   color: inherit;
   border: none;
 }
@@ -218,8 +217,7 @@ h1 {
  * 2. Show the overflow in Edge and IE.
  */
 hr {
-  -webkit-box-sizing: content-box;
-          box-sizing: content-box;
+  box-sizing: content-box;
   /* 1 */
   height: 0;
   /* 1 */
@@ -256,8 +254,7 @@ abbr[title] {
   /* 1 */
   text-decoration: underline;
   /* 2 */
-  -webkit-text-decoration: underline dotted;
-          text-decoration: underline dotted;
+  text-decoration: underline dotted;
   /* 2 */
 }
 
@@ -404,8 +401,7 @@ fieldset {
  *    `fieldset` elements in all browsers.
  */
 legend {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   /* 1 */
   color: inherit;
   /* 2 */
@@ -439,8 +435,7 @@ textarea {
  */
 [type="checkbox"],
 [type="radio"] {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   /* 1 */
   padding: 0;
   /* 2 */
@@ -544,12 +539,8 @@ template {
   }
 }
 .js-carbody-list {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
 }
 .js-carbody-list__name {
   font-family: "Volvo Novum", Arial, sans-serif;
@@ -584,8 +575,7 @@ template {
 }
 @media screen and (max-width: 577px) {
   .js-carbody-list {
-    -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
+    flex-wrap: wrap;
     margin-top: 5px;
   }
   .js-carbody-list__name {
@@ -596,71 +586,62 @@ template {
 }
 .js-model-list {
   display: none !important;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
 }
 .js-model-list_active {
-  display: -webkit-box !important;
-  display: -ms-flexbox !important;
   display: flex !important;
 }
 .js-model-list__unit {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
   cursor: pointer;
   margin: 0 10px;
 }
 .js-model-list__unit[data-model="XC90"] .js-model-list__img {
-  background-image: url(/_source/img/models-small/xc90.png);
+  background-image: url(/source/img/models-small/xc90.png);
 }
 .js-model-list__unit[data-model="XC60"] .js-model-list__img {
-  background-image: url(/_source/img/models-small/xc60.png);
+  background-image: url(/source/img/models-small/xc60.png);
 }
 .js-model-list__unit[data-model="XC40"] .js-model-list__img {
-  background-image: url(/_source/img/models-small/xc40.png);
+  background-image: url(/source/img/models-small/xc40.png);
 }
 .js-model-list__unit[data-model="S60"] .js-model-list__img {
-  background-image: url(/_source/img/models-small/s60.png);
+  background-image: url(/source/img/models-small/s60.png);
 }
 .js-model-list__unit[data-model="S90"] .js-model-list__img {
-  background-image: url(/_source/img/models-small/s90.png);
+  background-image: url(/source/img/models-small/s90.png);
 }
 .js-model-list__unit[data-model="V90"] .js-model-list__img {
-  background-image: url(/_source/img/models-small/v90.png);
+  background-image: url(/source/img/models-small/v90.png);
 }
 .js-model-list__unit[data-model="V60"] .js-model-list__img {
-  background-image: url(/_source/img/models-small/v60.png);
+  background-image: url(/source/img/models-small/v60.png);
 }
 .js-model-list__unit_active .js-model-list__name {
   color: #007BCD;
   font-weight: bold;
 }
 .js-model-list__unit_active[data-model="XC90"] .js-model-list__img {
-  background-image: url(/_source/img/models-small/xc90a.png);
+  background-image: url(/source/img/models-small/xc90a.png);
 }
 .js-model-list__unit_active[data-model="XC60"] .js-model-list__img {
-  background-image: url(/_source/img/models-small/xc60a.png);
+  background-image: url(/source/img/models-small/xc60a.png);
 }
 .js-model-list__unit_active[data-model="XC40"] .js-model-list__img {
-  background-image: url(/_source/img/models-small/xc40a.png);
+  background-image: url(/source/img/models-small/xc40a.png);
 }
 .js-model-list__unit_active[data-model="S60"] .js-model-list__img {
-  background-image: url(/_source/img/models-small/s60a.png);
+  background-image: url(/source/img/models-small/s60a.png);
 }
 .js-model-list__unit_active[data-model="S90"] .js-model-list__img {
-  background-image: url(/_source/img/models-small/s90a.png);
+  background-image: url(/source/img/models-small/s90a.png);
 }
 .js-model-list__unit_active[data-model="V90"] .js-model-list__img {
-  background-image: url(/_source/img/models-small/v90a.png);
+  background-image: url(/source/img/models-small/v90a.png);
 }
 .js-model-list__unit_active[data-model="V60"] .js-model-list__img {
-  background-image: url(/_source/img/models-small/v60a.png);
+  background-image: url(/source/img/models-small/v60a.png);
 }
 .js-model-list__img {
   width: 305px;
@@ -668,8 +649,7 @@ template {
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
-  -webkit-transition-duration: 130ms;
-          transition-duration: 130ms;
+  transition-duration: 130ms;
 }
 .js-model-list__name {
   margin-top: 10px;
@@ -688,25 +668,25 @@ template {
     font-weight: bold;
   }
   .js-model-list__unit:hover[data-model="XC90"] .js-model-list__img {
-    background-image: url(/_source/img/models-small/xc90a.png);
+    background-image: url(/source/img/models-small/xc90a.png);
   }
   .js-model-list__unit:hover[data-model="XC60"] .js-model-list__img {
-    background-image: url(/_source/img/models-small/xc60a.png);
+    background-image: url(/source/img/models-small/xc60a.png);
   }
   .js-model-list__unit:hover[data-model="XC40"] .js-model-list__img {
-    background-image: url(/_source/img/models-small/xc40a.png);
+    background-image: url(/source/img/models-small/xc40a.png);
   }
   .js-model-list__unit:hover[data-model="S60"] .js-model-list__img {
-    background-image: url(/_source/img/models-small/s60a.png);
+    background-image: url(/source/img/models-small/s60a.png);
   }
   .js-model-list__unit:hover[data-model="S90"] .js-model-list__img {
-    background-image: url(/_source/img/models-small/s90a.png);
+    background-image: url(/source/img/models-small/s90a.png);
   }
   .js-model-list__unit:hover[data-model="V90"] .js-model-list__img {
-    background-image: url(/_source/img/models-small/v90a.png);
+    background-image: url(/source/img/models-small/v90a.png);
   }
   .js-model-list__unit:hover[data-model="V60"] .js-model-list__img {
-    background-image: url(/_source/img/models-small/v60a.png);
+    background-image: url(/source/img/models-small/v60a.png);
   }
 }
 @media screen and (max-width: 577px) {
@@ -724,13 +704,9 @@ template {
 }
 .car-info {
   display: none;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
 }
 .car-info_active {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 .car-info__view {
@@ -747,19 +723,10 @@ template {
 .car-info__label {
   width: 220px;
   height: 68px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   bottom: 242px;
   right: 44px;
@@ -767,16 +734,14 @@ template {
 .car-info__label::before {
   content: '';
   background-color: #007BCD;
-  -webkit-box-shadow: 0px 10px 20px rgba(0, 123, 205, 0.3);
-          box-shadow: 0px 10px 20px rgba(0, 123, 205, 0.3);
+  box-shadow: 0px 10px 20px rgba(0, 123, 205, 0.3);
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   z-index: -1;
-  -webkit-transform: skew(-20deg);
-          transform: skew(-20deg);
+  transform: skew(-20deg);
 }
 .car-info__label-text {
   font-family: "Volvo Novum", Arial, sans-serif;
@@ -808,32 +773,18 @@ template {
   color: #161618;
 }
 .car-info__data-list {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
   margin-top: 40px;
   width: 388px;
 }
 .car-info__data-col {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
 }
 .car-info__data-unit {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
 }
 .car-info__data-unit:not(:first-of-type) {
   margin-top: 30px;
@@ -859,15 +810,9 @@ template {
   margin-top: 30px;
 }
 .car-info__feedback {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 50px;
 }
 .car-info__test-drive {
@@ -876,8 +821,7 @@ template {
   font-weight: normal;
   font-style: normal;
   line-height: 100%;
-  -webkit-text-decoration-line: underline;
-          text-decoration-line: underline;
+  text-decoration-line: underline;
   color: #161618;
 }
 
@@ -900,8 +844,6 @@ template {
 }
 
 .credit-type {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 .credit-type__credit-name {
@@ -931,8 +873,7 @@ template {
   width: 11px;
   position: absolute;
   top: 2px;
-  -webkit-transition-duration: 130ms;
-          transition-duration: 130ms;
+  transition-duration: 130ms;
 }
 .credit-type__switcher_position_left {
   left: 2px;
@@ -1025,13 +966,8 @@ template {
     font-size: 22px;
   }
   .car-info__feedback {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    flex-direction: column;
+    justify-content: center;
     margin-top: 30px;
   }
   .car-info__test-drive {
@@ -1052,13 +988,8 @@ template {
 }
 @media screen and (max-width: 577px) {
   .car-info {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    flex-direction: column;
+    align-items: center;
   }
   .car-info__view {
     width: 290px;
@@ -1112,13 +1043,8 @@ template {
   padding: 60px 73px;
 }
 .modal__get-proposal {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
 }
 .modal__title {
   font-family: "Volvo Novum", Arial, sans-serif;
@@ -1156,15 +1082,6 @@ template {
   line-height: 100%;
   color: #161618;
 }
-.modal__phone-input::-webkit-input-placeholder {
-  color: #161618;
-}
-.modal__phone-input:-ms-input-placeholder {
-  color: #161618;
-}
-.modal__phone-input::-ms-input-placeholder {
-  color: #161618;
-}
 .modal__phone-input::placeholder {
   color: #161618;
 }
@@ -1178,8 +1095,6 @@ template {
   margin-top: 15px;
 }
 .modal__privacy {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   margin-top: 14px;
 }
@@ -1188,8 +1103,7 @@ template {
   margin-top: 4px;
 }
 .modal__personal-data {
-  -webkit-text-decoration-line: underline;
-          text-decoration-line: underline;
+  text-decoration-line: underline;
 }
 .modal__answer {
   display: none;
